@@ -16,6 +16,9 @@ text/%.tex: text/%.md.tex
 	pandoc $(patsubst %.md.tex,%,$<).md.tex --from markdown --to latex > $(patsubst %.md.tex,%,$<).tex
 
 all : diplomarbeit.pdf
-diplomarbeit.pdf : diplomarbeit.tex FORCE_MAKE ${PDFTIKZ_FILES} ${CONVERTED_MARKDOWN_FILES}
+dependencies: ${PDFTIKZ_FILES} ${CONVERTED_MARKDOWN_FILES}
+diplomarbeit.pdf : diplomarbeit.tex FORCE_MAKE dependencies
 	pdflatex diplomarbeit.tex
+	rm $(CONVERTED_MARKDOWN_FILES)
+cleanup:
 	rm $(CONVERTED_MARKDOWN_FILES)
