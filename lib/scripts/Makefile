@@ -8,6 +8,12 @@
 # Override by setting the `PROJECT_NAME` environment
 # variable.
 PROJECT_NAME=$(shell ./lib/scripts/get_project_name.rb)
+PROJECT=$(PROJECT_NAME)
+
+PDFLATEX=pdflatex --output-directory=build -interaction=nonstopmode -file-line-error-style
+
+all: $(PROJECT).pdf
+run: all
 
 # http://stackoverflow.com/a/7507834/2066546
 # include other_makefile
@@ -26,17 +32,42 @@ img/%.pdf: img/%.tikz
 MARKDOWN_FILES = $(wildcard text/*.md.tex)
 CONVERTED_MARKDOWN_FILES = $(patsubst %.md.tex,%.tex,$(MARKDOWN_FILES))
 
+markdown: ${CONVERTED_MARKDOWN_FILES}
 text/%.tex: text/%.md.tex
 	cd text
-	pandoc $(patsubst %.md.tex,%,$<).md.tex --from markdown --to latex > $(patsubst %.md.tex,%,$<).tex
+	#cat $(patsubst %.md.tex,%,$<).md.tex |sed '/^%/d' |sed 's/\\/\\\\/g' > $(patsubst %.md.tex,%,$<).md.tmp.tex
+	#pandoc $(patsubst %.md.tex,%,$<).md.tmp.tex --from markdown --to latex > $(patsubst %.md.tex,%,$<).tmp.tex
+	#cat $(patsubst %.md.tex,%,$<).tmp.tex |sed 's/\\textbackslash{}/\\/g' |sed 's/\\{\(.*\)\\}/{\1}/g' > $(patsubst %.md.tex,%,$<).tex
+	#
+	cat $(patsubst %.md.tex,%,$<).md.tex |sed '/^%/d' > $(patsubst %.md.tex,%,$<).md.tmp.tex
+	pandoc $(patsubst %.md.tex,%,$<).md.tmp.tex --from markdown --to latex > $(patsubst %.md.tex,%,$<).tex
 
-all : $(PROJECT_NAME).pdf
+bibliography: build/$(PROJECT).bbl
 
-dependencies: ${PDFTIKZ_FILES} ${CONVERTED_MARKDOWN_FILES}
+build/$(PROJECT).bbl: build/$(PROJECT).bcf
+	biber build/$(PROJECT)
 
-$(PROJECT_NAME).pdf : $(PROJECT_NAME).tex FORCE_MAKE dependencies
-	pdflatex $(PROJECT_NAME).tex
-	rm $(CONVERTED_MARKDOWN_FILES)
+build/$(PROJECT).bcf: $(PROJECT).tex
+	mkdir -p build
+	$(PDFLATEX) $(PROJECT)
 
-cleanup:
-	rm $(CONVERTED_MARKDOWN_FILES)
+dependencies: ${PDFTIKZ_FILES} markdown bibliography
+
+tex: $(PROJECT).pdf
+
+$(PROJECT).pdf: build/$(PROJECT).pdf
+	-ln -s build/$(PROJECT).pdf $(PROJECT).pdf
+
+build/$(PROJECT).pdf : $(PROJECT).tex FORCE_MAKE dependencies
+	$(PDFLATEX) $(PROJECT)
+	-rm $(CONVERTED_MARKDOWN_FILES)
+
+clean:
+	# The minus sign in front of `rm` prevents this clean task
+	# from returning a fail status code if the files are not present.
+	-rm $(PROJECT).pdf
+	-rm build/*
+	-rm text/*.log
+	-rm text/*.tmp.tex
+	-rm $(CONVERTED_MARKDOWN_FILES)
+	-rm *.aux *.bcf *.fls *.run.xml *.synctex.gz *.fdb_latexmk *.log

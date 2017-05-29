@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
-make dependencies
-/Library/TeX/texbin/pdflatex $*
-make cleanup
+make clean \
+  && make dependencies \
+  && make tex \
+  #&& /Library/TeX/texbin/pdflatex $* \
+  && make clean

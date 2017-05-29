@@ -7,13 +7,18 @@
 
 \input{config/layout}
 
+\input{lib/utf8}
 \input{lib/lipsum}
 \input{lib/graphics}
 \input{lib/markdown}
 \input{lib/todo}
+\input{lib/bibliography}
 
+\bibliography{diplomarbeit}
 \begin{document}
   \maketitle
 
   \input{text/intersections}
+  Foo \cite{mueller2000}
+  \printbibliography
 \end{document}
