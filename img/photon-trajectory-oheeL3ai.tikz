@@ -1,0 +1,64 @@
+% Photon trajectory within the ice.
+%
+% Fiedlschuster, 2017-09-29
+%
+\documentclass[tikz,border=10pt]{standalone}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{intersections,through}
+
+% https://tex.stackexchange.com/a/88951/70789
+\tikzset{snake it/.style={decorate, decoration=snake}}
+
+% http://texample.net/tikz/examples/feynman-diagram/
+\tikzset{
+    photon/.style={decorate, decoration={snake}},
+    electron/.style={draw=blue, postaction={decorate},
+        decoration={markings,mark=at position .55 with {\arrow[draw=blue]{>}}}},
+    gluon/.style={decorate, draw=magenta,
+        decoration={coil,amplitude=4pt, segment length=5pt}}
+}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    scale=1,
+    >=stealth
+    %point/.style = {draw, circle,  fill = black, inner sep = 1pt},
+    %dot/.style   = {draw, circle,  fill = black, inner sep = .2pt},
+  ]
+
+  % axes
+  \coordinate (y) at (-7, 5);
+  \coordinate (x) at ( 3,-2);
+  \coordinate (o) at (-7,-2);
+  \draw [<->] (y) node[above] {$y$} -- (o) -- (x) node[right] {$x$};
+
+  % trajectory
+  \coordinate (p0) at (-6, 5);
+  \coordinate (p1) at (-2, 4);
+  \coordinate (p2) at (-3, 0);
+  \coordinate (p3) at (-2, -1);
+  \coordinate (p4) at (2, 0);
+  \coordinate (p5) at (2.5, -0.5);
+
+  % interaction points
+  \node [draw, circle, fill, inner sep=3pt] at (p0) {};
+  \node [draw, circle, fill, inner sep=3pt] at (p1) {};
+  \node [draw, circle, fill, inner sep=3pt] at (p2) {};
+  \node [draw, circle, fill, inner sep=3pt] at (p3) {};
+  \node [draw, circle, fill, inner sep=3pt] at (p4) {};
+  \node [draw, circle, fill, inner sep=3pt] at (p5) {};
+
+  \node (A) at (p3) [label = above:$A$, label = below: {Photon trajectory}] {};
+  \node (B) at (p4) [label = above:$B$] {};
+
+  \path [name path=trajectory, draw, ->, photon] (p0) -- (p1) -- (p2) -- (p3) -- (p4) -- (p5);
+
+  % dom
+  \node [draw, circle, minimum size=1cm, inner sep=0pt] (dom) at (p5) {};
+  \node [below] at (dom.south) {DOM};
+
+
+\end{tikzpicture}
+\end{document}

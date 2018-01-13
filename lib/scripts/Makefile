@@ -18,7 +18,8 @@ run: all
 # http://stackoverflow.com/a/7507834/2066546
 # include other_makefile
 
-TIKZ_FILES = $(wildcard img/*.tikz)
+TIKZDIR = img/
+TIKZ_FILES = $(wildcard $(TIKZDIR)/*.tikz)
 PDFTIKZ_FILES = $(patsubst %.tikz,%.pdf,$(TIKZ_FILES))
 
 img/%.pdf: img/%.tikz
