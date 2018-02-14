@@ -1,0 +1,21 @@
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{intersections,through}
+\usetikzlibrary{arrows,decorations.markings}
+
+% % https://tex.stackexchange.com/a/88951/70789
+% \tikzset{snake it/.style={decorate, decoration=snake}}
+%
+% % http://texample.net/tikz/examples/feynman-diagram/
+% \tikzset{
+%     photon/.style={decorate, decoration={snake}},
+%     electron/.style={draw=blue, postaction={decorate},
+%         decoration={markings,mark=at position .55 with {\arrow[draw=blue]{>}}}},
+%     gluon/.style={decorate, draw=magenta,
+%         decoration={coil,amplitude=4pt, segment length=5pt}}
+% }
+
+\tikzset{
+  photon/.style={draw, postaction={decorate}, decoration={markings, mark=at position 1 with {\arrow[scale=2, >=latex]{>}}}},
+  holeice/.style={draw, dash pattern=on \pdflinewidth off 2pt}
+}

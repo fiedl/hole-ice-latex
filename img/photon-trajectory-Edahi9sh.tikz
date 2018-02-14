@@ -3,19 +3,7 @@
 % Fiedlschuster, 2017-09-29
 %
 \documentclass[tikz,border=10pt]{standalone}
-\usetikzlibrary{calc}
-\usetikzlibrary{decorations.pathmorphing}
-\usetikzlibrary{intersections,through}
-
-% http://texample.net/tikz/examples/feynman-diagram/
-\tikzset{
-    photon/.style={decorate, decoration={snake}},
-    electron/.style={draw=blue, postaction={decorate},
-        decoration={markings,mark=at position .55 with {\arrow[draw=blue]{>}}}},
-    gluon/.style={decorate, draw=magenta,
-        decoration={coil,amplitude=4pt, segment length=5pt}}
-}
-
+\input{common}
 
 \begin{document}
 \begin{tikzpicture}
@@ -28,7 +16,7 @@
 
   % axes
   \coordinate (y) at (-3, 3);
-  \coordinate (x) at ( 4,-2);
+  \coordinate (x) at ( 7,-2);
   \coordinate (o) at (-3,-2);
   \draw [<->] (y) node[above] {$y$} -- (o) -- (x) node[right] {$x$};
 
@@ -39,15 +27,15 @@
   \coordinate (M) at (2,0.4);
   %\node (radius_end) at (4,0) {};
   \coordinate (radius_end) at (4,0);
-  \node [name path=cylinder,draw,circle through=(radius_end), label = above:{Hole-ice cylinder}] at (M) {};
+  \node [name path=cylinder, holeice, circle through=(radius_end), label = above:{Hole-ice cylinder}] at (M) {};
 
   % cylinder radius label
   %\draw [dotted] (radius_end) -- node (r) [label = above:$r$] {} (M);
 
   % trajectory
-  \node (A) at (-2,-1) [point, label = above:$A$, label = below: {Photon trajectory}] {};
-  \node (B) at (2,0) [point, label = above:$B$] {};
-  \path [name path=trajectory, draw, ->, photon] (A) -- (B);
+  \node (A) at (-2,-1) [point, label = above:$A$] {};
+  \node (B) at (2,1) [point, label = above:$B$, label=right:{Next scattering point}] {};
+  \path [name path=trajectory, draw] (A) -- (B);
 
   % intersection
   % https://tex.stackexchange.com/a/31400/70789
@@ -56,11 +44,14 @@
   %\node (X2) at (intersection-2) [point, label = below right:$X_2$] {};
 
   % scaled trajectory end B'
-  \node [label=above:$B'$, point] at ( $ (X1)!0.55!(B) $ ) (B') {};
+  \node [point, draw=red, fill=red, text=red, label={[above, red] $B'$}, label={[red, right] Next scattering point after correction}] at ( $ (X1)!0.55!(B) $ ) (B') {};
 
   % distance correction
   % Alternative: https://github.com/renard/tikz-dimline
-  \node [label=below:$\small{\Delta b}$] at ($(B')!0.5!(B)$) (delta_B) {};
+  %\node [label=below:$\small{\Delta b: AB\prime = AB + \Delta b}$] at ($(B')!0.5!(B)$) (delta_B) {};
+
+  % correction bended arrow
+  \path[draw, red, ->] (B) edge[bend right, dashed, draw=red] (B');
 
 \end{tikzpicture}
 \end{document}

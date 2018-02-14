@@ -3,21 +3,7 @@
 % Fiedlschuster, 2017-09-29
 %
 \documentclass[tikz,border=10pt]{standalone}
-\usetikzlibrary{calc}
-\usetikzlibrary{decorations.pathmorphing}
-\usetikzlibrary{intersections,through}
-
-% https://tex.stackexchange.com/a/88951/70789
-\tikzset{snake it/.style={decorate, decoration=snake}}
-
-% http://texample.net/tikz/examples/feynman-diagram/
-\tikzset{
-    photon/.style={decorate, decoration={snake}},
-    electron/.style={draw=blue, postaction={decorate},
-        decoration={markings,mark=at position .55 with {\arrow[draw=blue]{>}}}},
-    gluon/.style={decorate, draw=magenta,
-        decoration={coil,amplitude=4pt, segment length=5pt}}
-}
+\input{common}
 
 \begin{document}
 \begin{tikzpicture}
@@ -29,10 +15,10 @@
   ]
 
   % axes
-  \coordinate (y) at (-7, 5);
-  \coordinate (x) at ( 3,-2);
-  \coordinate (o) at (-7,-2);
-  \draw [<->] (y) node[above] {$y$} -- (o) -- (x) node[right] {$x$};
+  \coordinate (y) at (-7.5, 5);
+  \coordinate (x) at ( 4.5,-2.5);
+  \coordinate (o) at (-7.5,-2.5);
+  \draw [<->] (y) node[left] {$y$} -- (o) -- (x) node[below] {$x$};
 
   % trajectory
   \coordinate (p0) at (-6, 5);
@@ -43,22 +29,35 @@
   \coordinate (p5) at (2.5, -0.5);
 
   % interaction points
-  \node [draw, circle, fill, inner sep=3pt] at (p0) {};
-  \node [draw, circle, fill, inner sep=3pt] at (p1) {};
-  \node [draw, circle, fill, inner sep=3pt] at (p2) {};
-  \node [draw, circle, fill, inner sep=3pt] at (p3) {};
-  \node [draw, circle, fill, inner sep=3pt] at (p4) {};
-  \node [draw, circle, fill, inner sep=3pt] at (p5) {};
+  \node [draw, circle, fill, inner sep=1pt] at (p0) {};
+  %\node [draw, circle, fill, inner sep=1pt] at (p1) {};
+  %\node [draw, circle, fill, inner sep=1pt] at (p2) {};
+  %\node [draw, circle, fill, inner sep=1pt] at (p3) {};
+  %\node [draw, circle, fill, inner sep=1pt] at (p4) {};
+  \node [draw, circle, fill, inner sep=1pt] at (p5) {};
 
-  \node (A) at (p3) [label = above:$A$, label = below: {Photon trajectory}] {};
+  \node (startpoint) at (p0) [label={[align=center] Photon\\trajectory start}];
+  \node (scatteringpoint) at (p1) [label=right:{First scattering point}];
+  %\node (detectionpoint) at (p5) [label=right:{Detection}];
+
+  \node (A) at (p3) [label = above:$A$] {};
   \node (B) at (p4) [label = above:$B$] {};
 
-  \path [name path=trajectory, draw, ->, photon] (p0) -- (p1) -- (p2) -- (p3) -- (p4) -- (p5);
+  %\path [name path=trajectory, ->, photon] (p0) -- (p1) -- (p2) -- (p3) -- (p4) -- (p5);
+  \path [photon] (p0) -- (p1);
+  \path [photon] (p1) -- (p2);
+  \path [photon] (p2) -- (p3);
+  \path [photon] (p3) -- (p4);
+  \path [photon] (p4) -- (p5);
 
   % dom
-  \node [draw, circle, minimum size=1cm, inner sep=0pt] (dom) at (p5) {};
+  \coordinate (dom) at (2.5, -0.4);
+  \node [draw, circle, minimum size=1cm, inner sep=0pt] (dom) at (dom) {};
   \node [below] at (dom.south) {DOM};
 
+  % hole ice
+  \node [holeice, circle, minimum size=3cm, inner sep=0pt] (holeice) at (dom) {};
+  \node [above] at (holeice.north) {Hole ice};
 
 \end{tikzpicture}
 \end{document}
