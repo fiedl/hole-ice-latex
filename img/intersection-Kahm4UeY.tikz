@@ -6,42 +6,42 @@
 % Fiedlschuster, 2017-04-25
 %
 \documentclass[tikz,border=10pt]{standalone}
-\usetikzlibrary{calc}
-\usetikzlibrary{decorations.pathmorphing}
-\usetikzlibrary{intersections,through}
-
-% https://tex.stackexchange.com/a/88951/70789
-\tikzset{snake it/.style={decorate, decoration=snake}}
+\input{lib/tikz-styles}
 
 \begin{document}
 \begin{tikzpicture}
   [
-    scale=3,
+    scale=1,
     >=stealth,
     point/.style = {draw, circle,  fill = black, inner sep = 1pt},
     dot/.style   = {draw, circle,  fill = black, inner sep = .2pt},
   ]
 
+  \input{lib/hole-ice-circle}
+
   % circle around M stands for the hole-ice cylinder
   % http://www.texample.net/tikz/examples/bisector/
   % https://tex.stackexchange.com/a/31400/70789
-  \node (M) at (0,0) [point, label = {below right:$M$}] {};
-  \node (radius_end) at (-1,0) {};
-  \node [name path=cylinder,draw,circle through=(radius_end), label = above:{Hole-ice cylinder}] at (M) {};
+  \node (M) at (M) [point, label = {below:$M$}] {};
+  \node [name path=cylinder, holeice, circle through=(radius_end), label = above:{Hole-ice cylinder}] at (M) {};
 
   % cylinder radius label
   \draw [dotted] (radius_end) -- node (r) [label = above:$r$] {} (M);
 
-  % trajectory
-  \node (A) at (-2,-1) [label = above:$A$] {};
-  \node (B) at (2,0) [label = above:$B$, label = below right: {Photon trajectory}] {};
-  \path [name path=trajectory, draw, ->, snake it] (A) -- (B);
+  % photon
+  \node (A) at (A) [point, label = above:$A$, label = {[below, rotate=27] $s=0$}] {};
+  \node (B) at (B) [point, label = above:$B$, label = {[below, rotate=27] $s=1$}] {};
+  \node (extended_endpoint) at (extended_endpoint) {};
+
+  \path [name path=trajectory] (A) -- (extended_endpoint);
+  \path [draw] (A) -- (B);
+  \path [draw, dashed] (B) -- (extended_endpoint);
 
   % intersection
   % https://tex.stackexchange.com/a/31400/70789
   \path [name intersections={of=trajectory and cylinder, name=intersection}];
-  \node (X1) at (intersection-1) [point, label = below:$X_1$] {};
-  \node (X2) at (intersection-2) [point, label = below right:$X_2$] {};
+  \node (X1) at (intersection-2) [point, label = above:$X_1$, label = {[below, rotate=27] $s = s_1$}] {};
+  \node (X2) at (intersection-1) [point, label = above:$X_2$, label = {[below, rotate=27] $s = s_2$}] {};
 
 \end{tikzpicture}
 \end{document}

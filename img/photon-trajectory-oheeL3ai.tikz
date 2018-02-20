@@ -36,9 +36,9 @@
   %\node [draw, circle, fill, inner sep=1pt] at (p4) {};
   \node [draw, circle, fill, inner sep=1pt] at (p5) {};
 
-  \node (startpoint) at (p0) [label={[align=center] Photon\\trajectory start}];
-  \node (scatteringpoint) at (p1) [label=right:{First scattering point}];
-  %\node (detectionpoint) at (p5) [label=right:{Detection}];
+  \node (startpoint) at (p0) [label={[align=center] Photon\\trajectory start}] {};
+  \node (scatteringpoint) at (p1) [label=right:{First scattering point}] {};
+  %\node (detectionpoint) at (p5) [label=right:{Detection}] {};
 
   \node (A) at (p3) [label = above:$A$] {};
   \node (B) at (p4) [label = above:$B$] {};

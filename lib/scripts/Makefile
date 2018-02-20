@@ -52,7 +52,10 @@ build/$(PROJECT).bcf: $(PROJECT).tex
 	mkdir -p build
 	$(PDFLATEX) $(PROJECT)
 
-dependencies: ${PDFTIKZ_FILES} markdown bibliography
+images: ${PDFTIKZ_FILES}
+
+#dependencies: images markdown bibliography
+dependencies: markdown
 
 tex: $(PROJECT).pdf
 

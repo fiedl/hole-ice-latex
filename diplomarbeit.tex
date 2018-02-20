@@ -13,16 +13,22 @@
 \input{lib/markdown}
 \input{lib/todo}
 \input{lib/bibliography}
+\input{lib/math}
 \input{lib/listings}
+\input{lib/references}
 
 \bibliography{diplomarbeit}
 \begin{document}
   \maketitle
 
   \input{text/intersections}
-  \input{text/hole_ice_trajectory_corrections}
-  \input{text/problems}
+  %\input{text/hole_ice_trajectory_corrections}
+  %\input{text/problems}
 
-  Foo \cite{mueller2000}
-  \printbibliography
+  %Foo \cite{mueller2000}
+  %\printbibliography
+
+  \appendix
+  \input{text/appendix/calculating_intersections_with_sympy}
+
 \end{document}
