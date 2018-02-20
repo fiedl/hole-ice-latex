@@ -36,3 +36,12 @@
 
 ## https://tex.stackexchange.com/q/215264/70789
 .*.lb
+
+## Pygments, minted code listings
+build/_minted*
+
+## Tikz generated images
+img/*.pdf
+
+## Text conversion temp files
+text/*.tmp.tex
