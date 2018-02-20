@@ -10,7 +10,7 @@
 PROJECT_NAME=$(shell ./lib/scripts/get_project_name.rb)
 PROJECT=$(PROJECT_NAME)
 
-PDFLATEX=pdflatex --output-directory=build -interaction=nonstopmode -file-line-error-style
+PDFLATEX=pdflatex --output-directory=build -interaction=nonstopmode -file-line-error-style -shell-escape
 
 all: $(PROJECT).pdf
 run: all
