@@ -3,7 +3,7 @@
 % Fiedlschuster, 2017-09-29
 %
 \documentclass[tikz,border=10pt]{standalone}
-\input{common}
+\input{lib/common}
 
 \begin{document}
 \begin{tikzpicture}

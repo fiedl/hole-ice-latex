@@ -6,7 +6,7 @@
 % Fiedlschuster, 2017-04-25
 %
 \documentclass[tikz,border=10pt]{standalone}
-\input{lib/tikz-styles}
+\input{lib/common}
 
 \begin{document}
 \begin{tikzpicture}
