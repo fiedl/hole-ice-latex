@@ -127,6 +127,9 @@ end
 task :clean do
   log.section "Cleaning up"
   for extension in %w(aux bcf fdb_latexmk fls log pdf run.xml synctex.gz)
-    sh "rm build/*.#{extension} build/**/*.#{extension}"
+    sh "rm build/*.#{extension} build/**/*.#{extension} || true"
+  end
+  for extension in %w(pdf log aux)
+    sh "rm img/*.#{extension} || true"
   end
 end
