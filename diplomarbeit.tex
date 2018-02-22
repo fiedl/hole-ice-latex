@@ -1,4 +1,4 @@
-%!TEX TS-program = ./lib/scripts/make_and_pdflatex.zsh
+%!TEX TS-program = ./make.zsh
 
 \documentclass[a4paper]{article}
 
@@ -17,18 +17,20 @@
 \input{lib/listings}
 \input{lib/references}
 
+%\includeonly{}
+
 \bibliography{diplomarbeit}
 \begin{document}
   \maketitle
 
-  \input{text/intersections}
-  %\input{text/hole_ice_trajectory_corrections}
-  %\input{text/problems}
+  \include{text/intersections}
+  \include{text/hole_ice_trajectory_corrections}
+  \include{text/problems}
 
   %Foo \cite{mueller2000}
   %\printbibliography
 
   \appendix
-  \input{text/appendix/calculating_intersections_with_sympy}
+  \include{text/appendix/calculating_intersections_with_sympy}
 
 \end{document}
