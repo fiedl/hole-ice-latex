@@ -6,7 +6,8 @@ In order to make the hole-ice simulation more efficient, one needs to calculate 
 
 \image{intersection-Kahm4UeY}
 
-\subsubsection{Analytic approach}
+
+### Analytic approach
 
 Consider the starting point $A := (A_x, A_y)$ and the ending point $B := (B_x, B_y)$ of the trajectory.
 
@@ -56,6 +57,67 @@ Therefore, the intersection point coordinate vectors $\vec{X_1}$ and $\vec{X_2}$
 \end{equation}
 
 How this result can be verified using a symbolic mathematics library, is shown in \appendixref{app:calculating_intersections_with_sympy}.
+
+
+### Geometric approach
+
+It turns out, the simulation on the GPU is faster and more precise if one does not treat the coordinates, e.g. $A_x, A_y$ as separate quantities but keeps the calculations as much as possible vectorial and uses the GPU-native vector operation functions like `dot` for the vector scalar product ("dot product").
+
+\image{intersection-vectorial-auloLai2}
+
+\paragraph{Goal} The goal is to find the distances $\len{AX_1}, \len{AX_2}$ from the starting point $A$ to the intersection points $X_1, X_2$.
+
+\paragraph{Relations}
+
+Consider a projection of $M$ onto $AB$. The projected point is called $M'$.
+
+Given $\len{A M'}$ and $\len{X_1 M'}$, the distances to the intersection points can be calculated as:
+
+\begin{equation} \len{A X_{1,2}} = \len{A M'} \mp \len{X_1 M'} \end{equation}
+
+Given $\vec{AM}$ and the unit vector $\vec{v}$ in $\vec{AB}$ direction, $\len{AM'}$ can be calculated using a vector projection:
+
+\begin{equation} \len{AM'} = \vec{AM} \cdot \vec{v} \end{equation}
+
+The operator $\cdot$ is the scalar product (dot product). The unit vector $\vec{v}$ in $\vec{AB}$ direction is $\vec{v} = \vec{AB} / \len{AB}$.
+
+The distance $m:=\len{MM'}$ on right hand side of the triangle $\triangle AM'M$ can be calculated using the pythagorean theorem:
+
+\begin{equation} m: \len{AM'}^2 + m^2 = \len{AM}^2 \end{equation}
+
+The distance $\len{X_1 M}$, interpreted as part of the triangle $\triangle X_1 M' M$ can be calculated using the pythagorean theorem:
+
+\begin{equation} \len{X_1 M'}: \len{X_1 M'}^2 + m^2 = r^2 \end{equation}
+
+The length $\len{AM}$ of the vector $\vec{AM}$ can be calculated using the scalar product, i.e. projecting the vector on itself, and taking the square root:
+
+\begin{equation} \len{AM} = \sqrt{\vec{AM} \cdot \vec{AM}} \end{equation}
+
+Using both pythagorean equations, eliminating $m$, one finds:
+
+\begin{equation}\begin{split}
+  \len{X_1 M'} &= \sqrt{r^2 - m^2} \\
+    &= \sqrt{r^2 - (\len{AM}^2 - \len{AM'}^2)} \\
+    &= \sqrt{r^2 - \len{AM}^2 + \len{AM'}^2} \\
+    &= \sqrt{r^2 - \vec{AM} \cdot \vec{AM} + \len{AM'}^2}
+\end{split}\end{equation}
+
+\paragraph{Algorithm} Using these relations, the desired distances $\len{AX_1}, \len{AX_2}$ can be calculated with the following steps:
+
+1. Calculate the length $\len{AM'}$ by projecting $\vec{AM}$ onto the unit vector $\vec{v}$ in $\vec{AB}$-direction: $$ \len{AM'} = \vec{AM} \cdot \vec{v} $$
+1. Calculate $\len{X_1M'}$: $$ \len{X_1 M'} = \sqrt{r^2 - \vec{AM} \cdot \vec{AM} + \len{AM'}^2} $$
+1. Calculate the desired distances $\len{AX_1}$ and $\len{AX_2}$: $$ \len{A X_{1,2}} = \len{A M'} \mp \len{X_1 M'} $$
+
+Or, as C code using the opencl native vector functions:
+
+\begin{ccode}
+  const floating4_t vector_AM = (const floating4_t)(M.x - A.x, M.y - A.y, 0, 0);
+  const floating_t length_AMprime = dot(vector_AM, v);
+  const floating_t length_XMprime = native_sqrt(r * r - dot(vector_AM, vector_AM) + length_AMprime * length_AMprime);
+  const floating_t length_AX1 = length_AMprime - length_XMprime;
+  const floating_t length_AX2 = length_AMprime + length_XMprime;
+\end{ccode}
+
 
 ### TODO
 

@@ -1,0 +1,58 @@
+% Photon trajectory intersects hole-ice cylinder.
+%
+% I've used this as a template:
+% http://www.texample.net/tikz/examples/bisector/
+%
+% Fiedlschuster, 2017-04-25
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    scale=1,
+    >=stealth,
+    point/.style = {draw, circle,  fill = black, inner sep = 1pt},
+    dot/.style   = {draw, circle,  fill = black, inner sep = .2pt},
+  ]
+
+  \input{lib/hole-ice-circle}
+
+  % circle around M stands for the hole-ice cylinder
+  \tkzDrawPoint(M) \tkzLabelPoint[below](M){$M$}
+  \tkzDrawCircle[dotted](M,radius_end)
+  \tkzLabelCircle[above](M,radius_end)(90){Hole-ice cylinder}
+
+  % photon
+  \tkzDrawPoints(A,B)
+  \tkzLabelPoint[above](A){$A$}
+  \tkzLabelPoint[above](B){$B$}
+  \tkzDrawSegment(A,B)
+
+  % extended trajectory
+  \tkzDrawSegment[dashed](B,extended_endpoint)
+
+  % intersection
+  % https://tex.stackexchange.com/a/37237/70789
+  \tkzInterLC(A,B)(M,radius_end) \tkzGetPoints{X1}{X2}
+  \tkzDrawPoints(X1,X2)
+  \tkzLabelPoint[above](X1){$X_1$}
+  \tkzLabelPoint[above](X2){$X_2$}
+
+  % cylinder radius
+  \tkzDrawSegment[dotted](X1,M)
+  \tkzLabelSegment[below](X1,M){$r$}
+
+  % project X1M onto the photon trajectory
+  \tkzDefPointBy[projection = onto A--B](M) \tkzGetPoint{M'}
+  \tkzDrawPoint(M') \tkzLabelPoint[above left](M'){$M^\prime$}
+  \tkzDrawSegment[dashed](M',M)
+  \tkzMarkRightAngle(X1,M',M)
+  \tkzLabelSegment[right](M,M'){$m$}
+
+  % second triangle to understand the pythagoras
+  \tkzDrawSegment[dashed](A,M)
+
+\end{tikzpicture}
+\end{document}

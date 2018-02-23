@@ -6,11 +6,12 @@
 
 
 % circle
-\coordinate (M) at (2,0.4);
+\tkzDefPoint(2,0.4){M};
 \coordinate (radius_end) at (4,0);
+\tkzCalcLength[cm](M,radius_end) \tkzGetLength{r};
 
 % photon
-\coordinate (A) at (-2,-1);
-\coordinate (B) at (2,1);
+\tkzDefPoint(-2,-1){A};
+\tkzDefPoint(2,1){B};
 \coordinate (extended_endpoint) at ($ (A)!1.8!(B) $);
 
