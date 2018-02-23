@@ -105,15 +105,24 @@ Using both pythagorean equations, eliminating $m$, one finds:
 \paragraph{Algorithm} Using these relations, the desired distances $\len{AX_1}, \len{AX_2}$ can be calculated with the following steps:
 
 1. Calculate the length $\len{AM'}$ by projecting $\vec{AM}$ onto the unit vector $\vec{v}$ in $\vec{AB}$-direction: $$ \len{AM'} = \vec{AM} \cdot \vec{v} $$
-1. Calculate $\len{X_1M'}$: $$ \len{X_1 M'} = \sqrt{r^2 - \vec{AM} \cdot \vec{AM} + \len{AM'}^2} $$
+1. Calculate $\len{X_1M'}^2$: $$ \len{X_1 M'}^2 = r^2 - \vec{AM} \cdot \vec{AM} + \len{AM'}^2 $$
+1. Calculate $\len{X_1M'}$: $$ \len{X_1 M'} = \sqrt{\len{X_1 M'}^2} $$ In this approach, $\len{X_1M'}^2$ plays the role of the **discriminant**. If it is greater than zero, there are two intersection points. If it is zero, the intersection point $X$ falls onto $M'$, i.e. the line is actually a tangent. If the discriminant is less than zero, there is no intersection, because the radius $r$ is too small, i.e. the line is out of reach, resulting in the discriminant becoming negative.
 1. Calculate the desired distances $\len{AX_1}$ and $\len{AX_2}$: $$ \len{A X_{1,2}} = \len{A M'} \mp \len{X_1 M'} $$
 
 Or, as C code using the opencl native vector functions:
 
 \begin{ccode}
+  // Step 1
   const floating4_t vector_AM = (const floating4_t)(M.x - A.x, M.y - A.y, 0, 0);
   const floating_t length_AMprime = dot(vector_AM, v);
-  const floating_t length_XMprime = native_sqrt(r * r - dot(vector_AM, vector_AM) + length_AMprime * length_AMprime);
+
+  // Step 2
+  const floating_t discriminant = r * r - dot(vector_AM, vector_AM) + length_AMprime * length_AMprime;
+
+  // Step 3
+  const floating_t length_XMprime = native_sqrt(discriminant);
+
+  // Step 4
   const floating_t length_AX1 = length_AMprime - length_XMprime;
   const floating_t length_AX2 = length_AMprime + length_XMprime;
 \end{ccode}
