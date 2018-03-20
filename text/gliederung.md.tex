@@ -1,0 +1,85 @@
+%!TEX TS-program = ../make.zsh
+
+\tableofcontents
+
+# Introduction
+% What is the work?
+% Why is it important?
+% What is needed to understand the work?
+% How will the work be presented?
+% Definitions and key terms
+
+## What is IceCube
+## IceCube as Particle Physics Laboratory
+## IceCube as Deep-space Neutrino Telescope
+## Improving the Detector Resolution Through Calibration
+## Can Local Ice Properties be Implemented in Simulations Aiming to Improve Calibration?
+
+# Theoretical Background
+## Neutrinos
+## Relevant Neutrino Reactions
+## Photon Model
+## Scattering Model
+
+# Experimental Background
+## IceCube Detector
+## Digital Optical Modules (DOMs)
+## DOM Angular Acceptance Characteristics
+## Event Reconstruction
+## Likelihood Methods for Comparing Simulations to Reference Data
+## Ice Models to Characterize Photon Scattering And Absorption
+## Hole Ice As Region with Different Ice Properties Around Detector Strings
+
+# Simulation Background
+## Parallal Computing
+## Photon Propagation Algorithm
+## `clsim` Photon Propagator
+
+# Methods
+% Everything needed to reproduce the work
+## Photon Propagation Through Different Media
+### Principles of Adding Medium Changes to Photon Propagation
+### Adding Hole Ice as Post-propagation-step Correction
+### Adding Hole Ice to Generic Medium Changes
+### Unit Testing
+## Implementing Cylinder-shaped Areas with Distinct Ice Properties
+### Hole-ice Cylinders
+### Nested Cylinders With Different Properties
+### Cables With Instant Absorption
+## Example Studies
+### Basic Scattering Properties
+### Instant Absorption
+### Shifting the DOMs Relative to the Hole-ice Cylinder
+### Cable Shadows
+## Parameter Grid Scan to Find Hole-ice Properties
+### Based on Reference Simulation
+### Based on Flasher Data ($\rightarrow$ out of scope)
+## Full-cycle simulation to Check for Sensitivity to Simulated Features ($\rightarrow$ out of scope)
+
+# Results
+% All results relevant to the question
+## Impact of Simulated Features on the Effective DOM Angular Acceptance
+### Effect of Hole-ice Cylinders
+### Effect of Nested Cylinders
+### Effect of Cable Shadows
+### Effect of Shifted DOM Positions
+## Estimated Hole-ice Parameters of Reference Simulation
+## Impact of Simulated Features on Event Reconstruction ($\rightarrow$ out of scope)
+
+# Discussion
+% What do the results mean?
+% Why is it interesting?
+% What does it change?
+## Simulation Sensitivity to Local Ice Features
+## Estimated Gain on Reconstruction Resolution ($\rightarrow$ out of scope)
+## Performance Impact on Simulation
+## Estimated Uncertainties Due to Numerical Limitations
+## New Features are Most Useful in Low-energy Studies (?)
+## Comparison to Alterantive Propagation Tool, \textit{Photon Propagation Code}, `ppc`
+
+# Conclusion
+% Key results
+% Outlook
+## Detector Calibration Can/Cannot (?) Be Improved By Simulating Local Ice Properties Like Hole Ice
+## Suggested Follow-up Studies
+
