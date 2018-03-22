@@ -4,6 +4,7 @@
 
 \title{Diplomarbeit}
 \author{Sebastian Fiedlschuster}
+\newcommand\entwurf{\today}
 
 \input{config/layout}
 
@@ -20,20 +21,22 @@
 \input{lib/sections}
 \input{lib/header}
 
-%\includeonly{}
+\includeonly{text/gliederung}
 
 \bibliography{diplomarbeit}
 \begin{document}
   \maketitle
 
-  \include{text/intersections}
-  \include{text/hole_ice_trajectory_corrections}
-  \include{text/problems}
+  \include{text/gliederung}
 
-  %Foo \cite{mueller2000}
-  %\printbibliography
-
-  \appendix
-  \include{text/appendix/calculating_intersections_with_sympy}
+  %\include{text/intersections}
+  %\include{text/hole_ice_trajectory_corrections}
+  %\include{text/problems}
+  %
+  %%Foo \cite{mueller2000}
+  %%\printbibliography
+  %
+  %\appendix
+  %\include{text/appendix/calculating_intersections_with_sympy}
 
 \end{document}

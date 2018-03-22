@@ -1,6 +1,7 @@
 % This file is responsible for the page header.
 
 \usepackage{fancyhdr}
+\usepackage{xspace}
 
 \newcommand{\fancyfootfont}[1]{\footnotesize\textsf{#1}}
 
@@ -23,7 +24,8 @@
   \minipage{10cm}%
     \textsf{%
       \textbf{{\runtitle}}%
-      \ifdef{\dokumentid}{\xspace, \dokumentid}{}
+      \ifdef{\dokumentid}{\xspace, \dokumentid}{}%
+      \ifdef{\entwurf}{\xspace, Draft \entwurf}{}%
       %\ifthenelse{\equal{\entwurf}{}}{
       %	\datum
       %}{

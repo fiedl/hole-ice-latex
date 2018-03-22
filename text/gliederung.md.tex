@@ -1,5 +1,6 @@
 %!TEX TS-program = ../make.zsh
 
+\setcounter{tocdepth}{2}
 \tableofcontents
 
 # Introduction
@@ -17,7 +18,7 @@
 
 # Theoretical Background
 ## Neutrinos
-## Relevant Neutrino Interactions
+## Neutrino Interactions Relevant to IceCube
 ## Cherenkov-light Emission
 ## Photon Scattering Model
 
@@ -31,8 +32,8 @@
 % DOM is wrongly considered centred in hole ice
 ## Event Reconstruction
 ## Likelihood Methods for Comparing Simulations to Reference Data
-## Ice Models to Characterize Photon Scattering And Absorption in the South-polar Ice
-## Hole Ice As Region of Different Ice Properties Around Detector Strings
+## Ice Models to Characterize Photon Scattering and Absorption in the South-polar Ice
+## Hole Ice as Region of Different Ice Properties Around Detector Strings
 
 # Simulation Background
 ## Monte-carlo Simulations
@@ -49,17 +50,16 @@
 ### Unit Testing
 ## Implementing Cylinder-shaped Areas with Distinct Ice Properties
 ### Hole-ice Cylinders
-### Nested Cylinders With Different Properties
-### Cables With Instant Absorption
+### Nested Cylinders with Different Properties
+### Cables with Instant Absorption
 ## Example Studies
 ### Basic Scattering Properties
 ### Instant Absorption
 ### Shifting the DOMs Relative to the Hole-ice Cylinder
 ### Cable Shadows
-## Parameter Grid Scan to Find Hole-ice Properties
-### Based on Reference Simulation
-### Based on Flasher Data ($\rightarrow$ out of scope)
-## Full-cycle simulation to Check for Sensitivity to Simulated Features ($\rightarrow$ out of scope)
+## Parameter Grid Scan to Find Hole-ice Properties Compared to Reference Simulation
+## Comparison of Flasher Data and Simulated Flasher Events
+% ## Full-cycle Simulation to Check for Sensitivity to Simulated Features (→ outofscope)
 
 # Results
 % All results relevant to the question
@@ -69,25 +69,26 @@
 ### Effect of Cable Shadows
 ### Effect of Shifted DOM Positions
 ## Estimated Hole-ice Parameters of Reference Simulation
-## Impact of Simulated Features on Event Reconstruction ($\rightarrow$ out of scope)
+## Estimated Hole-Ice Parameters Based on Flasher Data
+% ## Impact of Simulated Features on Event Reconstruction ($\rightarrow$ out of scope)
 
 # Discussion
 % What do the results mean?
 % Why is it interesting?
 % What does it change?
-## Estimated Detecion Sensitivity to Local Ice Features in Simulations
-## Estimated Gain on Reconstruction Resolution ($\rightarrow$ out of scope)
+## Estimated Detection Sensitivity to Local Ice Features in Simulations
+## Estimated Gain on Reconstruction Resolution ($\rightarrow$ out of scope ?)
 ## Performance Impact on Simulations
 ## Estimated Uncertainties Due to Numerical Limitations
-## New Features are Most Useful in Low-energy Studies (?)
+## New Simulation Features are Most Useful in Low-energy Studies (?)
 ## Comparison to Alterantive Propagation Tool, \textit{Photon Propagation Code}, `ppc`
-## Features Not Considered in this Simulation
+## Ice Features Not Considered in this Simulation
 ### Tilted DOM Positions
 ### Gradient in Hole-ice Properties
 
 # Conclusion
 % Key results
 % Outlook
-## Detector Calibration Can/Cannot (?) Be Improved By Simulating Local Ice Properties Like Hole Ice
+## Detector Calibration Can/Cannot (?) Be Improved by Simulating Local Ice Properties Like Hole Ice
 ## Suggested Follow-up Studies
 % Flasher studies to find hole-ice parameters
