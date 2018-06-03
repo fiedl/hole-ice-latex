@@ -1,6 +1,6 @@
 %!TEX TS-program = ../make.zsh
 
-## Cross Checks
+## Consistency Checks
 
 - The second hole-ice algorithm is more interconnected with other parts such that unit tests are ...
 - Another method of testing whether the medium-propagation algorithm is meeting the expectations, is implementing cross checks
@@ -40,7 +40,27 @@
 
 \paragraph{Observable} For each simulated photon, record the total path length, i.e. the total travelled distance from the starting point of the photon to the point where the photon is absorbed. Plot the distribution of these total path lengths.
 
-\paragraph{Expectation} As the probability of absorption is the same at each point within the hole-ice cylinder, the distribution of the total path length should folow an exponential curve governed by the photon absorption length within the hole-ice cylinder.
+\paragraph{Expectation}
+
+- The probability of absorption is the same at each point within the hole-ice cylinder
+- the distribution of the total path length should folow an exponential curve governed by the photon absorption length within the hole-ice cylinder.
+- Let $N$ be the total number of started photons in the simulation. Let $\lambdaabs$ be the photon absorption length within the hole-ice cylinder.
+- The probability $p(x):=f\,\dx$ for a photon to be absorbed within its path length interval $[x; x + \dx[$ is the same as long as the photon stays within the hole ice.
+- Let $n(x)$ be the number of photons with a path length of $x$ or more, i.e. the number of photons that still exist after travelling the distance $x$. \footnote{\todo{"after" ist nicht präzise}}
+- The number of photons that are absorbed within the interval $[x; x + \dx[$ should (in the limit of many photons) be $-\dn(x) := p(x)\ n(x) = f\,\dx\,n(x)$.
+
+$$ \frac{\d}{\dx}\ n(x) = -f\ n(x) $$
+
+- As the derivative of $n$ is proportional to $n$, $n$ is an exponential: $n(x) = a\,\e^{b\,x}$
+
+$$ \frac{\d}{\dx}\ n(x)
+  = \frac{\d}{\dx}\ a\,\e^{b\,x}
+  = a\,b\,\e^{b\,x}
+  = -f\ n(x)
+  = -f\,a\,\e^{b\,x} $$
+
+- Therefore, $b = -f$.
+- As the absorption length $\lambdaabs$ is defined as the distance after that the number of photons has dropped to $1/\e$ of the original number: $b = -1/\lambdaabs$.
 
 % absorption probability p at each point.
 % p = dx f
@@ -53,14 +73,26 @@ $$
   n(x) = n_0 \cdot \e^{-\frac{x}{\lambda_\text{abs}}}
 $$
 
-The number of photons $n(x)$ with total path length $x$, $\lambda_\text{abs}$ is the absorption length within the hole-ice cylinder. $N$ is the total number of photons started in the simulation.
+% Falsch [n(x) ist die Anzahl von Photonen, die noch da sind.]: The number of photons $n(x)$ with total path length $x$, $\lambda_\text{abs}$ is the absorption length within the hole-ice cylinder. $N$ is the total number of photons started in the simulation.
+%
+% $$
+%   n(x) \propto N \cdot \e^{-\frac{x}{\lambda_\text{abs}}}
+% $$
 
-$$
-  n(x) \propto N \cdot \e^{-\frac{x}{\lambda_\text{abs}}}
-$$
+- In a histogram of the total path lengths $x$, the bin height is proportional to the number of photons that are absorbed within the interval $[x; x + \dx[$, which is $-\dn(x)$.
+
+$$ \frac{\d}{\dx}\ n(x) = -f\ n(x)
+  = -f\ a\,\e^{-f\,x} $$
+
+- Therefore, the bin height $b(x)$ of the histogram should also follow an exponential curve:
+
+$$ b(x) \propto \dn(x) \propto \e^{-x/\lambdaabs} $$
+
+- And one should be able to determine the absorption length $\lambdaabs$ by fitting the histogram bins to an exponential function.
 
 \begin{figure}
   \image{cross-check-64-steamshovel}
   \caption{Viewing this cross check in steamshovel. The DOM is shown only to illustrate the size of the scenary and is configured not to interact with the simulated photons.}
 \end{figure}
 
+\paragraph{Confirmation} Indeed, the simulation yields the expected distribution of the total path length. Via a curve fit, the absorption length $\lambdaabs$ could be determined for this simulation to be $\lambdaabs = 0.1003\m \pm 0.0011\m$, which is in accordance with the true absorption length of $0.1000\m$ used in the simulation.
