@@ -1,0 +1,66 @@
+%!TEX TS-program = ../make.zsh
+
+## Cross Checks
+
+- The second hole-ice algorithm is more interconnected with other parts such that unit tests are ...
+- Another method of testing whether the medium-propagation algorithm is meeting the expectations, is implementing cross checks
+
+### Exponential distribution of the travelled distance to absorption
+
+- Wenn die Absorptionswahrscheinlichkeit an jedem Ort gleich ist, erwartet man eine exponentialverteilte distance to absorption
+- warum? wenn die Photonen nichts voneinander wissen, ist die Absorptionswahrscheinlichkeit unabhängig voneinander. Die absolute Zahl an Photonen, die nach einer Strecke $x$ werden, hängt also nur davon ab, wie viele Photonen insgesamt nach dieser Strecke $x$ noch da sind.
+- Wenn man das mit Standard-clsim prüft, kann man diese exponentielle Verteilung beobachten.\footnote{\todo{Issue erzeugen und prüfen, ob das auch so ist.}}
+- Erwartung: Wenn man Photonen im Hole-Ice startet und weiter ins Hole-Ice fliegen lässt, erwartet man auch einen exponentiellen Abfall, dessen Stärke sich nach der Absorptionswahrscheinlichkeit im Hole-Ice richtet.
+- Die Streuwahrscheinlichkeit ist hierbei nicht wichtig, ist im Experiment aber so gewählt, dass die Photonen möglichst nicht wieder aus dem Hole-Ice herausstreuen.
+
+\begin{figure}
+  \image{cross-check-64-exponential-distribution.png}
+  \caption{Distribution of the total path length of simulated photons both started and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. As expected, the distribution follows an exponential curve. The fitted absorption length $\lambda_\text{abs}=0.1003\m \pm 0.0011\m$ is in agreement with the true absorption length of $0.1000\m$ used in the simulation.}
+\end{figure}
+
+- Simulation, um das zu überprüfen: Starte Photonen in einem Hole-Ice-Zylinder und wähle die Absorptionslänge so, dass sie deutlich kleiner als der Hole-Ice-Radius ist, sodass die meisten Photonen innerhalb des Zylinders absorbiert werden.
+
+\paragraph{Simulation scenario} Start a pencil beam of $10^4$ photons within a hole-ice cylinder with a radius of $1.0\m$ with a distance of $0.9\m$ to the cylinder center towards the cylinder center. Let the effective scattering length within the cylinder be $100.0\m$ and the absorption length be $0.1\m$.\footnote{This cross check is documented and implemented at \url{https://github.com/fiedl/hole-ice-study/issues/64}.}
+
+\todo{Number of significant digits}
+
+% [2018-05-14 16:33:11] fiedl@fiedl-mbp ~/hole-ice-study/scripts/FiringRange master ⚡
+% ▶ rm tmp/gcd_with_hole_ice.i3
+% ./run.rb \
+%     --hole-ice-radius=1.00 \
+%     --effective-scattering-length=100.0 \
+%     --absorption-length=0.10 \
+%     --distance=0.90 \
+%     --number-of-photons=10000 \
+%     --cpu --save-photon-paths \
+%     --number-of-runs=1 --number-of-parallel-runs=1 \
+%     |grep "CROSS CHECK" |grep -v "INFO" \
+%     > ~/hole-ice-study/results/cross_checks/cross_check_64.txt
+% steamshovel tmp/propagated_photons.i3
+
+\paragraph{Observable} For each simulated photon, record the total path length, i.e. the total travelled distance from the starting point of the photon to the point where the photon is absorbed. Plot the distribution of these total path lengths.
+
+\paragraph{Expectation} As the probability of absorption is the same at each point within the hole-ice cylinder, the distribution of the total path length should folow an exponential curve governed by the photon absorption length within the hole-ice cylinder.
+
+% absorption probability p at each point.
+% p = dx f
+% probability to be absorbed after distance x: P(x) is proportional to number of pho
+% the number of photon with a total path length of x is proportional to the total number of photons and the probability of a photon to have this path length
+% probability of a photon having a path length of x: depends on the absorption length or the absorption probability at each point
+% \int_0^x{dx f}
+
+$$
+  n(x) = n_0 \cdot \e^{-\frac{x}{\lambda_\text{abs}}}
+$$
+
+The number of photons $n(x)$ with total path length $x$, $\lambda_\text{abs}$ is the absorption length within the hole-ice cylinder. $N$ is the total number of photons started in the simulation.
+
+$$
+  n(x) \propto N \cdot \e^{-\frac{x}{\lambda_\text{abs}}}
+$$
+
+\begin{figure}
+  \image{cross-check-64-steamshovel}
+  \caption{Viewing this cross check in steamshovel. The DOM is shown only to illustrate the size of the scenary and is configured not to interact with the simulated photons.}
+\end{figure}
+
