@@ -52,7 +52,7 @@
     \substep record photon position\\
     \substep \rnd distance to next scattering point\\
     \substep \rnd next scattering angle\\
-    \substep calculate new position and direction
+    \substep \framebox{calculate new position and direction}
     }]{Propagate to next scattering point};
   \node (intersect_dom)[decision, below of = propagate_to_next_scattering_point]{Hit\\DOM on the\\way?};
   \node (detect)[process, right = 2cm of intersect_dom, label = {[align = left] east:
