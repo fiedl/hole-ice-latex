@@ -19,28 +19,31 @@
 
   % Nodes
   \node (start)[start]{Start};
-  \node (create_photon)[process, below of = start, label = {[align = left] east:
+  \node (create_photon)[process, below of = start]{Create photon};
+  \node (propagate_to_next_scattering_point)[process, below of = create_photon]
+    {Propagate to next scattering point};
+  \node (intersect_dom)[decision, below of = propagate_to_next_scattering_point]{Hit\\DOM on the\\way?};
+  \node (detect)[process, right = 2cm of intersect_dom]{Detect};
+  \node (destroy_after_detection)[stop, below of = detect]{Destroy photon};
+  \node (distance_to_absorption_left)[decision, below = 3mm of intersect_dom]{Distance\\to absorption\\left?};
+  \node (absorb)[process, below = 5mm of distance_to_absorption_left]{Absorb};
+  \node (destroy_after_absorption)[stop, below of = absorb]{Destroy photon};
+
+  % Substeps
+  \node ()[substeps, right = 1mm of create_photon]{
     \substep initiate position and direction\\
-    \substep \rnd distance to absorption
-    }]{Create photon};
-  \node (propagate_to_next_scattering_point)[process, below of = create_photon, label = {[align = left] east:
+    \substep \rnd distance to absorption};
+  \node ()[substeps, right = 1mm of propagate_to_next_scattering_point]{
     \substep record photon position\\
     \substep \rnd distance to next scattering point\\
     \substep \rnd next scattering angle\\
-    \substep \framebox{calculate new position and direction}
-    }]{Propagate to next scattering point};
-  \node (intersect_dom)[decision, below of = propagate_to_next_scattering_point]{Hit\\DOM on the\\way?};
-  \node (detect)[process, right = 2cm of intersect_dom, label = {[align = left] east:
+    \substep \framebox{calculate new position and direction}};
+  \node ()[substeps, right = 1mm of detect]{
     \substep update position and direction\\
-    \substep record detection
-    }]{Detect};
-  \node (destroy_after_detection)[stop, below of = detect]{Destroy photon};
-  \node (distance_to_absorption_left)[decision, below = 3mm of intersect_dom]{Distance\\to absorption\\left?};
-  \node (absorb)[process, below = 5mm of distance_to_absorption_left, label = {[align = left] east:
+    \substep record detection};
+  \node ()[substeps, right = 1mm of absorb]{
     \substep update position\\
-    \substep record absorption
-    }]{Absorb};
-  \node (destroy_after_absorption)[stop, below of = absorb]{Destroy photon};
+    \substep record absorption};
 
   % Arrows
   \draw[->](start)--(create_photon);
