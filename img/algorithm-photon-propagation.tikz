@@ -12,28 +12,30 @@
 \begin{tikzpicture}
   [
     %scale=1,
-    node distance = 1.8cm,
+    node distance = 2.0cm,
     every node/.style = {fill=white, font=\sffamily},
     align = center
   ]
 
   % Nodes
   \node (start)[start]{Start};
-  \node (create_photon)[process, below of = start]{Create photon};
-  \node (propagate_to_next_scattering_point)[process, below of = create_photon]
+  \node (create)[process, below of = start]{Create photon};
+  \node (propagate)[process, below of = create]
     {Propagate to next scattering point};
-  \node (intersect_dom)[decision, below of = propagate_to_next_scattering_point]{Hit\\DOM on the\\way?};
-  \node (detect)[process, right = 2cm of intersect_dom]{Detect};
+
+  \node (hit)[decision, below = 13mm of propagate]{Hit\\DOM on the\\way?};
+  \node (detect)[process, right = 2cm of hit]{Detect};
   \node (destroy_after_detection)[stop, below of = detect]{Destroy photon};
-  \node (distance_to_absorption_left)[decision, below = 3mm of intersect_dom]{Distance\\to absorption\\left?};
-  \node (absorb)[process, below = 5mm of distance_to_absorption_left]{Absorb};
+
+  \node (absorption)[decision, below = 13mm of hit]{Distance\\to absorption\\reached?};
+  \node (absorb)[process, right = 2cm of absorption]{Absorb};
   \node (destroy_after_absorption)[stop, below of = absorb]{Destroy photon};
 
   % Substeps
-  \node ()[substeps, right = 1mm of create_photon]{
+  \node ()[substeps, right = 1mm of create]{
     \substep initiate position and direction\\
     \substep \rnd distance to absorption};
-  \node ()[substeps, right = 1mm of propagate_to_next_scattering_point]{
+  \node ()[substeps, right = 1mm of propagate]{
     \substep record photon position\\
     \substep \rnd distance to next scattering point\\
     \substep \rnd next scattering angle\\
@@ -46,22 +48,25 @@
     \substep record absorption};
 
   % Arrows
-  \draw[->](start)--(create_photon);
-  \draw[->](create_photon)--(propagate_to_next_scattering_point);
-  \draw[->](propagate_to_next_scattering_point)--(intersect_dom);
-  \draw[->](intersect_dom)--(detect);
-  \draw[->](detect)--(destroy_after_detection);
-  \draw[->](intersect_dom)--(distance_to_absorption_left);
-  \draw[->](distance_to_absorption_left.west)
-    -- +(-3,0) |- (propagate_to_next_scattering_point.west);
-  \draw[->](distance_to_absorption_left)--(absorb);
-  \draw[->](absorb)--(destroy_after_absorption);
+  \newcommand\connect[2]{\draw[->](#1)--(#2)}
+  \connect{start}{create};
+  \connect{create}{propagate};
+
+  \connect{propagate}{hit};
+  \connect{hit}{detect};
+  \connect{detect}{destroy_after_detection};
+
+  \connect{hit}{absorption};
+  \connect{absorption}{absorb};
+  \connect{absorb}{destroy_after_absorption};
+
+  \draw[->](absorption.south) -- +(0,-1) -- +(-5,-1) |- (propagate.west);
 
   % YES/NO labels
-  \node (intersect_yes)[right = 1mm of intersect_dom, yshift = 3mm]{YES};
-  \node (intersect_no)[below = -1mm of intersect_dom, xshift = 5mm]{NO};
-  \node (distance_to_absorption_left_yes)[left = 1mm of distance_to_absorption_left, yshift = 3mm]{YES};
-  \node (distance_to_absorption_left_no)[below = -1mm of distance_to_absorption_left, xshift = 5mm]{NO};
+  \newcommand\yes[1]{\node ()[right = 1mm of #1, yshift = 3mm]{YES}}
+  \newcommand\no[1]{\node ()[below = 1mm of #1, xshift = -5mm, yshift = 2mm]{NO}}
+  \yes{hit}; \no{hit};
+  \yes{absorption}; \no{absorption};
 
 
 \end{tikzpicture}
