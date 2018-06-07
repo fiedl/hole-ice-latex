@@ -1,0 +1,70 @@
+% Algorithm: Photon propagation
+%
+% Templates:
+% http://www.texample.net/tikz/examples/android/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+
+\usetikzlibrary{arrows.meta}
+\usepackage{epsdice}
+
+\tikzset{%
+  >={Latex[width=2mm,length=2mm]},
+  % Specifications for style of nodes:
+            base/.style = {rectangle, rounded corners, draw=black,
+                           minimum width=4cm, minimum height=1cm,
+                           text centered, font=\sffamily},
+           start/.style = {base, fill=blue!30, rounded corners = 15},
+            stop/.style = {start},
+  %     startstop/.style = {base, fill=red!30},
+  %  activityRuns/.style = {base, fill=green!30},
+         process/.style = {base, minimum width=2.5cm, fill=orange!15,
+                           font=\ttfamily},
+        decision/.style = {base, diamond, inner sep = 0pt, fill = green!30, minimum width = 0cm, minimum height = 0cm, node distance = 2.5cm}
+}
+
+\newcommand\rnd{\epsdice[black]{5}\,}
+\newcommand\substep{- }
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    %scale=1,
+    node distance = 1.5cm,
+    every node/.style = {fill=white, font=\sffamily},
+    align = center
+  ]
+
+  % Nodes
+  \node (start)[start]{Start};
+  \node (create_photon)[process, below of = start, label = {[align = left] east:\substep initiate position and direction\\\substep \rnd distance to absorption}]{Create photon};
+  \node (propagate_to_next_scattering_point)[process, below of = create_photon, label = {[align = left] east:\substep \rnd distance to next scattering point\\\substep \rnd scattering angle\\\substep calculate new position and direction}]{Propagate to next scattering point};
+  \node (intersect_dom)[decision, below of = propagate_to_next_scattering_point]{Intersect\\DOM on the\\way?};
+  \node (detect)[process, right = 2cm of intersect_dom, label = {[align = left] east:\substep update position and direction\\\substep record detection}]{Detect};
+  \node (destroy_after_detection)[stop, below of = detect]{Destroy photon};
+  \node (distance_to_absorption_left)[decision, below = 3mm of intersect_dom]{Distance\\to absorption\\left?};
+  \node (absorb)[process, below = 5mm of distance_to_absorption_left, label = {[align = left] east:\substep update position\\\substep record absorption}]{Absorb};
+  \node (destroy_after_absorption)[stop, below of = absorb]{Destroy photon};
+
+  % Arrows
+  \draw[->](start)--(create_photon);
+  \draw[->](create_photon)--(propagate_to_next_scattering_point);
+  \draw[->](propagate_to_next_scattering_point)--(intersect_dom);
+  \draw[->](intersect_dom)--(detect);
+  \draw[->](detect)--(destroy_after_detection);
+  \draw[->](intersect_dom)--(distance_to_absorption_left);
+  \draw[->](distance_to_absorption_left.west)
+    -- +(-3,0) |- (propagate_to_next_scattering_point.west);
+  \draw[->](distance_to_absorption_left)--(absorb);
+  \draw[->](absorb)--(destroy_after_absorption);
+
+  % YES/NO labels
+  \node (intersect_yes)[right = 1mm of intersect_dom, yshift = 3mm]{YES};
+  \node (intersect_no)[below = -1mm of intersect_dom, xshift = 5mm]{NO};
+  \node (distance_to_absorption_left_yes)[left = 1mm of distance_to_absorption_left, yshift = 3mm]{YES};
+  \node (distance_to_absorption_left_no)[below = -1mm of distance_to_absorption_left, xshift = 5mm]{NO};
+
+
+\end{tikzpicture}
+\end{document}
