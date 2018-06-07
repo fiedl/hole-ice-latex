@@ -7,7 +7,12 @@
 \input{lib/common}
 
 \usetikzlibrary{arrows.meta}
+
+% Dice
 \usepackage{epsdice}
+\usepackage{pifont}
+\DeclareFontFamily{U}{dice3d}{}
+\DeclareFontShape{U}{dice3d}{m}{n}{<-> s*[4] dice3d}{}
 
 \tikzset{%
   >={Latex[width=2mm,length=2mm]},
@@ -24,7 +29,8 @@
         decision/.style = {base, diamond, inner sep = 0pt, fill = green!30, minimum width = 0cm, minimum height = 0cm, node distance = 2.5cm}
 }
 
-\newcommand\rnd{\epsdice[black]{5}\,}
+\newcounter{DiceCounter}\setcounter{DiceCounter}{122}
+\newcommand\rnd{\addtocounter{DiceCounter}{-2}\Pisymbol{dice3d}{\arabic{DiceCounter}}\,}%{\epsdice[black]{5}\,}
 \newcommand\substep{- }
 
 \begin{document}
