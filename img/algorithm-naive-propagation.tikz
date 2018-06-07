@@ -27,10 +27,10 @@
   \node (destroy_after_detection)[stop, below of = detect]{Destroy photon};
 
   \node (scattering)[decision, below = 2.0cm of hit]{\rnd:\\Scattering?};
-  \node (new_direction)[process, right = 2.0cm of scattering]{\rnd new direction};
+  \node (scatter)[process, right = 2.6cm of scattering]{Scatter};
 
   \node (absorption)[decision, below = 1cm of scattering]{\rnd:\\Absorption?};
-  \node (absorb)[process, right = 3cm of absorption]{Absorb};
+  \node (absorb)[process, right = 2.6cm of absorption]{Absorb};
   \node (destroy_after_absorption)[stop, below of = absorb]{Destroy photon};
 
   % Substeps
@@ -41,6 +41,9 @@
     \substep update photon position};
   \node ()[substeps, right = 1mm of detect]{
     \substep record detection};
+  \node ()[substeps, right = 1mm of scatter]{
+    \substep record position\\
+    \substep \rnd new direction};
   \node ()[substeps, right = 1mm of absorb]{
     \substep record absorption};
 
@@ -53,8 +56,8 @@
   \connect{detect}{destroy_after_detection};
 
   \connect{hit}{scattering};
-  \connect{scattering}{new_direction};
-  \draw[->](new_direction.south)|-(absorption.north);
+  \connect{scattering}{scatter};
+  \draw[->](scatter.south)|-(absorption.north);
 
   \connect{scattering}{absorption};
   \connect{absorption}{absorb};
