@@ -5,33 +5,8 @@
 %
 \documentclass[tikz,border=10pt]{standalone}
 \input{lib/common}
-
-\usetikzlibrary{arrows.meta}
-
-% Dice
-\usepackage{epsdice}
-\usepackage{pifont}
-\DeclareFontFamily{U}{dice3d}{}
-\DeclareFontShape{U}{dice3d}{m}{n}{<-> s*[4] dice3d}{}
-
-\tikzset{%
-  >={Latex[width=2mm,length=2mm]},
-  % Specifications for style of nodes:
-            base/.style = {rectangle, rounded corners, draw=black,
-                           minimum width=4cm, minimum height=1cm,
-                           text centered, font=\sffamily},
-           start/.style = {base, fill=blue!30, rounded corners = 15},
-            stop/.style = {start},
-  %     startstop/.style = {base, fill=red!30},
-  %  activityRuns/.style = {base, fill=green!30},
-         process/.style = {base, minimum width=2.5cm, fill=orange!15,
-                           font=\ttfamily},
-        decision/.style = {base, diamond, inner sep = 0pt, fill = green!30, minimum width = 0cm, minimum height = 0cm, node distance = 2.5cm}
-}
-
-\newcounter{DiceCounter}\setcounter{DiceCounter}{122}
-\newcommand\rnd{\addtocounter{DiceCounter}{-2}\Pisymbol{dice3d}{\arabic{DiceCounter}}\,randomize }%{\epsdice[black]{5}\,}
-\newcommand\substep{- }
+\input{lib/flow_charts}
+\input{lib/dice_symbols}
 
 \begin{document}
 \begin{tikzpicture}

@@ -1,0 +1,10 @@
+
+% \usepackage{epsdice}
+% \newcommand\rnd{\epsdice[black]{5}\,}
+
+\usepackage{pifont}
+\DeclareFontFamily{U}{dice3d}{}
+\DeclareFontShape{U}{dice3d}{m}{n}{<-> s*[4] dice3d}{}
+
+\newcounter{DiceCounter}\setcounter{DiceCounter}{122}
+\newcommand\rnd{\addtocounter{DiceCounter}{-2}\Pisymbol{dice3d}{\arabic{DiceCounter}}\,randomize }
