@@ -1,0 +1,68 @@
+% Algorithm: Hole-ice propagation 2017
+% https://github.com/fiedl/hole-ice-study/issues/78
+
+%
+% Templates:
+% http://www.texample.net/tikz/examples/android/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+\input{lib/flow_charts}
+\input{lib/dice_symbols}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    %scale=1,
+    node distance = 1.8cm,
+    every node/.style = {fill=white, font=\sffamily},
+    align = center
+  ]
+
+  % Nodes
+  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
+  \newcommand\decision[3]{\node(#1)[decision, below = 5mm of #3]{#2}}
+  \node(start)[start]{Start};
+  \process{listofmedia}{Declare list of media}{below = 1cm of start};
+  \process{addstartmedium}{Add start medium\\at current photon position\\from ice-layer-properties table\\to list of media}{below = 1cm of listofmedia};
+  \process{addicelayers}{Add ice layers in range\\from ice-layer-properties table\\to list of media}{below = 5mm of addstartmedium};
+  \process{addholeice}{Add hole-ice cylinders in range\\to list of media}{below of = addicelayers};
+  \process{sort}{Sort list of media\\by distance from current photon position}{below of = addholeice};
+  \process{loop}{Loop over list of media and\\calculate geometrical distances\\to the next scattering point\\and to absorption}{below of = sort};
+  \node(return)[stop, below of = loop]{Return};
+
+  % Comments
+  \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
+  \comment{start}{
+    \substep photon position and direction\\
+    \substep hole-ice cylinders\\
+    \substep number of scattering lengths left to next scattering point\\
+    \substep number of absorption lengths left to absorption\\
+  };
+  \comment{listofmedia}{
+    Each list item has:\\
+    \substep geometrical distance along the photon trajectory from the current photon position to the medium\\
+    \substep geometrical scattering length within the medium\\
+    \substep geometrical absorption length within the medium\\
+  };
+  \comment{addholeice}{
+    May overwrite the start medium\\
+    if the photon starts within the cylinder.
+  };
+  \comment{return}{
+    \substep geometrical distance to next scattering point\\
+    \substep geometrical distance to absorption
+  };
+
+  %  Arrows
+  \newcommand\connect[2]{\draw[->](#1)--(#2)}
+  \connect{start}{listofmedia};
+  \connect{listofmedia}{addstartmedium};
+  \connect{addstartmedium}{addicelayers};
+  \connect{addicelayers}{addholeice};
+  \connect{addholeice}{sort};
+  \connect{sort}{loop};
+  \connect{loop}{return};
+
+\end{tikzpicture}
+\end{document}
