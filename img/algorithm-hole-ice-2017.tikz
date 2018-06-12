@@ -1,0 +1,88 @@
+% Algorithm: Hole-ice propagation 2017
+% https://github.com/fiedl/hole-ice-study/issues/77
+
+%
+% Templates:
+% http://www.texample.net/tikz/examples/android/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+\input{lib/flow_charts}
+\input{lib/dice_symbols}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    %scale=1,
+    node distance = 1.8cm,
+    every node/.style = {fill=white, font=\sffamily},
+    align = center
+  ]
+
+  % Nodes
+  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
+  \newcommand\decision[3]{\node(#1)[decision, below = 5mm of #3]{#2}}
+  \node(start)[start]{Start};
+  \process{filter}{Filter cylinders by range}{below of = start};
+  \node(cylindersleft)[decision, below = 2cm of filter]{Any\\cylinders left\\?};
+  \process{next}{Take next cylinder in range}{below = 5mm of cylindersleft};
+  \process{intersection}{Calculate intersection points of\\photon trajectory and cylinder}{below of = next};
+  \decision{anyintersections}{Any\\intersections\\?}{intersection};
+  \process{scacorrection}{Calculate hole-ice correction for geometric distance\\to the next scattering point}{below = 5mm of anyintersections};
+  \decision{reachesholeice}{Photon\\reaches hole ice\\?}{scacorrection};
+  \process{distancewithin}{Calculate distance within cylinder relevant to absorption correction}{below = 5mm of reachesholeice};
+  \process{abscorrection}{Calculate hole-ice correction for geometric distance\\to absorption}{below of = distancewithin};
+  %\node(return)[stop, below = 3cm of abscorrection]{Return};
+  \node(return)[stop, below = 3cm of abscorrection, xshift=-7.5cm]{Return};
+
+  % Comments
+  \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
+  \comment{start}{
+    \substep photon position and direction\\
+    \substep hole-ice cylinders\\
+    \substep correction factors for scattering and absorption lengths\\
+    \substep geometrical distance to next scattering point before hole-ice correction\\
+    \substep geometrical distance to absorption before hole-ice correction
+  };
+  \comment{distancewithin}{
+    The photon may be scattered away\\
+    before reaching the far end\\
+    of the hole-ice cylinder.
+  };
+  \comment{return}{
+    \substep geometrical distance to next scattering point after hole-ice correction\\
+    \substep geometrical distance to absorption after hole-ice correction
+  };
+
+   Arrows
+  \newcommand\connect[2]{\draw[->](#1)--(#2)}
+  \connect{start}{filter};
+  \connect{filter}{cylindersleft};
+  %\draw[->](cylindersleft.west) -- +(-7,0) -- +(-7,-19.2) -- ($(abscorrection)!0.7!(return)$) -- (return.north);
+  \draw[->](cylindersleft.west) -- +(-6,0) -- (return.north);
+
+  \connect{cylindersleft}{next};
+  \connect{next}{intersection};
+  \connect{intersection}{anyintersections};
+  \draw[->](anyintersections.east) -- +(11.5,0);
+
+  \connect{anyintersections}{scacorrection};
+  \connect{scacorrection}{reachesholeice};
+  \draw[->](reachesholeice.east) -- +(11.3,0);
+
+  \connect{reachesholeice}{distancewithin};
+  \connect{distancewithin}{abscorrection};
+  \draw[->](abscorrection.south) -- +(0,-1) -- +(13,-1) |- ($(filter)!0.4!(cylindersleft)$);
+
+  % YES/NO labels
+  \node ()[left = 1mm of cylindersleft, yshift = 3mm]{NO};
+  \node ()[below = -1mm of cylindersleft, xshift = -5mm]{YES};
+
+  \node ()[right = 1mm of anyintersections, yshift = 3mm]{NO};
+  \node ()[below = -1mm of anyintersections, xshift = -5mm]{YES};
+
+  \node ()[right = 1mm of reachesholeice, yshift = 3mm]{NO};
+  \node ()[below = -1mm of reachesholeice, xshift = -5mm]{YES};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,92 @@
+% Algorithm: Hole-ice propagation 2017
+% Calculation of the hole-ice corrections.
+% https://github.com/fiedl/hole-ice-study/issues/77
+
+%
+% Templates:
+% http://www.texample.net/tikz/examples/android/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+\input{lib/flow_charts}
+\input{lib/dice_symbols}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    %scale=1,
+    node distance = 1.8cm,
+    every node/.style = {fill=white, font=\sffamily},
+    align = center
+  ]
+
+  % Nodes
+  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
+  \newcommand\decision[3]{\node(#1)[decision, minimum width = 4cm, minimum height = 4cm, #3]{#2}}
+  \node(start)[start]{Start};
+  \decision{n0}{No intersections\\($N = 0$)\\?}{below = 5mm of start};
+  \decision{n0startsoutside}{Step starts\\outside cylinder\\?}{right = 1.5cm of n0};
+  \process{case1}{Case 1}{right = 1.5cm of n0startsoutside};
+  \process{case2}{Case 2}{below = 2cm of case1};
+
+  \decision{n1}{One intersection\\($N = 1$)\\?}{below = 3cm of n0};
+  \decision{n1startsoutside}{Step starts\\outside cylinder\\?}{right = 1.5cm of n1};
+  \process{case3}{Case 3}{right = 1.5cm of n1startsoutside};
+  \process{case4}{Case 4}{below = 2cm of case3};
+
+  \process{case5}{Case 5}{below = 3cm of case4};
+
+  \node(return)[stop, below = 8cm of n1]{Return};
+
+  % % Comments
+  \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
+  \comment{start}{
+    \substep geometrical distance before correction\\
+    \substep interaction length correction factor\\
+    \substep intersectin points of step trajectory and cylinder
+  };
+  \comment{return}{
+    \substep distance correction $\Delta x$
+  };
+  \node () [substep, left = 4.5cm of case5, yshift = 3mm]{Two intersections ($N = 2$)};
+
+  % Arrows
+  \newcommand\connect[2]{\draw[->](#1)--(#2)}
+  \connect{start}{n0};
+  \connect{n0}{n0startsoutside};
+  \connect{n0startsoutside}{case1};
+  \draw[->](n0startsoutside) |- (case2);
+
+  \connect{n0}{n1};
+  \connect{n1}{n1startsoutside};
+  \connect{n1startsoutside}{case3};
+  \draw[->](n1startsoutside) |- (case4);
+
+  \draw[->] (n1) |- (case5);
+
+  \draw[->] (case1) -- +(2,0) -- +(2,-16) -| (return.north);
+  \draw[->] (case2) -- +(2,0);
+  \draw[->] (case3) -- +(2,0);
+  \draw[->] (case4) -- +(2,0);
+  \draw[->] (case5) -- +(2,0);
+
+  % YES/NO labels
+  \newcommand\yes[1]{\node ()[right = 1mm of #1, yshift = 3mm]{YES}}
+  \yes{n0}; \yes{n0startsoutside};
+  \yes{n1}; \yes{n1startsoutside};
+
+  \newcommand\no[1]{\node ()[below = -1mm of #1, xshift = -5mm]{NO}}
+  \no{n0}; \no{n0startsoutside};
+  \no{n1}; \no{n1startsoutside};
+
+  % \node ()[left = 1mm of cylindersleft, yshift = 3mm]{NO};
+  % \node ()[below = -1mm of cylindersleft, xshift = -5mm]{YES};
+  %
+  % \node ()[right = 1mm of anyintersections, yshift = 3mm]{NO};
+  % \node ()[below = -1mm of anyintersections, xshift = -5mm]{YES};
+  %
+  % \node ()[right = 1mm of reachesholeice, yshift = 3mm]{NO};
+  % \node ()[below = -1mm of reachesholeice, xshift = -5mm]{YES};
+
+\end{tikzpicture}
+\end{document}
