@@ -20,29 +20,46 @@
     align = center
   ]
 
+  % Images for mathematical cases
+  \newcommand\casesketch[2]{
+    \\\begin{tikzpicture}[]
+      \draw (0,0) circle (0.5cm);
+      \draw [->] (#1) -- (#2);
+      \draw [fill] (#1) circle (0.5mm);
+    \end{tikzpicture}
+  }
+
+  \newcommand\casecontent[4]{
+    Case #1\\
+    \casesketch{#2}{#3}\\
+    #4
+  }
+
   % Nodes
-  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
+  \newcommand\process[3]{\node(#1)[process, #3, minimum width = 4cm]{#2}}
   \newcommand\decision[3]{\node(#1)[decision, minimum width = 4cm, minimum height = 4cm, #3]{#2}}
   \node(start)[start]{Start};
   \decision{n0}{No intersections\\($N = 0$)\\?}{below = 5mm of start};
   \decision{n0startsoutside}{Step starts\\outside cylinder\\?}{right = 1.5cm of n0};
-  \process{case1}{Case 1}{right = 1.5cm of n0startsoutside};
-  \process{case2}{Case 2}{below = 2cm of case1};
 
-  \decision{n1}{One intersection\\($N = 1$)\\?}{below = 3cm of n0};
+  \process{case1}{\casecontent{1}{-1,0.7}{0.3,1.0}{$\Delta x = 0$}}{right = 1.5cm of n0startsoutside};
+  \process{case2}{\casecontent{2}{-0.2,-0.05}{0.2,0.05}{$\Delta x = (f-1)\,x$}}{below = 2cm of case1};
+
+  \decision{n1}{One intersection\\($N = 1$)\\?}{below = 5cm of n0};
   \decision{n1startsoutside}{Step starts\\outside cylinder\\?}{right = 1.5cm of n1};
-  \process{case3}{Case 3}{right = 1.5cm of n1startsoutside};
-  \process{case4}{Case 4}{below = 2cm of case3};
 
-  \process{case5}{Case 5}{below = 3cm of case4};
+  \process{case3}{\casecontent{3}{-1.2,-0.05}{0.2,0.05}{$\Delta x = \frac{\overline{AY}}{\overline{AB}}\,(f-1)\,x$}}{right = 1.5cm of n1startsoutside};
+  \process{case4}{\casecontent{4}{-0.2,-0.05}{1.2,0.05}{$\Delta x = (1-\frac{1}{f})\,x$}}{below = 2cm of case3};
 
-  \node(return)[stop, below = 8cm of n1]{Return};
+  \process{case5}{\casecontent{5}{-1,-0.2}{1,0.2}{$\Delta x = (1-\frac{1}{f})\,\overline{YC}$}}{below = 1cm of case4};
+
+  \node(return)[stop, below = 10cm of n1]{Return};
 
   % % Comments
   \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
   \comment{start}{
-    \substep geometrical distance before correction\\
-    \substep interaction length correction factor\\
+    \substep geometrical distance $x$ before correction\\
+    \substep interaction length correction factor $f$\\
     \substep intersectin points of step trajectory and cylinder
   };
   \comment{return}{
@@ -64,11 +81,11 @@
 
   \draw[->] (n1) |- (case5);
 
-  \draw[->] (case1) -- +(2,0) -- +(2,-16) -| (return.north);
-  \draw[->] (case2) -- +(2,0);
-  \draw[->] (case3) -- +(2,0);
-  \draw[->] (case4) -- +(2,0);
-  \draw[->] (case5) -- +(2,0);
+  \draw[->] (case1) -- +(3,0) -- +(3,-20) -| (return.north);
+  \draw[->] (case2) -- +(3,0);
+  \draw[->] (case3) -- +(3,0);
+  \draw[->] (case4) -- +(3,0);
+  \draw[->] (case5) -- +(3,0);
 
   % YES/NO labels
   \newcommand\yes[1]{\node ()[right = 1mm of #1, yshift = 3mm]{YES}}
@@ -79,14 +96,6 @@
   \no{n0}; \no{n0startsoutside};
   \no{n1}; \no{n1startsoutside};
 
-  % \node ()[left = 1mm of cylindersleft, yshift = 3mm]{NO};
-  % \node ()[below = -1mm of cylindersleft, xshift = -5mm]{YES};
-  %
-  % \node ()[right = 1mm of anyintersections, yshift = 3mm]{NO};
-  % \node ()[below = -1mm of anyintersections, xshift = -5mm]{YES};
-  %
-  % \node ()[right = 1mm of reachesholeice, yshift = 3mm]{NO};
-  % \node ()[below = -1mm of reachesholeice, xshift = -5mm]{YES};
 
 \end{tikzpicture}
 \end{document}
