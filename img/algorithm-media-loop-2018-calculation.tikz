@@ -1,0 +1,91 @@
+% Algorithm: Hole-ice propagation 2018
+% https://github.com/fiedl/hole-ice-study/issues/78
+
+%
+% Templates:
+% http://www.texample.net/tikz/examples/android/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+\input{lib/flow_charts}
+\input{lib/dice_symbols}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    %scale=1,
+    node distance = 1.8cm,
+    every node/.style = {fill=white, font=\sffamily},
+    align = center
+  ]
+
+  % Nodes
+  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
+  \newcommand\decision[3]{\node(#1)[decision, #3]{#2}}
+  \node(start)[start]{Start};
+  \decision{sca}{Scatter\\within this medium\\?}{below = 5mm of start};
+  \process{scayes}{
+    distance to next scattering += scattering lengths left $\cdot \lambda_\mathrm{sca}$ \\ \\
+    scattering lengths left = 0
+  }{right = 3cm of sca};
+  \process{scayessetmax}{Set maximum distance for absorption\\to distance to the scattering point}{below = 1cm of scayes};
+  \process{scano}{
+    distance to next scattering += distance to next boundary \\ \\
+    scattering lengths left -= $\frac{\mathrm{distance\ to\ next\ boundary}}{\lambda_\mathrm{sca}}$
+  }{below = 2cm of scayessetmax};
+  \process{scanosetmax}{Set maximum distance for absorption\\to distance to the next medium boundary}{below = 1cm of scano};
+
+  \decision{abs}{Absorb\\within this medium\\?}{below = 8cm of sca};
+  \process{absyes}{
+    distance to absorption += absorption lengths left $\cdot \lambda_\mathrm{abs}$\\ \\
+    absorption lengths left = 0
+  }{right = 3cm of abs};
+  \process{absno}{
+    distance to absorption += maximum distance for absorption\\ \\
+    absorption lengths left -= $\frac{\mathrm{maximum\ distance\ for\ absorption}}{\lambda_\mathrm{abs}}$
+  }{below = 1cm of absyes};
+
+  \node(return)[stop, below = 5cm of abs]{Return};
+
+  % % % Comments
+  \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
+  \comment{start}{
+    \substep geometrical distance to next scattering point\\
+    \substep geometrical distance to absorption\\
+    \substep number of scattering lengths left to next scattering point\\
+    \substep number of absorption lengths left to absorption\\
+    \substep list of media. Each: distance to medium boundary, local scattering lenght, local absorption length
+  };
+  \comment{return}{
+    \substep geometrical distance to next scattering point\\
+    \substep geometrical distance to absorption\\
+    \substep number of scattering lengths left to next scattering point\\
+    \substep number of absorption lengths left to absorption
+  };
+
+  % Arrows
+  \newcommand\connect[2]{\draw[->](#1)--(#2)}
+  \connect{start}{sca};
+  \connect{sca}{scayes};
+  \connect{scayes}{scayessetmax};
+  \draw[->] (scayessetmax) -- +(7,0) -- +(7,-7) -| (abs.north);
+
+  \draw[->] (sca) |- (scano);
+  \connect{scano}{scanosetmax};
+  \draw[->] (scanosetmax) -- +(7,0);
+
+  \connect{abs}{absyes};
+  \draw[->] (absyes) -- +(7,0) -- +(7,-5) -| (return.north);
+
+  \draw[->] (abs) |- (absno);
+  \draw[->] (absno) -- +(7,0);
+
+  % YES/NO labels
+  \node () [right = 1mm of sca, yshift = 3mm]{YES};
+  \node () [below = -1mm of sca, xshift = -5mm]{NO};
+
+  \node () [right = 1mm of abs, yshift = 3mm]{YES};
+  \node () [below = -1mm of abs, xshift = -5mm]{NO};
+
+\end{tikzpicture}
+\end{document}

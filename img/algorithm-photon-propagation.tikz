@@ -8,6 +8,8 @@
 \input{lib/flow_charts}
 \input{lib/dice_symbols}
 
+\usepackage{xcolor}
+
 \begin{document}
 \begin{tikzpicture}
   [
@@ -39,7 +41,9 @@
     \substep record photon position\\
     \substep \rnd distance to next scattering point\\
     \substep \rnd next scattering angle\\
-    \substep \framebox{calculate new position and direction}};
+    \substep \color{red}\framebox{\color{black}calculate new position and direction}\\
+    \hspace*{5mm}\color{red} $\uparrow$ Hole-ice corrections go here.
+  };
   \node ()[substeps, right = 1mm of detect]{
     \substep update position and direction\\
     \substep record detection};

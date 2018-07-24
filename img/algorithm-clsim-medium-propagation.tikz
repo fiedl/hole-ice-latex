@@ -1,0 +1,62 @@
+% Algorithm: Photon propagation through media in clsim
+%
+% Templates:
+% http://www.texample.net/tikz/examples/android/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+\input{lib/flow_charts}
+\input{lib/dice_symbols}
+
+\usepackage{xcolor}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    %scale=1,
+    node distance = 2.0cm,
+    every node/.style = {fill=white, font=\sffamily},
+    align = center
+  ]
+
+  % Nodes
+  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
+  \node (start)[start]{Start};
+  \process{tilt}{Take ice tilt into account by using an effective z:\\
+    $z_\mathrm{effective} = z - \mathrm{tilt}(x,y,z)$
+  }{below = 1cm of start};
+  \process{anisotropy}{Take ice anisotropy into account:\\
+    Absorption is stronger along some directions.\\
+    $\mathrm{absorption\ lengths\ left}$ *= $\mathrm{anisotropy}(\mathrm{photon\ direction})$
+  }{below = 0.5cm of tilt};
+  \process{loop}{Loop over ice layers\\
+    beginning at current position along z direction of motion:\\
+    Calculate contribution of each layer\\
+    to geometrical distances to scattering and absorption\\
+    and subtract from randomized budgets\\
+    until budget is spent.
+  }{below = 0.5cm of anisotropy};
+  \node (return)[stop, below = 1cm of loop]{Return};
+
+  % Comments
+  \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
+  \comment{start}{
+    \substep photon position and direction\\
+    \substep ice layers, anisoropy(photon direction), tilt(x,y,z)\\
+    \substep number of scattering lengths left to next scattering point\\
+    \substep number of absorption lengths left to absorption\\
+  };
+  \comment{return}{
+    \substep geometrical distance to next scattering point\\
+    \substep geometrical distance to absorption
+  };
+
+  % Arrows
+  \newcommand\connect[2]{\draw[->](#1)--(#2)}
+  \connect{start}{tilt};
+  \connect{tilt}{anisotropy};
+  \connect{anisotropy}{loop};
+  \connect{loop}{return};
+
+\end{tikzpicture}
+\end{document}

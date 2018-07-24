@@ -22,7 +22,9 @@
 \input{lib/header}
 \input{lib/units}
 
-\includeonly{text/likelihood}
+\input{config/aliases}
+
+\includeonly{text/cross_checks}
 
 \bibliography{diplomarbeit}
 \begin{document}
@@ -30,11 +32,11 @@
 
   \include{text/gliederung}
 
-  \include{text/likelihood}
-  \include{text/intersections}
-  \include{text/hole_ice_trajectory_corrections}
-  \include{text/problems}
   \include{text/cross_checks}
+  %\include{text/likelihood}
+  %\include{text/intersections}
+  %\include{text/hole_ice_trajectory_corrections}
+  %\include{text/problems}
   %
   %%Foo \cite{mueller2000}
   %%\printbibliography
