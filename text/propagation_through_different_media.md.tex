@@ -1,0 +1,49 @@
+%!TEX TS-program = ../make.zsh
+
+\subsection{Photon Propagation Through Different Media}
+
+\subsubsection{Very Basic Photon Propagation Algorithm}
+
+A first, very basic photon propagation algorithm moves the photon by a small distance $\delta x$. At the new photon position, the algorithm checks for detection at an optical module and randomizes as a function of the scattering and absorption lengths whether the photon should be scattered or absorbed by the ice at this position. Then, the photon is propagated again by the same small distance $\delta x$. The same loop repeats until the photon is either detected by an optical module or absorbed by the ice.
+
+Figure \ref{fig:ieph6Bie} illustrates a propagation scenario in a two-dimensional coordinate system. Figure \ref{fig:ohsa0miG} shows presents the algorithm as flow chart.
+
+\begin{figure}[htb]
+  \image{photon-trajectory-naive-ieph6Bie}
+  \label{fig:ieph6Bie}
+  \caption{Illustration of a basic photon propagation algorithm in a two-dimensional coordinate system. The photon is propagated by a small distance in each propagation step. At each position, the algorithm checks for absorption, scattering and absorption.}
+\end{figure}
+
+\begin{figure}[htb]
+  \image{algorithm-naive-propagation}
+  \label{fig:ohsa0miG}
+  \caption{Flow chart of a basic photon propagation algorithm. Interfaces, that means where the algorithm begins or ends, are displayed as violett pill shapes. Processes, that is things the algorithm is doing or calculating, are displayed as brown rounded boxes. Decisions are displayed as green rounded diamond shapes. One propagation step consists of moving the photon by a fixed small distance $\delta x$, checking for detection as well as randomizing scattering and absorption within the ice.}
+\end{figure}
+
+\FloatBarrier
+
+This very basic propagation calgorithm can handle propagation through different media just by making the scattering and absorption probabilities depend on the current photon position and direction.
+
+Ice layers and ice layer tilt can be implemented by making the scattering and absorption probabilities depend on the current photon position, absorption anisotropy by making the absorption probability depend on the current photon direction as well. Hole-ice cylinders can be implemented by checking whether the current photon position is within any of a list of cylinders defined in any way, either by supplying a list of cylinder coordinates and radii, or by re-using the coordinates of the detector strings.
+
+This basic propagation algorithm, however, is very inefficient regarding computational performance: The algorithm moves the photon over long distances in small steps without changing the direction. For a typical geometric scattering length of two metres, moving the photon in steps of $\delta x = 1\mm$ per propagation step would mean performing 2000 propagation steps before changing the direction of motion.
+
+The propagation algorithm can be made much more efficient by moving the photon in each propagation step not by a small distance $\delta x$ but by the whole distance to the next interaction point. This way, the above example would take only one propagation step rather than 2000. This performance improvement, however, comes at the cost that propagating through different media requires a different approach. This more efficient propagation algorithm, which is the standard photon propagation algorithm in IceCube, will be described in the next section.
+
+\subsubsection{Standard Photon Propagation Algorithm}
+
+\begin{figure}[htb]
+  \image{photon-trajectory-oheeL3ai}
+  \label{fig:oheeL3ai}
+  \caption{Bar}
+\end{figure}
+
+
+\begin{figure}[htb]
+  \image{algorithm-photon-propagation}
+  \label{fig:Ar0vai8u}
+  \caption{Foo}
+\end{figure}
+
+
+

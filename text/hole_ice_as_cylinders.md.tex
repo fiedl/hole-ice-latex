@@ -1,0 +1,20 @@
+%!TEX TS-program = ../make.zsh
+
+\section{Methods}
+
+\subsection{Modelling Hole-Ice as Cylinder-Shaped Ice Areas With Differing Propagation Properties}
+
+In the current IceCube simulation framework, photon propagation simulation takes several ice features into account: The photon absorption length and the photon scattering length may depend on the photon wave length. Absorption and scattering length may also depend on the photon's $z$-coordinate as the south-polar ice consists of ice layers. These ice layers may also be tilted by a constant angle. Furthermore, the absorption length may depend on the photon's direction of motion, which is called absorption anisotropy.
+
+\begin{figure}[htb]
+  \image{hole-ice-as-cylinder-shaped-areas}
+  \label{fig:aiw2Thah}
+  \caption{Shematic diagram of a propagating photon. The photon enters a hole-ice cylinder with a scattering length different from the outside ice. When leaving the cylinder the photon assumes the scattering length of the outside ice again.}
+\end{figure}
+
+This study adds another ice feature: Hole ice may be modelled by adding cylinder-shaped areas within the surrounding bulk ice where the propagation properties, that is to say the photon's absorption length and scattering length, differ from the propagation properties of the bulk ice.
+
+Figure \ref{fig:aiw2Thah} illustrates such a scenario for one single photon: The photon's trajectory starts in the bulk ice. The photon enters the hole-ice cylinder where the scattering length is shorter as in the bulk ice. Hence the photon scatters more frequently. When the photon leaves the hole-ice cylinder the propagation properties of the bulk ice take effect again, resulting in the photon scattering less frequently after leaving the cylinder.
+
+In this study, cylinders are always defined along the $z$-axis. Also, the scattering angle is assumed to behave the same within the hole-ice cylinders as in the bulk ice because there has been no indication provided by experimental data or theoretical ice models on how the scattering angle should behave differently within the hole ice. \todo{Maybe move these limitations somewhere later.}
+
