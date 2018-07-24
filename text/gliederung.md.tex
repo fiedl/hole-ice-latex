@@ -1,89 +1,68 @@
 %!TEX TS-program = ../make.zsh
 
-\setcounter{tocdepth}{2}
-\tableofcontents
-
-# Introduction
-% What is the work?
-% Why is it important?
-% What is needed to understand the work?
-% How will the work be presented?
-% Definitions and key terms
-
-## What is IceCube
-## IceCube as Particle Physics Laboratory
-## IceCube as Deep-space Neutrino Telescope
-## Improving the Detector Resolution Through Calibration
-## Can Local Ice Properties be Implemented in Simulations Aiming to Improve Calibration?
-
-# Theoretical Background
-## Neutrinos
-## Neutrino Interactions Relevant to IceCube
-## Cherenkov-light Emission
-## Photon Scattering Model
-% + what happens at medium changes
-
-# Experimental Background
-## IceCube Detector
-## Digital Optical Modules (DOMs)
-## DOM Angular Acceptance Characteristics
-## Angular Acceptance Approximations and Their Limitations
-% Outdated model for hole-ice properties
-% No different properties for each string/DOMs
-% DOM is wrongly considered centred in hole ice
-## Event Reconstruction
-## Likelihood Methods for Comparing Simulations to Reference Data
-## Ice Models to Characterize Photon Scattering and Absorption in the South-polar Ice
-## Hole Ice as Region of Different Ice Properties Around Detector Strings
-
-# Simulation Background
-## Monte-carlo Simulations
-## Parallal Computing on Graphics Processing Units (GPUs)
-## Photon Propagation Algorithm
-## `clsim` Photon Propagation Simulation
-
 # Methods
 % Everything needed to reproduce the work
-## Photon Propagation Through Different Media
-### Principles of Adding Medium Changes to Photon Propagation
-### Adding Hole Ice as Post-propagation-step Correction
-### Adding Hole Ice to Generic Medium Changes
-### Unit Testing
-## Implementing Cylinder-shaped Areas with Distinct Ice Properties
-### Hole-ice Cylinders
-### Nested Cylinders with Different Properties
-### Cables with Instant Absorption
-## Example Studies
-### Basic Scattering Properties
-### Instant Absorption
-### Shifting the DOMs Relative to the Hole-ice Cylinder
-### Cable Shadows
-## Parameter Grid Scan to Find Hole-ice Properties Compared to Reference Simulation
-## Comparison of Flasher Data and Simulated Flasher Events
-% ## Full-cycle Simulation to Check for Sensitivity to Simulated Features (→ outofscope)
 
-# Results
-% All results relevant to the question
-## Impact of Simulated Features on the Effective DOM Angular Acceptance
-### Effect of Hole-ice Cylinders
-### Effect of Nested Cylinders
-### Effect of Cable Shadows
-### Effect of Shifted DOM Positions
-## Estimated Hole-ice Parameters of Reference Simulation
-## Estimated Hole-Ice Parameters Based on Flasher Data
-% ## Impact of Simulated Features on Event Reconstruction ($\rightarrow$ out of scope)
+## Modelling Hole-Ice as Cylinder-Shaped Ice Areas With Differing Propagation Properties
+## Photon Propagation Through Different Media
+% naiv vs clsim
+
+## Tools
+% icesim
+% clsim
+% steamshovel
+% other software libraries: numpy, matplotlib, pandas, -> hole-ice-study repo, gtest(?)
+
+## Implementing Hole-Ice Propagation as Correction of the Existing Propagation Algorithm
+% Algorithmen A+B:
+% motivation
+% pros + cons
+% flow charts
+% context: task, before, after, input, output
+% mention intersection, projection and termination point where needed and refer to repo or appendix.
+
+## Implementing Hole-Ice Propagation as Generic Medium Change by Rewriting the Existing Propagation Algorithm
+% Algorithmen A+B:
+% motivation
+% pros + cons
+% flow charts
+% context: task, before, after, input, output
+
+## Technical Issues and Optimizations
+
+## Unit Tests and Consistency Checks
+### Unit Tests With Single Photons
+### Instant Absorption Tests
+### Arrival Time Distributions
+### Absorption Length Distributions
+
+# Application Examples
+## Simulating a Hole-Ice Column With Distinct Scattering Properties
+## Scanning the Angular Acceptance of an Optical Module
+% Plane-Wave vs. Pencil-Beam
+% Direct Detection
+## Parameter Grid Scan to Find Hole-ice Properties Compared to Reference Simulation / Determining the Hole-Ice Parameters of the Current Hole-Ice Approximation
+## Simulating Nested Hole-Ice Columns
+## Simulating the Displacement of Optical Modules Relative to the Hole-Ice Columns
+## Simulating Shadowing Cables as Opaque Cylinders
+## Scanning Hole-Ice Parameters for the Best Agreement with Flasher Calibration Data
 
 # Discussion
 % What do the results mean?
 % Why is it interesting?
 % What does it change?
-## Estimated Detection Sensitivity to Local Ice Features in Simulations
-## Estimated Gain on Reconstruction Resolution ($\rightarrow$ out of scope ?)
-## Performance Impact on Simulations
-## Estimated Uncertainties Due to Numerical Limitations
-## New Simulation Features are Most Useful in Low-energy Studies (?)
-## Comparison to Alterantive Propagation Tool, \textit{Photon Propagation Code}, `ppc`
-## Ice Features Not Considered in this Simulation
+
+## Improvements for Detector Callibration
+
+## Comparison to Other Hole-Ice-Propagation Software
+% ppc
+% approximation with standard clsim
+% inkl. performance-vergleich
+
+## Performance Considerations
+% taugt für low-energy-studies
+
+## Ice Features Not Considered in this Study
 ### Tilted DOM Positions
 ### Gradient in Hole-ice Properties
 

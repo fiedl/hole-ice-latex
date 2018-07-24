@@ -2,7 +2,7 @@
 
 \documentclass[a4paper,12pt]{article}
 
-\title{Diplomarbeit}
+\title{The Effect of Hole Ice on the Propagation and Detection of Light in IceCube}
 \author{Sebastian Fiedlschuster}
 \newcommand\entwurf{\today}
 
@@ -24,15 +24,26 @@
 
 \input{config/aliases}
 
-\includeonly{text/cross_checks}
+%\includeonly{}
 
 \bibliography{diplomarbeit}
 \begin{document}
   \maketitle
 
+  \newpage
+  \setcounter{tocdepth}{2}
+  \tableofcontents
+
+  \include{text/introduction}
+  \include{text/theoretical_background}
+  \include{text/experimental_background}
+  \include{text/simulation_background}
+
+
   \include{text/gliederung}
 
-  \include{text/cross_checks}
+
+  %\include{text/cross_checks}
   %\include{text/likelihood}
   %\include{text/intersections}
   %\include{text/hole_ice_trajectory_corrections}
