@@ -32,7 +32,7 @@
       %	\textcolor{red}\entwurf\normalcolor
       %} \\
       %\xspace \ifthenelse{\equal{\currentsubsection}{}}{}{\thesubsection \ \ }\currentsection\ifthenelse{\equal{\currentsubsection}{}}{}{: \currentsubsection}
-      \xpsace, \currentsection
+      \ifdef{\currentsection}{\xspace, \currentsection}
     }
   \endminipage
 }
