@@ -23,7 +23,7 @@
   \footnotesize
   \minipage{10cm}%
     \textsf{%
-      \textbf{{\runtitle}}%
+      \textbf{\ifdef{\shorttitle}{\shorttitle}{\runtitle}}%
       \ifdef{\dokumentid}{\xspace, \dokumentid}{}%
       \ifdef{\entwurf}{\xspace, Draft \entwurf}{}%
       %\ifthenelse{\equal{\entwurf}{}}{
@@ -31,7 +31,8 @@
       %}{
       %	\textcolor{red}\entwurf\normalcolor
       %} \\
-      \ifthenelse{\equal{\currentsubsection}{}}{}{\thesubsection \ \ }\currentsection\ifthenelse{\equal{\currentsubsection}{}}{}{: \currentsubsection}
+      %\xspace \ifthenelse{\equal{\currentsubsection}{}}{}{\thesubsection \ \ }\currentsection\ifthenelse{\equal{\currentsubsection}{}}{}{: \currentsubsection}
+      \xpsace, \currentsection
     }
   \endminipage
 }
