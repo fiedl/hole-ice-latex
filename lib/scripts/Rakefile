@@ -118,11 +118,15 @@ end
 
 task :bibliography => "build/#{project_name}.bbl"
 
-file "build/#{project_name}.bbl" do
-  if File.exists?("build/#{project_name}.bib")
-    log.section "Bibliography biber"
-    sh "biber build/#{project_name}"
+file "build/#{project_name}.bib" => "#{project_name}.bib" do
+  unless File.symlink? "build/#{project_name}.bib"
+    sh "ln -s #{project_name}.bib build/#{project_name}.bib"
   end
+end
+
+file "build/#{project_name}.bbl" => "build/#{project_name}.bib" do
+  log.section "Bibliography biber"
+  sh "biber build/#{project_name}"
 end
 
 task :open do
