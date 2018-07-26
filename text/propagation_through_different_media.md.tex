@@ -59,6 +59,8 @@ Figure \ref{fig:Ar0vai8u} shows a flow chart of this algorithm. Figure \ref{fig:
   \caption{Illustration of IceCube's standard photon propagation algorithm in a two-dimensional coordinate system. The photon is propagated from one scattering point to the next scattering point in each propagation step. In each step, the algorithm checks for detection and absorption inbetween the two scattering points.}
 \end{figure}
 
+\FloatBarrier
+
 Assuming the number of calculations in each scattering step is of the same order of magnitude in both described algorithms, the number of simulation steps translates to the total number of calculations the processing unit needs to perform for each photon. Thus, the algorithm that needs much less simulation steps is also much more efficient.
 
 Propagating a photon through several media with different properties, that is to say different interaction probabilities, is more involved in this algorithm than in the basic one.
@@ -69,7 +71,15 @@ This can be illustrated by an extreme example where the scattering length within
 
 The solution to this problem chosen for the standard propagation algorithm in IceCube is to implement medium transitions in the following manner:
 
-Rather than randomizing geometrical distances to the interaction points immediately, the algorithm randomizes the number of interaction lengths the photon will travel to the interaction point, like a budget. This budget is spent by considering the differnt media on the way from the current interaction point along the phton's direction, and converting the number of interaction lengths into a geometrical distance according to the shares of the different media in the path of the photon between the two interaction points.
+Rather than randomizing the geometrical distance $X:=\overline{AB}$ from the current interaction point $A$ to the next interaction point $B$ immediately, the algorithm randomizes the number $N :\in \reals^+$ of interaction lengths the photon will travel to the interaction point, like a budget. This budget is spent by considering the differnt media on the way from the current interaction point along the phton's direction, and converting the number of interaction lengths into a geometrical distance according to the shares of the different media in the path of the photon between the two interaction points.
+
+Suppose, starting at interaction point $A$, the photon travels in $m :\in \naturals$ media $M_i$ with interaction lengths $\lambda_i$ for a distance of $x_i$ respectively until it reaches the next interaction point $B$. In each medium $M_i$, the algorithm spends $n_i: x_i = n_i\,\lambda_i$ of the budget $N:=\sum_1^m n_i$ that has been randomized at interaction point $A$ until it reaches interaction point $B$ in a distance $X:=\overline{AB}$.
+
+$$
+  X = \sum_1^m x_i = \sum_1^m n_i\,\lambda_i
+$$
+
+Each distance $x_i$ is the length of the trajectory the photon spends in medium $M_i$. The first distance $x_1$ is the distance from the starting point $A$ to the medium border of $M_1$ and $M_2$ along the photon direction. The subsequent distances $x_i$ are the distances of the first medium border of $M_{i-1}$ and $M_i$ and the second medium border of $M_i$ and $M_{i+1}$ respectively along the photon direction. The last distance $x_m$ is determined by how much of the budget $N$ is left in the last medium, $x_m = n_m\,\lambda_m$, such that the overall budget $N:=\sum_1^m n_i$ is spent.
 
 \todo{Check the previous text: when to call it interaction and when to call it scattering. When randomizing the number of absorption lengths to absorption, the algorithm does not know the path of the photon, yet, i.e. does not know the different media the photon will propagate through.}
 
