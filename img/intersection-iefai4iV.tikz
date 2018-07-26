@@ -1,0 +1,47 @@
+% Photon trajectory intersects hole-ice cylinder.
+%
+% I've used this as a template:
+% http://www.texample.net/tikz/examples/bisector/
+%
+% Fiedlschuster, 2018-07-26
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    scale=1,
+    >=stealth,
+    point/.style = {draw, circle,  fill = black, inner sep = 1pt},
+    dot/.style   = {draw, circle,  fill = black, inner sep = .2pt},
+  ]
+
+  \input{lib/hole-ice-circle}
+
+  % circle around M stands for the hole-ice cylinder
+  % http://www.texample.net/tikz/examples/bisector/
+  % https://tex.stackexchange.com/a/31400/70789
+  \node (M) at (M) [point, label = {below:$M$}] {};
+  \node [name path=cylinder, holeice, circle through=(radius_end), label = above:{Hole-ice cylinder}] at (M) {};
+
+  % cylinder radius label
+  \draw [dotted] (radius_end) -- node (r) [label = above:$r$] {} (M);
+
+  % photon
+  \node (A) at (A) [point, label = above:$A$] {};
+  \node (B) at (B) [point, label = above:$B$] {};
+  \node (extended_endpoint) at (extended_endpoint) {};
+
+  \path [name path=trajectory] (A) -- (extended_endpoint);
+  \path [draw] (A) -- (B);
+  \path [draw, dashed] (B) -- (extended_endpoint);
+
+  % intersection
+  % https://tex.stackexchange.com/a/31400/70789
+  \path [name intersections={of=trajectory and cylinder, name=intersection}];
+  \node (X1) at (intersection-2) [point, label = above:$Y$] {};
+  \node (X2) at (intersection-1) [point, label = above:$X$] {};
+
+\end{tikzpicture}
+\end{document}

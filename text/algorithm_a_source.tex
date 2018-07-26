@@ -1,0 +1,395 @@
+%!TEX root = ../diplomarbeit.tex
+
+\subsection{Source code of Algorithm A}
+\label{sec:algorithm_a_source}
+
+This is the source code of the first propagation algorithm through different media, described in section \ref{sec:algorithm_a}.
+
+\sourcepar{The source code can also be found online at \url{https://github.com/fiedl/clsim/tree/sf/hole-ice-2017/resources/kernels/lib}.}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/hole_ice/hole_ice.c
+
+#ifndef HOLE_ICE_C
+#define HOLE_ICE_C
+
+#include "hole_ice.h"
+#include "../intersection/intersection.c"
+
+inline bool is_between_zero_and_one(floating_t a) {
+  return ((!my_is_nan(a)) && (a > 0.0) && (a < 1.0));
+}
+
+inline bool not_between_zero_and_one(floating_t a) {
+  return (! is_between_zero_and_one(a));
+}
+
+inline unsigned int number_of_medium_changes(HoleIceProblemParameters_t p)
+{
+  // These are ordered by their frequency of occurrance in order
+  // to optimize for performance.
+  if (not_between_zero_and_one(p.entry_point_ratio) && not_between_zero_and_one(p.termination_point_ratio)) return 0;
+  if (not_between_zero_and_one(p.entry_point_ratio) || not_between_zero_and_one(p.termination_point_ratio)) return 1;
+  if (p.entry_point_ratio == p.termination_point_ratio) return 0; // tangent
+  return 2;
+}
+
+inline floating_t hole_ice_distance_correction(HoleIceProblemParameters_t p)
+{
+  // Depending on the fraction of the distance the photon is traveling
+  // within the hole ice, there are six cases to consider.
+  //
+  // N  denotes the number of intersections.
+  // H  means that the trajectory starts within hole ice.
+  // !H means that the trajectory starts outside of the hole ice.
+  //
+  // Case 1: The trajectory is completely outside of the hole ice (!H, N=0).
+  // Case 2: The trajectory is completely within the hole ice (H, N=0).
+  // Case 3: The trajectory begins outside, but ends inside the hole ice (!H, N=1).
+  // Case 4: The trajectory begins inside, but ends outside the hole ice (H, N=1).
+  // Case 5: The trajectory starts and ends outside, but passes through the hole ice (!H, N=2).
+  // Case 6: The trajectory begins within one hole-ice cylinder, passes through
+  //           normal ice and ends in another hole-ice cylinder (H, N=2).
+  //
+  // For further information, please have look at:
+  // https://github.com/fiedl/clsim/tree/sf/master/resources/kernels/lib/hole_ice
+
+  const unsigned int num_of_medium_changes = number_of_medium_changes(p);
+
+  // Case 1: The trajectory is completely outside of the hole ice.
+  // Thus, needs no correction.
+  if ((num_of_medium_changes == 0) && !p.starts_within_hole_ice) {
+    return 0;
+  }
+
+  const floating_t ac = p.distance * p.termination_point_ratio;
+
+  if (p.starts_within_hole_ice) {
+
+    // Case 4: The trajectory begins inside, but ends outside the hole ice.
+    if (p.interaction_length_factor * p.distance > ac) {
+      return (1.0 - 1.0 / p.interaction_length_factor) * ac;
+
+    // Case 2: The trajectory is completely within the hole ice.
+    } else {
+      return (p.interaction_length_factor - 1.0) * p.distance;
+    }
+
+  } else {
+
+    const floating_t yb = p.distance * (1.0 - p.entry_point_ratio);
+    floating_t yc = p.distance * (p.termination_point_ratio - p.entry_point_ratio);
+
+    if (yc < 0) {
+      printf("WARNING: YC SHOULD NOT BE NEGATIVE, BUT YC=%f\n", yc);
+      yc = 0;
+    }
+
+    // Case 5: The trajectory starts and ends outside, but passes through the hole ice.
+    if (p.interaction_length_factor * yb > yc) {
+      return (1.0 - 1.0 / p.interaction_length_factor) * yc;
+
+    // Case 3
+    } else {
+      return (p.interaction_length_factor - 1.0) * p.distance * (1.0 - p.entry_point_ratio);
+    }
+  }
+
+#ifdef PRINTF_ENABLED
+  printf("WARNING: UNHANDLED INTERSECTION CASE. This point should not be reached.");
+#endif
+
+  return my_nan();
+}
+
+inline floating_t hole_ice_distance_correction_for_intersection_problem(floating_t distance, floating_t interaction_length_factor, IntersectionProblemParameters_t p)
+{
+  calculate_intersections(&p);
+  HoleIceProblemParameters_t hip = {
+    distance,
+    interaction_length_factor,
+    intersection_s1(p), // entry_point_ratio
+    intersection_s2(p), // termination_point_ratio
+    intersecting_trajectory_starts_inside(p) // starts_within_hole_ice
+  };
+  return hole_ice_distance_correction(hip);
+}
+
+#ifdef HOLE_ICE_TEST_H
+inline floating_t apply_hole_ice_correction(floating4_t photonPosAndTime, floating4_t photonDirAndWlen, unsigned int numberOfCylinders, floating4_t *cylinderPositionsAndRadii, floating_t holeIceScatteringLengthFactor, floating_t holeIceAbsorptionLengthFactor, floating_t *distancePropagated, floating_t *distanceToAbsorption)
+#endif
+#ifndef HOLE_ICE_TEST_H
+inline floating_t apply_hole_ice_correction(floating4_t photonPosAndTime, floating4_t photonDirAndWlen, unsigned int numberOfCylinders, __constant floating4_t *cylinderPositionsAndRadii, floating_t holeIceScatteringLengthFactor, floating_t holeIceAbsorptionLengthFactor, floating_t *distancePropagated, floating_t *distanceToAbsorption)
+#endif
+{
+
+  if (!(my_is_nan(photonPosAndTime.x) || my_is_nan(*distancePropagated))) {
+
+    // Find out which cylinders are in range in a separate loop
+    // in order to improve parallelism and thereby performance.
+    //
+    // See: https://github.com/fiedl/hole-ice-study/issues/30
+    //
+    #ifdef NUMBER_OF_CYLINDERS
+      // When running this on OpenCL, defining arrays using a constant
+      // as array size is not possible. Therefore, we need to use a
+      // pre-processor makro here.
+      //
+      // See: https://github.com/fiedl/hole-ice-study/issues/38
+      //
+      int indices_of_cylinders_in_range[NUMBER_OF_CYLINDERS];
+    #else
+      int indices_of_cylinders_in_range[numberOfCylinders];
+    #endif
+    {
+      unsigned int j = 0;
+      for (unsigned int i = 0; i < numberOfCylinders; i++) {
+        indices_of_cylinders_in_range[i] = -1;
+      }
+      for (unsigned int i = 0; i < numberOfCylinders; i++) {
+        if (sqr(photonPosAndTime.x - cylinderPositionsAndRadii[i].x) +
+            sqr(photonPosAndTime.y - cylinderPositionsAndRadii[i].y) <=
+            sqr(*distancePropagated + cylinderPositionsAndRadii[i].w /* radius */))
+        {
+
+          // If the cylinder has a z-range check if we consider that cylinder
+          // to be in range. https://github.com/fiedl/hole-ice-study/issues/34
+          //
+          if ((cylinderPositionsAndRadii[i].z == 0) || ((cylinderPositionsAndRadii[i].z != 0) && !(((photonPosAndTime.z < cylinderPositionsAndRadii[i].z - 0.5) && (photonPosAndTime.z + *distancePropagated * photonDirAndWlen.z < cylinderPositionsAndRadii[i].z - 0.5)) || ((photonPosAndTime.z > cylinderPositionsAndRadii[i].z + 0.5) && (photonPosAndTime.z + *distancePropagated * photonDirAndWlen.z > cylinderPositionsAndRadii[i].z + 0.5)))))
+          {
+            indices_of_cylinders_in_range[j] = i;
+            j += 1;
+          }
+        }
+      }
+    }
+
+    // Now loop over all cylinders in range and calculate corrections
+    // for `distancePropagated` and `distanceToAbsorption`.
+    //
+    for (unsigned int j = 0; j < numberOfCylinders; j++) {
+      const int i = indices_of_cylinders_in_range[j];
+      if (i == -1) {
+        break;
+      } else {
+
+        IntersectionProblemParameters_t p = {
+
+          // Input values
+          photonPosAndTime.x,
+          photonPosAndTime.y,
+          cylinderPositionsAndRadii[i].x,
+          cylinderPositionsAndRadii[i].y,
+          cylinderPositionsAndRadii[i].w, // radius
+          photonDirAndWlen,
+          *distancePropagated,
+
+          // Output values (will be calculated)
+          0, // discriminant
+          0, // s1
+          0  // s2
+
+        };
+
+        calculate_intersections(&p);
+
+        // Are intersection points possible?
+        if (intersection_discriminant(p) > 0) {
+
+          const floating_t scatteringEntryPointRatio = intersection_s1(p);
+          const floating_t scatterintTerminationPointRatio = intersection_s2(p);
+
+          HoleIceProblemParameters_t scatteringCorrectionParameters = {
+            *distancePropagated,
+            holeIceScatteringLengthFactor,
+            scatteringEntryPointRatio,
+            scatterintTerminationPointRatio,
+            intersecting_trajectory_starts_inside(p)
+          };
+
+          const floating_t scaCorrection = hole_ice_distance_correction(scatteringCorrectionParameters);
+          *distancePropagated += scaCorrection;
+
+          // For the absorption, there are special cases where the photon is scattered before
+          // reaching either the first or the second absorption intersection point.
+          floating_t absorptionEntryPointRatio;
+          floating_t absorptionTerminationPointRatio;
+          floating_t absCorrection = 0.0;
+          if (!(not_between_zero_and_one(scatteringCorrectionParameters.entry_point_ratio) && !scatteringCorrectionParameters.starts_within_hole_ice)) {
+            // The photon reaches the hole ice, i.e. the absorption correction
+            // needs to be calculated.
+            p.distance = *distanceToAbsorption;
+            calculate_intersections(&p);
+
+            // If the photon is scattered away before reaching the far and of
+            // the hole ice, the affected trajectory is limited by the
+            // point where the photon is scattered away.
+            absorptionEntryPointRatio = intersection_s1(p);
+            absorptionTerminationPointRatio = min(
+              *distancePropagated / *distanceToAbsorption,
+              intersection_s2(p)
+            );
+
+            HoleIceProblemParameters_t absorptionCorrectionParameters = {
+              *distanceToAbsorption,
+              holeIceAbsorptionLengthFactor,
+              absorptionEntryPointRatio,
+              absorptionTerminationPointRatio,
+              intersecting_trajectory_starts_inside(p),
+            };
+
+            absCorrection = hole_ice_distance_correction(absorptionCorrectionParameters);
+
+          }
+          *distanceToAbsorption += absCorrection;
+
+        }
+
+      }
+    }
+  }
+
+}
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/hole_ice/hole_ice.h
+
+#ifndef HOLE_ICE_H
+#define HOLE_ICE_H
+
+typedef struct HoleIceProblemParameters {
+  floating_t distance;
+  floating_t interaction_length_factor;
+  floating_t entry_point_ratio;
+  floating_t termination_point_ratio;
+  bool starts_within_hole_ice;
+} HoleIceProblemParameters_t;
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/intersection/intersection.c
+
+#include "intersection.h"
+
+inline void calculate_intersections(IntersectionProblemParameters_t *p)
+{
+  // Step 1
+  const floating4_t vector_AM = {p->mx - p->ax, p->my - p->ay, 0.0, 0.0};
+  const floating_t xy_projection_factor = my_sqrt(1 - sqr(p->direction.z));
+  const floating_t length_AMprime = dot(vector_AM, p->direction) / xy_projection_factor;
+
+  // Step 2
+  p->discriminant = sqr(p->r) - dot(vector_AM, vector_AM) + sqr(length_AMprime);
+
+  // Step 3
+  const floating_t length_XMprime = my_sqrt(p->discriminant);
+
+  // Step 4
+  const floating_t length_AX1 = length_AMprime - length_XMprime;
+  const floating_t length_AX2 = length_AMprime + length_XMprime;
+  p->s1 = length_AX1 / p->distance / xy_projection_factor;
+  p->s2 = length_AX2 / p->distance / xy_projection_factor;
+}
+
+inline floating_t intersection_s1(IntersectionProblemParameters_t p)
+{
+  return p.s1;
+}
+
+inline floating_t intersection_s2(IntersectionProblemParameters_t p)
+{
+  return p.s2;
+}
+
+inline floating_t intersection_discriminant(IntersectionProblemParameters_t p)
+{
+  return p.discriminant;
+}
+
+inline floating_t intersection_x1(IntersectionProblemParameters_t p)
+{
+  if ((p.s1 > 0) && (p.s1 < 1))
+    return p.ax + p.direction.x * p.distance * p.s1;
+  else
+    return my_nan();
+}
+
+inline floating_t intersection_x2(IntersectionProblemParameters_t p)
+{
+  if ((p.s2 > 0) && (p.s2 < 1))
+    return p.ax + p.direction.x * p.distance * p.s2;
+  else
+    return my_nan();
+}
+
+inline floating_t intersection_y1(IntersectionProblemParameters_t p)
+{
+  if ((p.s1 > 0) && (p.s1 < 1))
+    return p.ay + p.direction.y * p.distance * p.s1;
+  else
+    return my_nan();
+}
+
+inline floating_t intersection_y2(IntersectionProblemParameters_t p)
+{
+  if ((p.s2 > 0) && (p.s2 < 1))
+    return p.ay + p.direction.y * p.distance * p.s2;
+  else
+    return my_nan();
+}
+
+inline bool intersecting_trajectory_starts_inside(IntersectionProblemParameters_t p)
+{
+  return (intersection_s1(p) <= 0) &&
+      (intersection_s2(p) > 0) &&
+      (intersection_discriminant(p) > 0);
+}
+
+inline bool intersecting_trajectory_starts_outside(IntersectionProblemParameters_t p)
+{
+  return ( ! intersecting_trajectory_starts_inside(p));
+}
+
+inline bool intersecting_trajectory_ends_inside(IntersectionProblemParameters_t p)
+{
+  return (intersection_s1(p) < 1) &&
+      (intersection_s2(p) >= 1) &&
+      (intersection_discriminant(p) > 0);
+}
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/intersection/intersection.h
+
+#ifndef INTERSECTION_H
+#define INTERSECTION_H
+
+typedef struct IntersectionProblemParameters {
+
+  // Input values
+  //
+  floating_t ax;
+  floating_t ay;
+  floating_t mx;
+  floating_t my;
+  floating_t r;
+  floating4_t direction;
+  floating_t distance;
+
+  // Output values, which will be calculated in
+  // `calculate_intersections()`.
+  //
+  floating_t discriminant;
+  floating_t s1;
+  floating_t s2;
+
+} IntersectionProblemParameters_t;
+
+#endif
+\end{ccode}
+

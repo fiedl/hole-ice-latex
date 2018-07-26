@@ -1,13 +1,11 @@
-%!TEX TS-program = ../make.zsh
+%!TEX root = ../diplomarbeit.tex
 
-## Calculating intersections of photon trajectories with hole-ice cylinders
-
-In order to make the hole-ice simulation more efficient, one needs to calculate the intersection points of the photon trajectories with the hole-ice cylinders.
-
-\image{intersection-Kahm4UeY}
-
+\subsection{Calculating intersections of photon trajectories with hole-ice cylinders}
+\label{sec:intersections}
 
 ### Analytic approach
+
+\image{intersection-Kahm4UeY}
 
 Consider the starting point $A := (A_x, A_y)$ and the ending point $B := (B_x, B_y)$ of the trajectory.
 
@@ -56,7 +54,74 @@ Therefore, the intersection point coordinate vectors $\vec{X_1}$ and $\vec{X_2}$
   \vec{X_2} = \vec{A} + s_2 \, \vec{AB}
 \end{equation}
 
-How this result can be verified using a symbolic mathematics library, is shown in \appendixref{app:calculating_intersections_with_sympy}.
+This result can be verified using a symbolic mathematics library like \noun{SymPy}\footnote{\textbf{SymPy} is a Python library for symbolic mathematics. \url{http://sympy.org}}.
+
+% diplomarbeit/Logbuch/2018-02-13_schnittpunktberechnung.py
+
+\begin{python}
+# python
+
+from sympy import *
+init_printing(use_unicode=True)
+
+# Variables
+# ---------
+
+Ax, Ay = symbols("Ax Ay")
+Bx, By = symbols("Bx By")
+Mx, My = symbols("Mx My")
+Px, Py = symbols("Px Py")
+r = symbols("r")
+s = symbols("s")
+
+vx = Bx - Ax
+vy = By - Ay
+
+# First ansatz
+# ------------
+
+lhs = (Ax + s * vx - Mx)**2 + (Ay + s * vy - My)**2 - r**2
+expanded_lhs = expand(lhs)
+
+intersection_equation = Eq(lhs, 0)
+
+solution = solve(intersection_equation, s)
+s1 = solution[0]
+s2 = solution[1]
+
+# Second ansatz
+# -------------
+
+alpha = (By - Ay)**2 + (Bx - Ax)**2
+beta = 2 * Ay * (By - Ay) + 2 * Ax * (Bx - Ax) - 2 * My * (By - Ay) - 2 * Mx * (Bx - Ax)
+gamma = Ay**2 - 2 * Ay * My + My**2 - r**2 + Ax**2 - 2 * Ax * Mx + Mx**2
+discriminant = (beta**2 - 4 * alpha * gamma)
+
+ss1 = (- beta - sqrt(beta**2 - 4 * alpha * gamma)) / (2 * alpha)
+ss2 = (- beta + sqrt(beta**2 - 4 * alpha * gamma)) / (2 * alpha)
+
+# Compare ansatzes
+# ----------------
+
+# See also: http://docs.sympy.org/latest/tutorial/gotchas.html
+
+# # Does not work, because `==` checks object (structural) equality
+# s1 == ss1
+# s1 == ss2
+# s2 == ss1
+# s2 == ss2
+
+# Should be 0 for the matching pairs:
+simplify(s1 - ss1)  # => 0
+simplify(s1 - ss2)
+simplify(s2 - ss1)
+simplify(s2 - ss2)  # => 0
+
+# Or numerically:
+s1.equals(ss1)  # True
+s2.equals(ss2)  # True
+\end{python}
+
 
 
 ### Geometric approach

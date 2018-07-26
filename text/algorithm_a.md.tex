@@ -1,0 +1,114 @@
+%!TEX TS-program = ../make.zsh
+
+\subsection{Implementing Hole-Ice Propagation as Post-Correction of the Existing Propagation Algorithm}
+\label{sec:algorithm_a}
+
+% https://github.com/fiedl/hole-ice-study/issues/77
+
+\newcommand\abs{_\text{abs}}
+\newcommand\sca{_\text{sca}}
+\newcommand\hi{^\text{H}}
+
+A first approach to adding propagation through hole-ice cylinders to the standard propagation algorithm (section \ref{sec:standardphotonpropagationalgorithm}) implemented in \noun{clsim} is to add an ex-post correction to each simulation step without rewriting the existing algorithm.
+
+\sourcepar{The source code of the implementation of this first approach can be found in appendix \ref{sec:algorithm_a_source} as well as in the code repository at \url{https://github.com/fiedl/clsim/tree/sf/hole-ice-2017/resources/kernels/lib/hole_ice}.}
+
+This assumes that the scattering length $\lambda\hi\sca$ and the absorption length $\lambda\hi\abs$ within the hole ice can be expressed as multiple of the corresponding scattering length $\lambda\sca$ and absorption length $\lambda\abs$ within the surrounding bulk ice.
+
+$$
+  \lambda\sca\hi = f\sca \, \lambda\sca, \ \ \ \lambda\abs\hi = f\abs \, \lambda\abs
+$$
+
+The factor $f\sca :\in \reals^+_0$ will be called \textbf{scattering length factor}, $f\abs :\in \reals^+_0$ \textbf{absorption length factor}. These factors can be implemented as properties of the individual hole-ice cylinders, or as common property of all cylinders.
+
+If, for example a cylinder has an absorption length factor of $f\abs = 1$ this means that the absorption length within the hole ice is the same as in the surrounding bulk ice. If the absorption length factor is $f\abs = 0$ this means that the photon will be absorbed instantly when entering the hole-ice cylinder. A scattering factor of $f\sca=0.1$ means that the scattering length within the hole ice is one tenth of the scattering length within the surrounding bulk ice.
+
+\paragraph{Task} The task of this correction algorithm is to modify the quantities that are effected by the hole ice in each simulation step.
+
+Figure \ref{fig:Edahi9sh} illustrates this task: The standard \noun{clsim} propagation algorithm calculates the next scattering point $B$ without any knowledge of the hole ice. The hole-ice algorithm takes the hole ice into account and calculates a correction for the next scattering point. \noun{clsim} will use the corrected next scattering point $B'$ from that point on.
+
+\begin{figure}[htbp]
+  \image{photon-trajectory-Edahi9sh}
+  \caption{Illustration of the task of the hole-ice correction algorithm. In this two-dimensional scenario, the hole-ice cylinder is represented by a circle. When the photon scatters at point $A$, the standard clsim algorithm calculates the next scattering point $B$ without knowledge of the hole ice. The hole-ice correction algorithm calculates what fraction of the trajectory $AB$ runs through the hole ice and determines a correction, resulting in a hole-ice-corrected next scattering point $B'$.}
+  \label{fig:Edahi9sh}
+\end{figure}
+
+\paragraph{Context} The hole-ice correction algorithm is inserted into the clsim propagation algorithm's simulation step right after clsim has calculated the distance to the next scattering point and the remaining distance to the absorption point without knowledge of the hole ice. After the hole-ice correction algorithm follows the check whether the photon hits an optical module on the way from $A$ to $B$.
+
+The hole-ice correction algorithm takes the following input parameters: Current photon position at point $A$, photon direction after scattering at point $A$, a list of the hole-ice cylinders with their coordinates and radii, the hole-ice scattering length factor $f\sca$ and absorption length factor $f\abs$ as common properties of all hole-ice cylinders, the distance the next scattering point calculated by the standard-clsim algorithm, and the remaining distance to the absorption point calculated by the standard-clsim algorithm.
+
+As output parameters, the hole-ice correcton algorithm returns the hole-ice-corrected distance to the next scattering point and the hole-ice-corrected remaining distance to the absorption point.
+
+\paragraph{Procedure} For each simulation step, for each propagation from one scattering point $A$ to the next scattering point $B$, the hole-ice algorithm calculates the intersection points of the photon trajectory $AB$ and the hole-ice cylinders in range.
+
+Based on what portion of the distance $AB$ runs through the hole ice, the algorithm calculates a correction for the distance to the next scattering point and a correction for the remaining distance to the absorption point.
+
+Both calculations, scattering correction and absorption correction, depend on each other: If the photon scatters earlier within the hole ice than determined by the standard-clsim algorithm, then the corrected path within the hole ice is shorter than the original one, which means that the remaining distance to the absorption point will be longer as less of the absorption budget is spent, yet. If, on the other hand, the hole ice absorbs the photon instantly when entering the cylinder, then the corrected final position $B'$ of this simulation step won't be the point determined by the scattering correction but the point where the photon enters the cylinder.
+
+Figure \ref{fig:bahxug7O} shows a flow chart of this algorithm including the loop over the hole-ice cylinders in range, the calculation of the intersection points of photon path and hole-ice cylinder, the correction of the next scattering point and the correction of the remaining distance to absorption.
+
+\begin{figure}[htbp]
+  % https://github.com/fiedl/hole-ice-study/issues/77#issuecomment-396559561
+  \image{algorithm-hole-ice-2017}
+  \caption{Flow chart of the hole-ice-correction algorithm, which calculates ex-post corrections for the quantities that are effected by the hole ice, that is to say the distance to the next scattering point and the remaining distance to absorption of the photon. Both corrections depend on each other: If the photon scatters earlier, the absorption correction will be smaller. The algorithm returns the corrected quantities to the standard-clsim algorithm, which uses the corrected quantities from that point on.}
+  \label{fig:bahxug7O}
+\end{figure}
+
+\paragraph{Intersection Calculations} In order to determine the fraction of the path $AB$ of the photon that runs through the hole-ice cylinder, the intersection points of the photon path and the cylinder need to be calculated. This can either be done solving the geometric equations coordinate-wise for the coordinates of the zero, one or two intersection points, or by treating the same scenario as vectorial problem, calculating the coordinate vectors of the intersection points using other vectorial quantities rather than separate coordinates. The latter approach turns out to be more efficient as it utilizes the support of native vector operations of the graphics processing units. Both approaches are presented in appendix \ref{sec:intersections}.
+
+\paragraph{3D-2D Projection}
+% https://github.com/fiedl/hole-ice-study/issues/25
+% 2017-10-02 2017-10-11 2018-02-07
+When calculating the intersection points in two dimensions, that is to say when projecting all coordinates from the three-dimensional coordinate system onto the $x$-$y$ plane along the $z$-axis, and then calculating the intersection of a line and a circle rather than the intersections of a line and a cylinder, then the fraction of the photon path that runs through the hole ice is still the same as in three dimensions due to the intercept theorem as both, the distance to the intersection point, $\len{AX}_\text{2D}:=\xi \len{AX}_\text{3D}$, and the distance to the next scattering point, $\len{AB}_\text{2D}:=\xi \len{AB}_\text{3D}$, use the same projection factor $\xi \in \reals^+$, which itself depends on the photon direction.
+
+$$
+  \frac{\len{AX}_\text{2D}}{\len{AB}_\text{2D}} = \frac{\len{AX}_\text{3D}}{\len{AB}_\text{3D}}
+$$
+
+The relative distance corrections, $\Delta x / \len{AB}$, are the same in two and three dimensions due to the same reason. But the absolute distance correction $\Delta x : \len{AB'} = \len{AB} + \Delta x$ needs to be expressed in three dimensions when adding the correction to the distances used in the standard-clsim algorithm as they are defined for a three-dimensional coordinate system.
+
+Keeping this conversion requirement in mind, the geometric cases of the photon path $AB$ running through a hole-ice cylinder can be examined in two dimensions.
+
+\paragraph{Geometric Cases}
+% https://github.com/fiedl/hole-ice-study/issues/77#issuecomment-396581950
+% https://github.com/fiedl/hole-ice-study/issues/2 -- corrections for $f > 1$
+% https://github.com/fiedl/hole-ice-study/issues/20 -- missing geometric test cases
+%
+When the hole-ice algorithm calculates the distance correction $\Delta x: \len{AB'} = \len{AB} + \Delta x$, there are several geometric cases to consider, depending on the number $N$ of intersections of the photon path $AB$ with the hole-ice cylinder and whether the path starts within the cylinder or outside the cylinder.
+
+\begin{figure}[htbp]
+  \image{intersection-iefai4iV}
+  \caption{Intersection of the line along the photon path $AB$ with the hole-ice cylinder in two dimensions, where the cylinder is represented by a circle of radius $r$ around the center $M$. The first intersection point is $Y$, the second intersection point $X$. The second intersection point $X$ is beyond the path's end point $B$. Thus, the number $N$ of intersections is considered to be $N=1$ in this case.}
+  \label{fig:iefai4iV}
+\end{figure}
+
+The distance correction depends on the fraction $w :\in \reals^+_0$ of the path length $\len{AB}$ that runs within the hole-ice cylinder.
+
+\begin{description}
+  \item[Case 1] If the photon starts outside the cylinder and the path has no intersection with the cylinder ($N = 0$), then the path does not run through the cylinder, $w = 0$, and the distance correction $\Delta x$ needs to be zero: $\Delta x = 0$.
+  \item[Case 2] If the photon starts inside the cylinder and the path has no intersection with the cylinder ($N = 0$), then the whole path is within the cylinder, $w = 1$. A photon that would travel a distance of $\lambda$ within the bulk ice, travels a distance of $\lambda\hi$ within the hole ice, $\lambda\hi = f\,\lambda$. The distance correction $\Delta x$ for this photon would be $\Delta x = \lambda\hi - \lambda = (f - 1)\lambda$, or more generally, $\Delta x = (f - 1) \len{AB}$.
+  \item[Case 3] If the photon starts outside the cylinder, but intersects the cylinder once ($N = 1$), then only the path from the first intersection point $Y$ to the destination point $B$ runs within the hole ice, $w = \len{YB} / \len{AB}$. As only this fraction needs to be corrected, the distance correction is $\Delta x = \frac{\len{YB}}{\len{AB}}(f - 1)\len{AB}$.
+  \item[Case 4] If the photon intersects the cylinder once ($N = 1$), but starts within the cylinder, only the first part, $AX$, of the path needs to be corrected. In contrast to Case 3, however, where the outside distance has been fixed, in this case the outside part comes after the hole ice and will be the shorter the stronger the hole-ice correction is. Therefore, one needs to use the scaled distance $\len{AX} / f$ to determine how much of the path will remain outside the cylinder, resulting in a distance correction of $\Delta x = (1 - \frac{1}{f})\len{AB}$.
+  \item[Case 5] If the photon starts outside the cylinder and has two intersections ($N = 2$) with the cylinder, this is a combination of Case 3 and Case 4, resulting in a distance correction of $\Delta x = (1 - \frac{1}{f})\len{YC}$. When the photon reaches the end of the cylinder, $C$ ist just the second intersection point, $C = X$. If the trajectory is terminated, however, by the other interaction respectively, for example if the photon is scattered away before reaching the far end when calculating the absorption correction, $C$ is the point where the trajectory is terminated by the other interaction.
+  % termination point formalsim: 2017-10-10 2017-10-13 2018-02-02
+\end{description}
+
+A flow chart of the distance-correction algorithm is shown in figure \ref{fig:Eeshi4Oh}.
+
+\begin{figure}[htbp]
+  % https://github.com/fiedl/hole-ice-study/issues/77#issuecomment-396581950
+  \image{algorithm-hole-ice-correction-2017-case-ordered}
+  \caption{Calculate hole-ice correction for geometric distance}
+  \label{fig:Eeshi4Oh}
+\end{figure}
+
+\paragraph{Pros and Cons}
+As this first hole-ice algorithm only adds ex-post corrections for the standard-clsim algorithm, it leaves the standard-clsim code, which is already well tested, almost untouched and is itself well-testable using unit tests due to its well defined and small surface area.
+
+This correction algorithm works only for a specific subset of conditions that are not met by the current requirements of ...
+
+- con: works only for one cylinder
+- con: current understanding more towards absolute properties rather than relative
+- con: Large errors when jumping over several ice layers with largely differing ice properties
+- con: Errors when several hole-ice cylinders (nested or stacked) are between two interaction points
+

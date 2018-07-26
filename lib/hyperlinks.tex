@@ -15,13 +15,21 @@
 \urlstyle{sf}
 
 \newcommand\iconpar[2]{%
-  \begin{tabularx}{\textwidth}{lL}%
-    \adjustbox{minipage=6mm, center=6mm, valign=t, raise=-2mm}{#1} & #2%
-  \end{tabularx}%
+  \vspace{1em}\fbox{%
+    \begin{tabularx}{\textwidth}{lL}%
+      \adjustbox{minipage=6mm, center=6mm, valign=t, raise=-2mm}{\center{#1}} & \footnotesize\sffamily #2%
+    \end{tabularx}%
+  }\vspace{1em}%
 }
 
-\newcommand\githubicon{\includegraphics[width=6mm]{img/github}}
+\newcommand\githubicon{\faGithub}
 \newcommand\githubpar[1]{\iconpar{\githubicon}{#1}}
 
 \newcommand\webicon{\hspace*{1mm}\faExternalLink}
 \newcommand\webpar[1]{\iconpar{\webicon}{#1}}
+
+\newcommand\documentationicon{\faBook}
+\newcommand\docpar[1]{\iconpar{\documentationicon}{#1}}
+
+\newcommand\sourcecodeicon{\faFileTextO}
+\newcommand\sourcepar[1]{\iconpar{\sourcecodeicon}{#1}}

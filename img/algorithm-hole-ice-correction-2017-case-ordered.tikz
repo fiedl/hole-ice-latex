@@ -43,12 +43,12 @@
   \decision{n0startsoutside}{Step starts\\outside cylinder\\?}{right = 1.5cm of n0};
 
   \process{case1}{\casecontent{1}{-1,0.7}{0.3,1.0}{$\Delta x = 0$}}{right = 1.5cm of n0startsoutside};
-  \process{case2}{\casecontent{2}{-0.2,-0.05}{0.2,0.05}{$\Delta x = (f-1)\,x$}}{below = 2cm of case1};
+  \process{case2}{\casecontent{2}{-0.2,-0.05}{0.2,0.05}{$\Delta x = (f-1)\,\overline{AB}$}}{below = 2cm of case1};
 
   \decision{n1}{One intersection\\($N = 1$)\\?}{below = 5cm of n0};
   \decision{n1startsoutside}{Step starts\\outside cylinder\\?}{right = 1.5cm of n1};
 
-  \process{case3}{\casecontent{3}{-1.2,-0.05}{0.2,0.05}{$\Delta x = \frac{\overline{AY}}{\overline{AB}}\,(f-1)\,x$}}{right = 1.5cm of n1startsoutside};
+  \process{case3}{\casecontent{3}{-1.2,-0.05}{0.2,0.05}{$\Delta x = \frac{\overline{YB}}{\overline{AB}}\,(f-1)\,\overline{AB}$}}{right = 1.5cm of n1startsoutside};
   \process{case4}{\casecontent{4}{-0.2,-0.05}{1.2,0.05}{$\Delta x = (1-\frac{1}{f})\,x$}}{below = 2cm of case3};
 
   \process{case5}{\casecontent{5}{-1,-0.2}{1,0.2}{$\Delta x = (1-\frac{1}{f})\,\overline{YC}$}}{below = 1cm of case4};

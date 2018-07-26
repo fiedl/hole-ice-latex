@@ -28,7 +28,7 @@
 
 \input{config/aliases}
 
-\includeonly{text/propagation_through_different_media}
+%\includeonly{}
 
 \bibliography{diplomarbeit}
 \begin{document}
@@ -48,20 +48,29 @@
   \include{text/hole_ice_as_cylinders}
   \include{text/propagation_through_different_media}
   \include{text/tools}
+  \include{text/algorithm_a}
+  \include{text/algorithm_b}
 
   \include{text/gliederung}
 
 
   %\include{text/cross_checks}
   %\include{text/likelihood}
-  %\include{text/intersections}
   %\include{text/hole_ice_trajectory_corrections}
   %\include{text/problems}
   %
   \printbibliography
   %
   \appendix
-  \include{text/appendix/howtoclsim}
-  %\include{text/appendix/calculating_intersections_with_sympy}
+  \section{Appendix}
+  \include{text/howtoclsim}
+  \include{text/algorithm_a_source}
+  \include{text/intersections}
+
+  % \subsection{List of Symbols}
+  % property symbol :  A: B  A has the property B
+  % identity symbol \equiv  to define new symbols based on known terms
+  % reals, reals+, reals+0, naturals
+
 
 \end{document}
