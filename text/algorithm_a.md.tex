@@ -1,6 +1,6 @@
 %!TEX TS-program = ../make.zsh
 
-\subsection{Implementing Hole-Ice Propagation as Post-Correction of the Existing Propagation Algorithm}
+\subsection{Implementing Hole-Ice Propagation as Ex-Post Correction of the Existing Propagation Algorithm}
 \label{sec:algorithm_a}
 
 % https://github.com/fiedl/hole-ice-study/issues/77
@@ -19,7 +19,7 @@ The factor $f\sca :\in \reals^+_0$ will be called \textbf{scattering length fact
 
 If, for example a cylinder has an absorption length factor of $f\abs = 1$ this means that the absorption length within the hole ice is the same as in the surrounding bulk ice. If the absorption length factor is $f\abs = 0$ this means that the photon will be absorbed instantly when entering the hole-ice cylinder. A scattering factor of $f\sca=0.1$ means that the scattering length within the hole ice is one tenth of the scattering length within the surrounding bulk ice.
 
-\paragraph{Task} The task of this correction algorithm is to modify the quantities that are effected by the hole ice in each simulation step.
+\paragraph{Task} The task of this \textbf{hole-ice-correction algorithm} is to modify the quantities that are effected by the hole ice in each simulation step.
 
 Figure \ref{fig:Edahi9sh} illustrates this task: The standard \noun{clsim} propagation algorithm calculates the next scattering point $B$ without any knowledge of the hole ice. The hole-ice algorithm takes the hole ice into account and calculates a correction for the next scattering point. \noun{clsim} will use the corrected next scattering point $B'$ from that point on.
 
@@ -83,10 +83,14 @@ The distance correction depends on the fraction $w :\in \reals^+_0$ of the path 
 \begin{description}
   \item[Case 1] If the photon starts outside the cylinder and the path has no intersection with the cylinder ($N = 0$), then the path does not run through the cylinder, $w = 0$, and the distance correction $\Delta x$ needs to be zero: $\Delta x = 0$.
   \item[Case 2] If the photon starts inside the cylinder and the path has no intersection with the cylinder ($N = 0$), then the whole path is within the cylinder, $w = 1$. A photon that would travel a distance of $\lambda$ within the bulk ice, travels a distance of $\lambda\hi$ within the hole ice, $\lambda\hi = f\,\lambda$. The distance correction $\Delta x$ for this photon would be $\Delta x = \lambda\hi - \lambda = (f - 1)\lambda$, or more generally, $\Delta x = (f - 1) \len{AB}$.
-  \item[Case 3] If the photon starts outside the cylinder, but intersects the cylinder once ($N = 1$), then only the path from the first intersection point $Y$ to the destination point $B$ runs within the hole ice, $w = \len{YB} / \len{AB}$. As only this fraction needs to be corrected, the distance correction is $\Delta x = \frac{\len{YB}}{\len{AB}}(f - 1)\len{AB}$.
-  \item[Case 4] If the photon intersects the cylinder once ($N = 1$), but starts within the cylinder, only the first part, $AX$, of the path needs to be corrected. In contrast to Case 3, however, where the outside distance has been fixed, in this case the outside part comes after the hole ice and will be the shorter the stronger the hole-ice correction is. Therefore, one needs to use the scaled distance $\len{AX} / f$ to determine how much of the path will remain outside the cylinder, resulting in a distance correction of $\Delta x = (1 - \frac{1}{f})\len{AB}$.
-  \item[Case 5] If the photon starts outside the cylinder and has two intersections ($N = 2$) with the cylinder, this is a combination of Case 3 and Case 4, resulting in a distance correction of $\Delta x = (1 - \frac{1}{f})\len{YC}$. When the photon reaches the end of the cylinder, $C$ ist just the second intersection point, $C = X$. If the trajectory is terminated, however, by the other interaction respectively, for example if the photon is scattered away before reaching the far end when calculating the absorption correction, $C$ is the point where the trajectory is terminated by the other interaction.
-  % termination point formalsim: 2017-10-10 2017-10-13 2018-02-02
+  \item[Case 3] If the photon starts outside the cylinder, but intersects the cylinder once ($N = 1$), then the first part of the trajectory, $AY$, stays the same, and only the path from the first intersection point $Y$ to the destination point $B$ runs within the hole ice, $w = \len{YB} / \len{AB}$. As only this fraction needs to be corrected, the distance correction is $\Delta x = (f - 1)\len{YB}$.
+  \item[Case 4] If the photon intersects the cylinder once ($N = 1$), but starts within the cylinder, only the first part, $AC$, of the path needs to be corrected.
+
+  $C$ is the \textbf{termination point} of the trajectory inside the cylinder. In cases where the photon reaches the far end of the cylinder, $C$ ist just the second intersection point, $C = X$. If the trajectory within the cylinder is terminated, however, by the other interaction respectively, for example if the photon is scattered away before reaching the far end when calculating the absorption correction, $C$ is the point where the trajectory is terminated by the other interaction.
+    % termination point formalsim: 2017-10-10 2017-10-13 2018-02-02
+
+  In contrast to Case 3 where the outside distance $AY$ has been fixed, in this case the outside part $CB$ comes after the hole ice and will be the shorter the stronger the hole-ice correction is. Therefore, one needs to use the scaled distance $\len{AC} / f$ to determine how much of the path will remain outside the cylinder, resulting in a distance correction of $\Delta x = (1 - \frac{1}{f})\len{AC}$.
+  \item[Case 5] If the photon starts outside the cylinder and has two intersections ($N = 2$) with the cylinder, this is a combination of Case 3 and Case 4, resulting in a distance correction of $\Delta x = (1 - \frac{1}{f})\len{YC}$.
 \end{description}
 
 A flow chart of the distance-correction algorithm is shown in figure \ref{fig:Eeshi4Oh}.
