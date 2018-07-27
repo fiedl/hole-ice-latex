@@ -103,12 +103,17 @@ A flow chart of the distance-correction algorithm is shown in figure \ref{fig:Ee
 \end{figure}
 
 \paragraph{Pros and Cons}
-As this first hole-ice algorithm only adds ex-post corrections for the standard-clsim algorithm, it leaves the standard-clsim code, which is already well tested, almost untouched and is itself well-testable using unit tests due to its well defined and small surface area.
+As this first hole-ice algorithm only adds ex-post corrections for the standard-clsim algorithm, it leaves the standard-clsim code, which is already well tested, almost untouched.
 
-This correction algorithm works only for a specific subset of conditions that are not met by the current requirements of ...
+The additions that come with the hole-ice algorithm interface with the clsim algorithm only through a small surface area, this is to say the number of variables to pass from one algorithm to the other is small. This allows to test the hole-ice algorithm with so called unit tests where specific examples with fixed input variables are provided and tested whether the algorithm produces the expected results for the example. \mref{Unit tests section.}
 
-- con: works only for one cylinder
-- con: current understanding more towards absolute properties rather than relative
-- con: Large errors when jumping over several ice layers with largely differing ice properties
-- con: Errors when several hole-ice cylinders (nested or stacked) are between two interaction points
+The hole-ice correction algorithm, however, has a number of important limitations.
 
+First, the current understanding of the hole ice suggests that the interaction properties of the hole ice are independent of the properties of the surrounding bulk ice.\footnote{\todo{The hole ice is refrozen water. When the bulk ice within the drill hole became water the structures that were responsible for the specific properties of that bulk-ice layer were destroyed. The refreezing happens the same way everywhere in the drill hole. \mref{Hole-ice description in the intro section.}}}
+  But with this hole-ice correction algorithm, it is only possible to define the interaction lengths of the hole ice relative to the interaction properties of the surrounding bulk ice.
+
+While one could workaround this problem locally by adjusting the correction factors $f$ in relation to the local properties of the bulk ice, large jumps over several layers of ice with different properties would cause inevitable errors.
+
+Second, the algorithm does work only correct in scenarios where the photon only crosses one cylinder per simulation step, that is to say between two scattering points. In scenarios where the photon crosses several cylinders, for example when nested cylinders are used to model radially changing properties of the hole ice, or when instantly-absorbing cylinders are used to model cables within a hole-ice cylinder, this algorithm is not able to calculate the corrections properly because it would interpret the interaction factors $f$ not only relative to the surrounding bulk ice but also relative to the cylinders the photon has already crossed in this simulation step.
+
+A different approach to adding propagation through hole-ice cylinders to the standard propagation algorithm is to treat hole-ice cylinders the same way as other media such as ice layers rather than accounting for the hole-ice effects using ex-post corrections. This second approach gets rid of the above shortcomings, but at the cost that the standard-clsim algorithm that handles the propagation through different media needs to be re-written. This second approach is described in the following section.
