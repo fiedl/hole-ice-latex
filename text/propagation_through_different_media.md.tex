@@ -75,9 +75,10 @@ Rather than randomizing the geometrical distance $X:=\overline{AB}$ from the cur
 
 Suppose, starting at interaction point $A$, the photon travels in $m :\in \naturals$ media $M_i$ with interaction lengths $\lambda_i$ for a distance of $x_i$ respectively until it reaches the next interaction point $B$. In each medium $M_i$, the algorithm spends $n_i: x_i = n_i\,\lambda_i$ of the budget $N:=\sum_1^m n_i$ that has been randomized at interaction point $A$ until it reaches interaction point $B$ in a distance $X:=\overline{AB}$.
 
-$$
-  X = \sum_1^m x_i = \sum_1^m n_i\,\lambda_i
-$$
+\begin{equation}
+  X = \sum_{i=1}^m x_i = \sum_{i=1}^m n_i\,\lambda_i, \ \ \ \ N = \sum_{i=1}^m n_i
+  \label{eq:convertbudgettodistance}
+\end{equation}
 
 Each distance $x_i$ is the length of the trajectory the photon spends in medium $M_i$. The first distance $x_1$ is the distance from the starting point $A$ to the medium border of $M_1$ and $M_2$ along the photon direction. The subsequent distances $x_i$ are the distances of the first medium border of $M_{i-1}$ and $M_i$ and the second medium border of $M_i$ and $M_{i+1}$ respectively along the photon direction. The last distance $x_m$ is determined by how much of the budget $N$ is left in the last medium, $x_m = n_m\,\lambda_m$, such that the overall budget $N:=\sum_1^m n_i$ is spent.
 

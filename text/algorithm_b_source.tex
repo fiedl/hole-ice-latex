@@ -1,0 +1,539 @@
+%!TEX root = ../diplomarbeit.tex
+
+\subsection{Source code of Algorithm B}
+\label{sec:algorithm_b_source}
+
+This is the source code of the second propagation algorithm through different media, described in section \ref{sec:algorithm_b}.
+
+\sourcepar{The source code can also be found online at \url{https://github.com/fiedl/clsim/tree/sf/hole-ice-2018/resources/kernels/lib}.}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/propagation_through_media/propagation_through_media.c
+
+#ifndef PROPAGATION_THROUGH_MEDIA_C
+#define PROPAGATION_THROUGH_MEDIA_C
+
+#include "propagation_through_media.h"
+#include "../ice_layers/ice_layers.c"
+#ifdef HOLE_ICE
+  #include "../hole_ice/hole_ice.c"
+#endif
+
+
+// PROPAGATION THROUGH DIFFERENT MEDIA 2018: Layers, Cylinders
+// -----------------------------------------------------------------------------
+
+// We know how many scattering lengths (`sca_step_left`) and
+// absorption lengths (`abs_lens_left`) the photon will
+// travel in this step.
+//
+// Because the mean scattering and absorption lengths are local
+// properties, i.e. depend on the ice layer or whether the photon
+// is within a hole-ice cylinder, we need to convert `sca_step_left`
+// and `abs_lens_left` to geometrical distances in order to determine
+// where the next interaction point is, i.e. how far to propagate
+// the photon in this step.
+
+inline void apply_propagation_through_different_media(
+  floating4_t photonPosAndTime, floating4_t photonDirAndWlen,
+  #ifdef HOLE_ICE
+    unsigned int numberOfCylinders, __constant floating4_t *cylinderPositionsAndRadii,
+    __constant floating_t *cylinderScatteringLengths, __constant floating_t *cylinderAbsorptionLengths,
+  #endif
+  floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths,
+  floating_t *sca_step_left, floating_t *abs_lens_left,
+  floating_t *distancePropagated, floating_t *distanceToAbsorption)
+{
+
+  int number_of_medium_changes = 0;
+  distances_to_medium_changes[0] = 0.0;
+  int currentPhotonLayer = min(max(findLayerForGivenZPos(photonPosAndTime.z), 0), MEDIUM_LAYERS-1);
+  local_scattering_lengths[0] = getScatteringLength(currentPhotonLayer, photonDirAndWlen.w);
+  local_absorption_lengths[0] = getAbsorptionLength(currentPhotonLayer, photonDirAndWlen.w);
+
+  // To check which medium boundaries are in range, we need to estimate
+  // how far the photon can travel in this step.
+  //
+  const floating_t photonRange = *sca_step_left * local_scattering_lengths[0];
+
+  add_ice_layers_on_photon_path_to_medium_changes(
+    photonPosAndTime,
+    photonDirAndWlen,
+    photonRange,
+
+    // These values will be updates within this function:
+    &number_of_medium_changes,
+    distances_to_medium_changes,
+    local_scattering_lengths,
+    local_absorption_lengths
+  );
+
+  #ifdef HOLE_ICE
+    add_hole_ice_cylinders_on_photon_path_to_medium_changes(
+      photonPosAndTime,
+      photonDirAndWlen,
+      photonRange,
+      numberOfCylinders,
+      cylinderPositionsAndRadii,
+
+      // These values will be updates within this function:
+      &number_of_medium_changes,
+      distances_to_medium_changes,
+      local_scattering_lengths,
+      local_absorption_lengths
+    );
+  #endif
+
+  sort_medium_changes_by_ascending_distance(
+    number_of_medium_changes,
+
+    // These values will be updates within this function:
+    distances_to_medium_changes,
+    local_scattering_lengths,
+    local_absorption_lengths
+  );
+
+  loop_over_media_and_calculate_geometrical_distances_up_to_the_next_scattering_point(
+    number_of_medium_changes,
+    distances_to_medium_changes,
+    local_scattering_lengths,
+    local_absorption_lengths,
+
+    // These values will be updates within this function:
+    sca_step_left,
+    abs_lens_left,
+    distancePropagated,
+    distanceToAbsorption
+  );
+}
+
+inline void sort_medium_changes_by_ascending_distance(int number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths)
+{
+  // Sort the arrays `distances_to_medium_changes`, `local_scattering_lengths` and
+  // `local_absorption_lengths` by ascending distance to have the medium changes
+  // in the right order.
+  //
+  // https://en.wikiversity.org/wiki/C_Source_Code/Sorting_array_in_ascending_and_descending_order
+  //
+  for (int k = 0; k <= number_of_medium_changes; k++) {
+    for (int l = 0; l <= number_of_medium_changes; l++) {
+      if (distances_to_medium_changes[l] > distances_to_medium_changes[k]) {
+        floating_t tmp_distance = distances_to_medium_changes[k];
+        floating_t tmp_scattering = local_scattering_lengths[k];
+        floating_t tmp_absorption = local_absorption_lengths[k];
+
+        distances_to_medium_changes[k] = distances_to_medium_changes[l];
+        local_scattering_lengths[k] = local_scattering_lengths[l];
+        local_absorption_lengths[k] = local_absorption_lengths[l];
+
+        distances_to_medium_changes[l] = tmp_distance;
+        local_scattering_lengths[l] = tmp_scattering;
+        local_absorption_lengths[l] = tmp_absorption;
+      }
+    }
+  }
+}
+
+inline void loop_over_media_and_calculate_geometrical_distances_up_to_the_next_scattering_point(int number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths, floating_t *sca_step_left, floating_t *abs_lens_left, floating_t *distancePropagated, floating_t *distanceToAbsorption)
+{
+  // We know how many scattering lengths (`sca_step_left`) and how many
+  // absorption lengths (`abs_lens_left`) we may spend when propagating
+  // through the different media.
+  //
+  // Convert these into the geometrical distances `distancePropagated` (scattering)
+  // and `distanceToAbsorption` (absorption) and decrease `sca_step_left` and
+  // `abs_lens_left` accordingly.
+  //
+  // Abort when the next scattering point is reached, i.e. `sca_step_left == 0`.
+  // At this point, `abs_lens_left` may still be greater than zero, because
+  // the photon may be scattered several times until it is absorbed.
+  //
+  for (int j = 0; (j < number_of_medium_changes) && (*sca_step_left > 0); j++) {
+    floating_t max_distance_in_current_medium = distances_to_medium_changes[j+1] - distances_to_medium_changes[j];
+
+    if (*sca_step_left * local_scattering_lengths[j] > max_distance_in_current_medium) {
+      // The photon scatters after leaving this medium.
+      *sca_step_left -= my_divide(max_distance_in_current_medium, local_scattering_lengths[j]);
+      *distancePropagated += max_distance_in_current_medium;
+    } else {
+      // The photon scatters within this medium.
+      max_distance_in_current_medium = *sca_step_left * local_scattering_lengths[j];
+      *distancePropagated += max_distance_in_current_medium;
+      *sca_step_left = 0;
+    }
+
+    if (*abs_lens_left * local_absorption_lengths[j] > max_distance_in_current_medium) {
+      // The photon is absorbed after leaving this medium.
+      *abs_lens_left -= my_divide(max_distance_in_current_medium, local_absorption_lengths[j]);
+      *distanceToAbsorption += max_distance_in_current_medium;
+    } else {
+      // The photon is absorbed within this medium.
+      *distanceToAbsorption += *abs_lens_left * local_absorption_lengths[j];
+      *abs_lens_left = 0;
+    }
+  }
+
+  // Spend the rest of the budget with the last medium properties.
+  if (*sca_step_left > 0) {
+    *distancePropagated += *sca_step_left * local_scattering_lengths[number_of_medium_changes];
+    *distanceToAbsorption += *abs_lens_left * local_absorption_lengths[number_of_medium_changes];
+    *abs_lens_left -= my_divide(*distancePropagated, local_absorption_lengths[number_of_medium_changes]);
+  }
+
+  // If the photon is absorbed, only propagate up to the absorption point.
+  if (*distanceToAbsorption < *distancePropagated) {
+    *distancePropagated = *distanceToAbsorption;
+    *distanceToAbsorption = ZERO;
+    *abs_lens_left = ZERO;
+  }
+}
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/propagation_through_media/propagation_through_media.h
+
+#ifndef PROPAGATION_THROUGH_MEDIA_H
+#define PROPAGATION_THROUGH_MEDIA_H
+
+inline void apply_propagation_through_different_media(
+  floating4_t photonPosAndTime, floating4_t photonDirAndWlen,
+  #ifdef HOLE_ICE
+    unsigned int numberOfCylinders, __constant floating4_t *cylinderPositionsAndRadii,
+    __constant floating_t *cylinderScatteringLengths, __constant floating_t *cylinderAbsorptionLengths,
+  #endif
+  floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths,
+  floating_t *sca_step_left, floating_t *abs_lens_left,
+  floating_t *distancePropagated, floating_t *distanceToAbsorption);
+
+inline void sort_medium_changes_by_ascending_distance(int number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths);
+
+inline void loop_over_media_and_calculate_geometrical_distances_up_to_the_next_scattering_point(int number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths, floating_t *sca_step_left, floating_t *abs_lens_left, floating_t *distancePropagated, floating_t *distanceToAbsorption);
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/ice_layers/ice_layers.c
+
+#ifndef ICE_LAYERS_C
+#define ICE_LAYERS_C
+
+#include "ice_layers.h"
+
+inline void add_ice_layers_on_photon_path_to_medium_changes(floating4_t photonPosAndTime, floating4_t photonDirAndWlen, floating_t photonRange, int *number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths)
+{
+
+  // The closest ice layer is special, because we need to check how far
+  // it is away from the photon. After that, all photon layers are equidistant.
+  //
+  floating_t z_of_closest_ice_layer_boundary =
+      mediumLayerBoundary(photon_layer(photonPosAndTime.z));
+  if (photonDirAndWlen.z > ZERO) z_of_closest_ice_layer_boundary +=
+      (floating_t)MEDIUM_LAYER_THICKNESS;
+
+  *number_of_medium_changes += 1;
+  distances_to_medium_changes[*number_of_medium_changes] =
+      my_divide(z_of_closest_ice_layer_boundary - photonPosAndTime.z, photonDirAndWlen.z);
+  int next_photon_layer =
+      photon_layer(z_of_closest_ice_layer_boundary + photonDirAndWlen.z);
+  local_scattering_lengths[*number_of_medium_changes] =
+      getScatteringLength(next_photon_layer, photonDirAndWlen.w);
+  local_absorption_lengths[*number_of_medium_changes] =
+      getAbsorptionLength(next_photon_layer, photonDirAndWlen.w);
+
+  // Now loop through the equidistant layers in range.
+  //
+  const floating_t max_trajectory_length_between_two_layers =
+      my_divide((floating_t)MEDIUM_LAYER_THICKNESS, my_fabs(photonDirAndWlen.z));
+  while (distances_to_medium_changes[*number_of_medium_changes] + max_trajectory_length_between_two_layers < photonRange)
+  {
+    *number_of_medium_changes += 1;
+    distances_to_medium_changes[*number_of_medium_changes] =
+        distances_to_medium_changes[*number_of_medium_changes - 1]
+        + max_trajectory_length_between_two_layers;
+    next_photon_layer = photon_layer(photonPosAndTime.z
+        + (distances_to_medium_changes[*number_of_medium_changes] + 0.01) * photonDirAndWlen.z);
+    local_scattering_lengths[*number_of_medium_changes] =
+        getScatteringLength(next_photon_layer, photonDirAndWlen.w);
+    local_absorption_lengths[*number_of_medium_changes] =
+        getAbsorptionLength(next_photon_layer, photonDirAndWlen.w);
+  }
+
+}
+
+inline int photon_layer(floating_t z)
+{
+  return min(max(findLayerForGivenZPos(z), 0), MEDIUM_LAYERS-1);
+}
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/ice_layers/ice_layers.h
+
+#ifndef ICE_LAYERS_H
+#define ICE_LAYERS_H
+
+inline void add_ice_layers_on_photon_path_to_medium_changes(floating4_t photonPosAndTime, floating4_t photonDirAndWlen, floating_t photonRange, int *number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths);
+
+inline int photon_layer(floating_t z);
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/hole_ice/hole_ice.c
+
+#ifndef HOLE_ICE_C
+#define HOLE_ICE_C
+
+#include "hole_ice.h"
+#include "../intersection/intersection.c"
+
+inline void add_hole_ice_cylinders_on_photon_path_to_medium_changes(floating4_t photonPosAndTime, floating4_t photonDirAndWlen, floating_t photonRange, unsigned int numberOfCylinders, __constant floating4_t *cylinderPositionsAndRadii, int *number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths)
+{
+  // Find out which cylinders are in range in a separate loop
+  // in order to improve parallelism and thereby performance.
+  //
+  // See: https://github.com/fiedl/hole-ice-study/issues/30
+  //
+  #ifdef NUMBER_OF_CYLINDERS
+    // When running this on OpenCL, defining arrays using a constant
+    // as array size is not possible. Therefore, we need to use a
+    // pre-processor makro here.
+    //
+    // See: https://github.com/fiedl/hole-ice-study/issues/38
+    //
+    int indices_of_cylinders_in_range[NUMBER_OF_CYLINDERS];
+  #else
+    int indices_of_cylinders_in_range[numberOfCylinders];
+  #endif
+  {
+    unsigned int j = 0;
+    for (unsigned int i = 0; i < numberOfCylinders; i++) {
+      indices_of_cylinders_in_range[i] = -1;
+    }
+    for (unsigned int i = 0; i < numberOfCylinders; i++) {
+      if (sqr(photonPosAndTime.x - cylinderPositionsAndRadii[i].x) +
+          sqr(photonPosAndTime.y - cylinderPositionsAndRadii[i].y) <=
+          sqr(photonRange + cylinderPositionsAndRadii[i].w /* radius */))
+      {
+
+        // If the cylinder has a z-range check if we consider that cylinder
+        // to be in range. https://github.com/fiedl/hole-ice-study/issues/34
+        //
+        if ((cylinderPositionsAndRadii[i].z == 0) || ((cylinderPositionsAndRadii[i].z != 0) && !(((photonPosAndTime.z < cylinderPositionsAndRadii[i].z - 0.5) && (photonPosAndTime.z + photonRange * photonDirAndWlen.z < cylinderPositionsAndRadii[i].z - 0.5)) || ((photonPosAndTime.z > cylinderPositionsAndRadii[i].z + 0.5) && (photonPosAndTime.z + photonRange * photonDirAndWlen.z > cylinderPositionsAndRadii[i].z + 0.5)))))
+        {
+          indices_of_cylinders_in_range[j] = i;
+          j += 1;
+        }
+      }
+    }
+  }
+
+  // Now loop over all cylinders in range and calculate corrections
+  // for `*distancePropagated` and `*distanceToAbsorption`.
+  //
+  for (unsigned int j = 0; j < numberOfCylinders; j++) {
+    const int i = indices_of_cylinders_in_range[j];
+    if (i == -1) {
+      break;
+    } else {
+
+      IntersectionProblemParameters_t p = {
+
+        // Input values
+        photonPosAndTime.x,
+        photonPosAndTime.y,
+        cylinderPositionsAndRadii[i].x,
+        cylinderPositionsAndRadii[i].y,
+        cylinderPositionsAndRadii[i].w, // radius
+        photonDirAndWlen,
+        1.0, // distance used to calculate s1 and s2 relative to
+
+        // Output values (will be calculated)
+        0, // discriminant
+        0, // s1
+        0  // s2
+
+      };
+
+      calculate_intersections(&p);
+
+      if (intersection_discriminant(p) > 0) {
+        if ((intersection_s1(p) <= 0) && (intersection_s2(p) >= 0)) {
+          // The photon is already within the hole ice.
+          local_scattering_lengths[0] = cylinderScatteringLengths[i];
+          local_absorption_lengths[0] = cylinderAbsorptionLengths[i];
+        } else if (intersection_s1(p) > 0) {
+          // The photon enters the hole ice on its way.
+          *number_of_medium_changes += 1;
+          distances_to_medium_changes[*number_of_medium_changes] = intersection_s1(p);
+          local_scattering_lengths[*number_of_medium_changes] = cylinderScatteringLengths[i];
+          local_absorption_lengths[*number_of_medium_changes] = cylinderAbsorptionLengths[i];
+        }
+        if (intersection_s2(p) > 0) {
+          // The photon leaves the hole ice on its way.
+          *number_of_medium_changes += 1;
+          distances_to_medium_changes[*number_of_medium_changes] = intersection_s2(p);
+          if (i == 0) // there is no larger cylinder
+          {
+            const int photonLayerAtTheCylinderBorder =
+                photon_layer(photonPosAndTime.z + photonDirAndWlen.z * intersection_s2(p));
+            local_scattering_lengths[*number_of_medium_changes] =
+                getScatteringLength(photonLayerAtTheCylinderBorder, photonDirAndWlen.w);
+            local_absorption_lengths[*number_of_medium_changes] =
+                getAbsorptionLength(photonLayerAtTheCylinderBorder, photonDirAndWlen.w);
+          } else {
+            // There is a larger cylinder outside this one, which is the one before in the array.
+            // See: https://github.com/fiedl/hole-ice-study/issues/47
+            //
+            local_scattering_lengths[*number_of_medium_changes] = cylinderScatteringLengths[i - 1];
+            local_absorption_lengths[*number_of_medium_changes] = cylinderAbsorptionLengths[i - 1];
+          }
+        }
+      }
+
+    }
+  }
+
+}
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/hole_ice/hole_ice.h
+
+#ifndef HOLE_ICE_H
+#define HOLE_ICE_H
+
+inline void add_hole_ice_cylinders_on_photon_path_to_medium_changes(floating4_t photonPosAndTime, floating4_t photonDirAndWlen, floating_t photonRange, unsigned int numberOfCylinders, __constant floating4_t *cylinderPositionsAndRadii, int *number_of_medium_changes, floating_t *distances_to_medium_changes, floating_t *local_scattering_lengths, floating_t *local_absorption_lengths);
+
+#endif
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/intersection/intersection.c
+
+#include "intersection.h"
+
+inline void calculate_intersections(IntersectionProblemParameters_t *p)
+{
+  // Step 1
+  const floating4_t vector_AM = {p->mx - p->ax, p->my - p->ay, 0.0, 0.0};
+  const floating_t xy_projection_factor = my_sqrt(1 - sqr(p->direction.z));
+  const floating_t length_AMprime = dot(vector_AM, p->direction) / xy_projection_factor;
+
+  // Step 2
+  p->discriminant = sqr(p->r) - dot(vector_AM, vector_AM) + sqr(length_AMprime);
+
+  // Step 3
+  const floating_t length_XMprime = my_sqrt(p->discriminant);
+
+  // Step 4
+  const floating_t length_AX1 = length_AMprime - length_XMprime;
+  const floating_t length_AX2 = length_AMprime + length_XMprime;
+  p->s1 = length_AX1 / p->distance / xy_projection_factor;
+  p->s2 = length_AX2 / p->distance / xy_projection_factor;
+}
+
+inline floating_t intersection_s1(IntersectionProblemParameters_t p)
+{
+  return p.s1;
+}
+
+inline floating_t intersection_s2(IntersectionProblemParameters_t p)
+{
+  return p.s2;
+}
+
+inline floating_t intersection_discriminant(IntersectionProblemParameters_t p)
+{
+  return p.discriminant;
+}
+
+inline floating_t intersection_x1(IntersectionProblemParameters_t p)
+{
+  if ((p.s1 > 0) && (p.s1 < 1))
+    return p.ax + p.direction.x * p.distance * p.s1;
+  else
+    return my_nan();
+}
+
+inline floating_t intersection_x2(IntersectionProblemParameters_t p)
+{
+  if ((p.s2 > 0) && (p.s2 < 1))
+    return p.ax + p.direction.x * p.distance * p.s2;
+  else
+    return my_nan();
+}
+
+inline floating_t intersection_y1(IntersectionProblemParameters_t p)
+{
+  if ((p.s1 > 0) && (p.s1 < 1))
+    return p.ay + p.direction.y * p.distance * p.s1;
+  else
+    return my_nan();
+}
+
+inline floating_t intersection_y2(IntersectionProblemParameters_t p)
+{
+  if ((p.s2 > 0) && (p.s2 < 1))
+    return p.ay + p.direction.y * p.distance * p.s2;
+  else
+    return my_nan();
+}
+
+inline bool intersecting_trajectory_starts_inside(IntersectionProblemParameters_t p)
+{
+  return (intersection_s1(p) <= 0) &&
+      (intersection_s2(p) > 0) &&
+      (intersection_discriminant(p) > 0);
+}
+
+inline bool intersecting_trajectory_starts_outside(IntersectionProblemParameters_t p)
+{
+  return ( ! intersecting_trajectory_starts_inside(p));
+}
+
+inline bool intersecting_trajectory_ends_inside(IntersectionProblemParameters_t p)
+{
+  return (intersection_s1(p) < 1) &&
+      (intersection_s2(p) >= 1) &&
+      (intersection_discriminant(p) > 0);
+}
+\end{ccode}
+
+\begin{ccode}
+// https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/intersection/intersection.h
+
+#ifndef INTERSECTION_H
+#define INTERSECTION_H
+
+typedef struct IntersectionProblemParameters {
+
+  // Input values
+  //
+  floating_t ax;
+  floating_t ay;
+  floating_t mx;
+  floating_t my;
+  floating_t r;
+  floating4_t direction;
+  floating_t distance;
+
+  // Output values, which will be calculated in
+  // `calculate_intersections()`.
+  //
+  floating_t discriminant;
+  floating_t s1;
+  floating_t s2;
+
+} IntersectionProblemParameters_t;
+
+#endif
+\end{ccode}
