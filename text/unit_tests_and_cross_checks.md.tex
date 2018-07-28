@@ -96,6 +96,33 @@ A related, but more complex scenario is starting photons within two nested cylin
   \label{fig:sahmoo8O}
 \end{figure}
 
+
+### Arrival-Time Distributions
+
+% https://github.com/fiedl/hole-ice-study/issues/91
+
+An example of testing the behaviour of statistical properties of a sample of photons, is to plot the arrival-time distribution of photons travelling from a central position to receiving optical modules around the starting position (figure \ref{fig:eipau6Ag}).
+
+\begin{figure}[htbp]
+  \subcaptionbox{Top view of the detector strings in this simulation. The photons are started at the middle optical module of string 63, and are received by the optical modules of the surrounding strings 70, 71, 64, 55, 54, and 62.}{\includegraphics[width=.48\linewidth]{img/flasher-scenario}}
+  \hfill
+  \subcaptionbox{For different hole-ice configurations, the simulation results in different photon-arrival-time distributions. The dashed lines indicate the mean arrival times. With stronger hole-ice effects, less photons arrive in total, the photons arrive later, and more distributed.}{\includegraphics[width=.48\linewidth]{img/arrival-time-distribution-eipau6Ag}}
+  \caption{Testing the arrival-time distribution of photons propagating from a central position to receiving optical modules around the starting position. The simulation includes hole-ice cylinders around the detector strings and is performed for several configurations to observe different strengths of the hole-ice effect.}
+  \label{fig:eipau6Ag}
+\end{figure}
+
+In order to test the qualit
+
+- one sees three different effects
+- less photons because scattered away
+- later, because scattering around takes time
+- the left-hand side is less steep, because with more scattering points there is a larger number of possible paths, i.e. the arrival time is more distributed
+- predict exact behaviour is more involved
+- estimation based on the mean scattering angle and the radius of the hole-ice cylinder: to observe delay in the order of 100ns, increase the hole-ice radius by the order of metres.
+- no realistic scenario as drill hole is only about 50cm in diameter, but simulation
+
+- arrival-time distribution #91, abschätzung 2018-07-18
+
 ### Absorption Length Distributions
 
 - cross checks #63
@@ -107,4 +134,7 @@ A related, but more complex scenario is starting photons within two nested cylin
 - distance to hole-ice center #67
 - distance to next scattering point #71
 - scattering and absorption #72 (?)
+
+
+
 
