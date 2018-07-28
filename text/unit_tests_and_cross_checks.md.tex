@@ -101,7 +101,7 @@ A related, but more complex scenario is starting photons within two nested cylin
 
 % https://github.com/fiedl/hole-ice-study/issues/91
 
-An example of testing the behaviour of statistical properties of a sample of photons, is to plot the arrival-time distribution of photons travelling from a central position to receiving optical modules around the starting position (figure \ref{fig:eipau6Ag}).
+One way to test the behaviour of statistical properties of a sample of photons is to plot the arrival-time distribution of photons travelling from a central position to receiving optical modules around the starting position.
 
 \begin{figure}[htbp]
   \subcaptionbox{Top view of the detector strings in this simulation. The photons are started at the middle optical module of string 63, and are received by the optical modules of the surrounding strings 70, 71, 64, 55, 54, and 62.}{\includegraphics[width=.48\linewidth]{img/flasher-scenario}}
@@ -111,17 +111,26 @@ An example of testing the behaviour of statistical properties of a sample of pho
   \label{fig:eipau6Ag}
 \end{figure}
 
-In order to test the qualit
+Figure \ref{fig:eipau6Ag} shows arrival-time distributions for this scenario being carried out with a flasher experiment compared to two simulations with different hole-ice configurations each.
 
-- one sees three different effects
-- less photons because scattered away
-- later, because scattering around takes time
-- the left-hand side is less steep, because with more scattering points there is a larger number of possible paths, i.e. the arrival time is more distributed
-- predict exact behaviour is more involved
-- estimation based on the mean scattering angle and the radius of the hole-ice cylinder: to observe delay in the order of 100ns, increase the hole-ice radius by the order of metres.
-- no realistic scenario as drill hole is only about 50cm in diameter, but simulation
+% arrival-time distribution #91, estimation see 2018-07-18.
 
-- arrival-time distribution #91, abschätzung 2018-07-18
+An estimation based on the mean scattering angle and the radius of the hole-ice cylinder suggests that one would need a difference of the hole-ice cylinder's radius of several meters to cause a difference in the mean arrival time in the order of $100\ns$. While this is no realistic scenario as the drill hole's radius is only about $50\cm$, the simulation allows to use extreme scenarios to observe the effects more noticeable.
+
+From the comparison of the arrival-time distributions, note that the distribution that is based on real data is comparable to the ones based on simulations, which suggests that the new algorithm does not introduced unexpected, unphysical effects to the photon propagation.
+
+\todo{Check whether the simulation actually sets the time of the photon correctly in each simulation step.}
+
+In the simulation where the hole-ice cylinders have a much larger radius, the effects of the hole ice should be stronger. Indeed, the comparison of the distributions show three effects to expect from this assumption:
+
+First, in the simulation with stronger hole-ice effect, less photons arrive at the receiving optical modules in total as more photons are scattered away by the hole ice.
+
+Second, for stronger hole ice, the photons arrive later at the receiving optical modules, because they spend more time scattering randomly within the hole-ice cylinder before reaching the receiving optical module.
+
+Third, for stronger hole ice, the left-hand side of the distribution histogram is less steep, because with more scattering points on the photon's path, there is a larger number of possible paths, which leads to the arrival time being more distributed.
+
+While these effects confirm the expectations qualitatively, examining other high-level observables allows to compare expectations to the simulations' results even quantitatively. This is the subject of the following sections, beginning with observing the photons' path-length distributions.
+
 
 ### Absorption Length Distributions
 
