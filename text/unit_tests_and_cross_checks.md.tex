@@ -55,6 +55,47 @@ To increase confidence in the new software, therefore, in addition to unit testi
 
 
 ### Instant-Absorption Tests
+
+A simple high-level test can be performed by starting photons towards a cylinder, which is configured for instant absorption. After propagating the photons using the new media-propagation algorithm and recording the path of each individual photon, one can verify the results using a python script that makes sure than no recorded photon position is inside the instant-absorption cylinder.
+
+Additionaly, one can visualize the simulation using the \noun{Steamshovel} event viewer to verify that no photon enters the instant-absorption cylinder as shown in figure \ref{fig:moo9Eiqu}.
+
+% instant absorption: issue #22
+
+\begin{figure}[htbp]
+  \begin{subfigure}{.5\linewidth}
+    \image{instant-absorption-steamshovel-moo9Eiqu}
+    \caption{Starting from different positions into the same direction. View from above.}
+  \end{subfigure}
+  \begin{subfigure}{.5\linewidth}
+    \includegraphics[width=\textwidth, trim={0 0 40mm 0}, clip]{img/instant-absorption-steamshovel-Zae4phei}
+    \caption{Starting from the same position into different directions.}
+  \end{subfigure}
+  \caption{Visualizing an instant-absorption test using the \noun{Steamshovel} event viewer. In the simulation, photons are started towards a cylinder configured for instant absorption. If the medium-propagation algorithm works as expected, no photon can get inside the cylinder.}
+  \label{fig:moo9Eiqu}
+\end{figure}
+
+A related, but more complex scenario is starting photons within two nested cylinders where the inner cylinder is configured for a short scattering length and the outer cylinder is configured for instant absorption (figure \ref{fig:sahmoo8O}).
+
+% https://github.com/fiedl/hole-ice-study/issues/47
+
+\begin{figure}[htbp]
+  \begin{subfigure}{.32\linewidth}
+    \includegraphics[width=\textwidth, trim={0 3cm 16cm 0}, clip]{img/instant-absorption-steamshovel-sahmoo8O-above}
+    \caption{View from above.}
+  \end{subfigure}
+  \begin{subfigure}{.32\linewidth}
+    \includegraphics[width=\textwidth, trim={6cm 4cm 13cm 1.5cm}, clip]{img/instant-absorption-steamshovel-sahmoo8O-3d}
+    \caption{View from the side.}
+  \end{subfigure}
+  \begin{subfigure}{.32\linewidth}
+    \includegraphics[width=\textwidth, trim={6cm 4cm 13cm 1.5cm}, clip]{img/instant-absorption-steamshovel-sahmoo8O-turned-off}
+    \caption{Instant absorption turned off.}
+  \end{subfigure}
+  \caption{Visualizing an instant-absorption test where photons are started within two nested cylinders. The outer cylinder is configured for instant absorption. No photon can pass through the area between both cylinders unless the instant absorption is turned off.}
+  \label{fig:sahmoo8O}
+\end{figure}
+
 ### Absorption Length Distributions
 
 - cross checks #63
