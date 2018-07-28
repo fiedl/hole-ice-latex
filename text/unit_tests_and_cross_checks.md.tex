@@ -63,14 +63,8 @@ Additionaly, one can visualize the simulation using the \noun{Steamshovel} event
 % instant absorption: issue #22
 
 \begin{figure}[htbp]
-  \begin{subfigure}{.5\linewidth}
-    \image{instant-absorption-steamshovel-moo9Eiqu}
-    \caption{Starting from different positions into the same direction. View from above.}
-  \end{subfigure}
-  \begin{subfigure}{.5\linewidth}
-    \includegraphics[width=\textwidth, trim={0 0 40mm 0}, clip]{img/instant-absorption-steamshovel-Zae4phei}
-    \caption{Starting from the same position into different directions.}
-  \end{subfigure}
+  \subcaptionbox{Starting from different positions into the same direction. View from above.}{\includegraphics[width=0.49\textwidth]{img/instant-absorption-steamshovel-moo9Eiqu}}\hfill
+  \subcaptionbox{Starting from the same position into different directions.}{\includegraphics[width=.49\textwidth, trim={0 0 40mm 0}, clip]{img/instant-absorption-steamshovel-Zae4phei}}
   \caption{Visualizing an instant-absorption test using the \noun{Steamshovel} event viewer. In the simulation, photons are started towards a cylinder configured for instant absorption. If the medium-propagation algorithm works as expected, no photon can get inside the cylinder.}
   \label{fig:moo9Eiqu}
 \end{figure}
@@ -80,18 +74,9 @@ A related, but more complex scenario is starting photons within two nested cylin
 % https://github.com/fiedl/hole-ice-study/issues/47
 
 \begin{figure}[htbp]
-  \begin{subfigure}{.32\linewidth}
-    \includegraphics[width=\textwidth, trim={0 3cm 16cm 0}, clip]{img/instant-absorption-steamshovel-sahmoo8O-above}
-    \caption{View from above.}
-  \end{subfigure}
-  \begin{subfigure}{.32\linewidth}
-    \includegraphics[width=\textwidth, trim={6cm 4cm 13cm 1.5cm}, clip]{img/instant-absorption-steamshovel-sahmoo8O-3d}
-    \caption{View from the side.}
-  \end{subfigure}
-  \begin{subfigure}{.32\linewidth}
-    \includegraphics[width=\textwidth, trim={6cm 4cm 13cm 1.5cm}, clip]{img/instant-absorption-steamshovel-sahmoo8O-turned-off}
-    \caption{Instant absorption turned off.}
-  \end{subfigure}
+  \subcaptionbox{View from above.}{\includegraphics[width=.32\textwidth, trim={0 3cm 16cm 0}, clip]{img/instant-absorption-steamshovel-sahmoo8O-above}}\hfill
+  \subcaptionbox{View from the side.}{\includegraphics[width=.32\textwidth, trim={6cm 4cm 13cm 1.5cm}, clip]{img/instant-absorption-steamshovel-sahmoo8O-3d}}\hfill
+  \subcaptionbox{Instant absorption of the outer cylinder turned off.}{\includegraphics[width=.32\textwidth, trim={6cm 4cm 13cm 1.5cm}, clip]{img/instant-absorption-steamshovel-sahmoo8O-turned-off}}
   \caption{Visualizing an instant-absorption test where photons are started within two nested cylinders. The outer cylinder is configured for instant absorption. No photon can pass through the area between both cylinders unless the instant absorption is turned off.}
   \label{fig:sahmoo8O}
 \end{figure}
