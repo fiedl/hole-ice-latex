@@ -7,3 +7,25 @@
 
 - \todo{check numerical issues: are the unclean-cut issues really from numerical issues or caused by the 3d-projection issue?}
 
+### Technical Issues
+
+- driver issue: isnan #16, caching #include #15
+- performance profiling #69 #70 and memory optimization, gprof, 2018-05-24 25 26.
+- numerical issue: mathematically consistent, but numerically unstable: 2018-01-16 17: #14 #17.
+  - distance square vs. intersection calculation; inconsistency lets simulation fail
+  - vector operations vs. coordinate-wise calculation #28, 2018-02-13 19 23.
+- complicated algorithm -> tests
+- computing limits -> cluster, parallelization, thinning, optimizations
+- caching
+
+### Optimizations
+
+- ray-tracing list 2017-05-26
+- kernel caching #15
+- production build without prints and debug outputs #73
+- algorithm optimization #21
+- parallelization #76
+  - filter by range separately #30
+  - order mathematical cases by frequency
+- memory optimization #69 #70
+
