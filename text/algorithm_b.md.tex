@@ -109,7 +109,40 @@ The down side to this approach is that an important part of standard-clsim's med
 
 Also, standard-clsim's medium-propagation has been ported to the new interfaces as drop-in replacement for the new medium-propagation algorithm, such that one can switch between both algorithms without a code rollback.\footnote{A guide on how to switch the medium-propagation algorithm is presented in appendix \ref{sec:how_to_switch_media_propagation}.}
 
-\todo{comparison table from talk}
+\begin{table}
+  \begin{tabelle}{l|L|L}
+    & \textbf{Algorithm (a)} & \textbf{Algorithm (b)} \\
+    \hline
+    Approach
+      & Leave clsim medium propagation as it is and add \textbf{hole-ice effects as correction} afterwards
+      & Unify clsim medium propagation through layers and hole ice: Treat them as \textbf{generic medium changes} \\
+    Hole-ice properties
+      & defined relative to bulk-ice properties
+      & defined absolute \\
+    Pros
+      &
+        \begin{itemize}
+          \item[+] Small surface area of hole-ice code, well testable through unit tests
+          \item[+] Standard clsim almost untouched
+        \end{itemize}
+      &
+        \begin{itemize}
+          \item[+] Supports nested cylinders and cables
+        \end{itemize}
+      \\
+    Cons
+      &
+        \begin{itemize}
+          \item[--] Current understanding of hole-ice suggests defining hole-ice properties absolute rather than relative
+        \end{itemize}
+      &
+        \begin{itemize}
+          \item[--] Needed rewrite of clsim's medium-propagation code
+          \item[--] Ice tilt and ice anisotropy not re-implemented, yet
+        \end{itemize}
+  \end{tabelle}
+  \caption{Comparison of the hole-ice-correction algorithm (a) and the new medium-propagation algorithm (b).}
+\end{table}
 
 \mref{discussion: comparison to other tools: standard-clsim, ppc, angular-acceptance approximation}
 
