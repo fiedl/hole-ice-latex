@@ -57,7 +57,17 @@ To increase confidence in the new software, therefore, in addition to unit testi
 
 ### Instant-Absorption Tests
 
-A simple high-level test can be performed by starting photons towards a cylinder, which is configured for instant absorption. After propagating the photons using the new media-propagation algorithm and recording the path of each individual photon, one can verify the results using a python script that makes sure than no recorded photon position is inside the instant-absorption cylinder.
+A simple high-level test can be performed by starting photons towards a cylinder, which is configured for instant absorption. After propagating the photons using the new media-propagation algorithm and recording the path of each individual photon, one can verify the results making sure than no recorded photon position is inside the instant-absorption cylinder (figure \ref{fig:chiep7Is}).
+
+\sourcepar{The implementation of this consistency check can be found in \issue{67}, \issue{47}, and \issue{22}.}
+
+% https://github.com/fiedl/hole-ice-study/issues/67
+\begin{figure}[htbp]
+  \subcaptionbox{Distribution of the distance to the hole-ice center, evaluated for each scattering step.}{\includegraphics[width=0.32\textwidth, trim={1cm 0 25cm 2cm}, clip]{img/cross-check-67-histogram}}\hfill
+  \subcaptionbox{Distance to the next scattering point and distance to hole-ice center for each scattering step.}{\includegraphics[width=0.65\textwidth, trim={0 0 1cm 0}, clip]{img/cross-check-67-scatter}}
+  \caption{Analysing the simulation of photons propagating towards a hole-ice cylinder configured for instant absorption. No photon can be recorded within the hole-ice cylinder's radius.}
+  \label{fig:chiep7Is}
+\end{figure}
 
 Additionaly, one can visualize the simulation using the \noun{Steamshovel} event viewer to verify that no photon enters the instant-absorption cylinder as shown in figure \ref{fig:moo9Eiqu}.
 
