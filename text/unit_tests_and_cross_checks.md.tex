@@ -242,7 +242,7 @@ Note that the histogram's bins are proportional to the number $m(x):=\sfrac{-\d 
 
 This consistency check aims to verify that the medium-boundary transition is handled correctly when photons enter and leave a hole-ice cylinder.
 
-\paragraph{Simulation Scenario} Start a pencil beam of $10^5$ photons in a distance of $1.5\m$ to the cylinder center towards the hole-ice cylinder with a radius of $0.5\m$. Set the effective scattering length outside and inside to $10^6\m$. Set the absorption length outside to $1.0\m$, inside to $0.75\m$.\footnote{This simulation is implemented and documented at \url{https://github.com/fiedl/hole-ice-study/issues/66}.}
+\paragraph{Simulation Scenario} Start a pencil beam of $10^5$ photons in a distance of $1.5\m$ to the cylinder center towards the hole-ice cylinder with a radius of $0.5\m$. Set the effective scattering length outside and inside to $10^6\m$. Set the absorption length outside to $1.0\m$, inside to $0.75\m$.
 
 \sourcepar{The implementation of this consistency check can be found in \issue{66}.}
 
@@ -262,14 +262,42 @@ This consistency check aims to verify that the medium-boundary transition is han
 
 \paragraph{Confirmation} The simulation yields the expected distribution of the total path length. The absorption lengths $\lambda_\text{abs,1} = 1.0213\m \pm 0.2227\m$, $\lambda_\text{abs,2} = 0.6845\m \pm 0.1888\m$ and $\lambda_\text{abs,3} = 1.0722\m \pm 0.2343\m$ determined via a curve fit are in accordance with the true absorption length outside of $1.0000\m$ and within the hole-ice cylinder of $0.7500\m$ set in the simulation.
 
+### Distance to Next Scattering Point in Relation to the Distance From the Hole-Ice Center
 
-### Absorption Length Distributions
+% https://github.com/fiedl/hole-ice-study/issues/71
 
-- zylinder-übergang #47
-- distance to hole-ice center #67
-- distance to next scattering point #71
-- scattering and absorption #72 (?)
+The consistency checks of the previous sections refer to the absorption length. To examine the scattering-length behavior of the photons simulated using the new media-propagation algorithm, this consistency check observes the distance to the next scattering point in relation to the distance from the hole-ice center at each scattering point.
 
+\sourcepar{The implementation of this consistency check can be found in \issue{71}.}
 
+\paragraph{Simulation Scenario} Simulate a plane wave of 100 photons propagating towards a hole-ice cylinder. Let the hole-ice radius be $0.5\m$. The scattering length within the hole-ice cylinder is $6\cm$, the scattering length in the surrounding bulk ice is $1.48\m$.
 
+\begin{figure}[htbp]
+  \image{cross-check-71-steamshovel}
+  \caption{\noun{Steamshovel} event display of a simulation of a plane wave of photons propagating towards a hole-ice cylinder. The scattering length within the hole-ice cylinder is different from the scattering length within the surrounding bulk ice.}
+  \label{fig:An7ik8pu}
+\end{figure}
+
+\paragraph{Observable} For each scattering step, record the distance to the next scattering point and the current distance to the center of the hole-ice cylinder.
+
+\paragraph{Expectation} As the distance to the next scattering point should be exponentially distributed, governed by the scattering lengths within and without the hole-ice cylinder, the distance to the next scattering point should differ in the following three regions:
+
+Well within the hole-ice radius, the distance to the next scattering point should be in the range of the scattering length of the hole ice.
+
+Well outside the hole-ice radius, the distance to the next scattering point should be in the range of the scattering length of the surrounding bulk ice.
+
+In the vicinity of the hole-ice-cylinder radius, there should be a smooth transition. \todo{The technical reason is that the budget code handles both media here; TODO: physical explanation.}
+
+\paragraph{Confirmation}
+Assuming an exponential distribution of the distance to the next scattering point, the mean distance to the next scattering point within 80\,\% of the hole-ice radius is fitted to $0.07\m \pm 0.07\m$, the mean distance to the next scattering point outside of 120\,\% of the hole-ice radius is fitted to $1.37\m\pm 1.37\m$ (figure \ref{fig:eeYoid2p} b), which is in the range of the true scattering lengths of $6\cm$ and $1.48\m$ inside and outside the hole ice repsectively.
+
+When plotting the local average of the distance to the next scattering point for the vincinity of the hole-ice border (figure \ref{fig:eeYoid2p} c), the curve shows no abrupt jump but a transition between both domains as expected.
+
+\begin{figure}[htbp]
+  \subcaptionbox{All data points}{\includegraphics[width=0.32\linewidth]{img/cross-check-71-scatter}}\hfill
+  \subcaptionbox{Averaged for bins of a width of  $10\cm$}{\includegraphics[width=0.32\linewidth]{img/cross-check-71-bins}}\hfill
+  \subcaptionbox{Magnification of the vincinity of the hole-ice border}{\includegraphics[width=0.32\linewidth]{img/cross-check-71-bins-vicinity}}
+  \caption{For each scattering step of a simulation of photons entering a hole-ice cylinder, plot the distance to the next scattering step in relation to the current distance to the cylinder center. The curve of the local means is smeared out in the vincinity of the cylinder radius. The mean distance to the next scattering point within 80\,\% of the hole-ice radius is fitted to $0.07\m \pm 0.07\m$. The mean distance to the next scattering point outside of 120\,\% of the hole-ice radius is fitted to $1.37\m\pm 1.37\m$. }
+  \label{fig:eeYoid2p}
+\end{figure}
 
