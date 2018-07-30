@@ -89,8 +89,15 @@ If the photon does not scatter within this medium, the distance $\gamma$ is just
 If the photon does scatter within this medium, the distance $\gamma$ is set to the distance to the scattering point\footnote{This corresponds to the termination point being set to the point of the other interaction in Case 4 and Case 5 of the hole-ice-correction algorithm described in section \ref{sec:algorithm_a}.} as shown in the upper half of figure \ref{fig:eewoo3Be}.
 
 \paragraph{Order and Precedence of Cylinders}
-\todo{Grafik erstellen: Zwei Grafiken nebeneinander: Die erste soll zwei verschachtelte Zylinder zeigen wie in \url{https://github.com/fiedl/hole-ice-study/issues/43#issuecomment-372055528}, die andere zwei gleich große Zylinder, die sich überlappen, sodass im zweiten Beispiel nicht intuitiv klar ist, welcher Zylinder gewinnt.}
-When nesting or overlapping cylinders as shown in figure (...), the algorithm needs to determine which ice properties to apply for a photon at a position within both cylinders.
+
+\begin{figure}[htbp]
+  \subcaptionbox{In a case where the inner cylinder is smaller, intuition suggests that the inner cylinder represents a special area within a more general area and should take precedence for a photon located within both cylinders.}{\includegraphics[width=0.48\textwidth]{img/cylinder-order-kuZ8deek}}
+  \subcaptionbox{If both overlapping cylinders have the same size, the choice which properties should be applied to a photon at a position within the overlap of both cylinders, is arbitrary. }{\includegraphics[width=0.48\textwidth]{img/cylinder-order-Yeifohm3}}
+  \caption{Two-dimensional projection of nested or overlapping hole-ice cylinders with different ice properties. If a photon is at a position within the overlap of both cylinders, which ice properties should be applied for the propagation? The algorithm defines that the cylinder added last takes precedence.}
+  \label{fig:kuZ8deek}
+\end{figure}
+
+When nesting or overlapping cylinders as shown in figure \ref{fig:kuZ8deek}, the algorithm needs to determine which ice properties to apply for a photon at a position within both cylinders.
 
 In the left part (a) of the figure, the intuition might be: The smaller cylinder models a special area within the more general outer cylinder and, therefore, should take precedence. In the right part (b) of the figure, however, both cylinders have the same size. Here it is unclear which ice properties to apply for a position within the cylinders' overlap.
 

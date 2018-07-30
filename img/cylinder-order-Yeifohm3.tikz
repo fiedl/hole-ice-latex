@@ -1,0 +1,29 @@
+% I've used this as a template:
+% http://www.texample.net/tikz/examples/bisector/
+%
+\documentclass[tikz,border=10pt]{standalone}
+\input{lib/common}
+
+\begin{document}
+\begin{tikzpicture}
+  [
+    scale=1,
+    >=stealth,
+    point/.style = {draw, circle,  fill = black, inner sep = 1pt},
+    dot/.style   = {draw, circle,  fill = black, inner sep = .2pt},
+  ]
+
+  \input{lib/hole-ice-circle}
+
+  % circle around M stands for the hole-ice cylinder
+  % http://www.texample.net/tikz/examples/bisector/
+  % https://tex.stackexchange.com/a/31400/70789
+  % \node (M) at (M) [point, label = {below:$M$}] {};
+  % \node [name path=cylinder, holeice, circle through=(radius_end), label = above:{Hole-ice cylinder}] at (M) {};
+
+  \draw (1,0.5) circle (2cm);
+  \draw (3,0.5) circle (2cm);
+
+
+\end{tikzpicture}
+\end{document}
