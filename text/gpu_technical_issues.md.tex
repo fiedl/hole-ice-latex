@@ -1,0 +1,11 @@
+%!TEX root = ../diplomarbeit.tex
+
+\subsection{Technical Issues Concerning Graphics Processing Units}
+\label{sec:gpu_technical_issues}
+
+- \todo{check numerical issues: are the unclean-cut issues really from numerical issues or caused by the 3d-projection issue?}
+
+- driver issue: isnan #16, caching #include #15
+- numerical issue: mathematically consistent, but numerically unstable: 2018-01-16 17: #14 #17.
+  - distance square vs. intersection calculation; inconsistency lets simulation fail
+  - vector operations vs. coordinate-wise calculation #28, 2018-02-13 19 23.

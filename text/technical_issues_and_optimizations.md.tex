@@ -3,29 +3,40 @@
 \subsection{Technical Issues and Optimizations}
 \label{sec:technical_issues_and_optimizations}
 
-- a list of technical issues to watch out for in follow-up studies, including caching, numerical, and memory allocation issues, can be found in appendix \mref{}.
+- Running simulation of millions of photon scattering and propagation processes
+- performance requirements
+- parallelization opportunities
+- technical challenges
 
-- \todo{check numerical issues: are the unclean-cut issues really from numerical issues or caused by the 3d-projection issue?}
+- complexity issues -> tests: \mref{unit testing and consistency checks}
+- computing limits -> cluster, parallelization, thinning, optimizations: this section
 
-### Technical Issues
+\paragraph{Simulation-Step Parallelization}
+- dima's image
 
-- driver issue: isnan #16, caching #include #15
+\paragraph{Cluster Parallelization}
+- different, simular, but different configurations, e.g. cluster scan \mref{} on several machines in parallel
+
+\paragraph{Issues Concerning Graphics Processing Units}
+Running and developing the propagation software for a cluster of graphics processing units, has provided challenges special to this architecture / unexpected. A list of technical issues that might prove useful in follow-up studies, is provided in appendix \ref{sec:gpu_technical_issues}.
+
+\paragraph{General Ray-Tracing-Optimization Techniques}
+- ray-tracing list 2017-05-26 -> \todo{bibliography}
+- simplify on paper first, but use vectors
+- also \mref{background section on parallel programming}
+
+\paragraph{Performance Profiling}
 - performance profiling #69 #70 and memory optimization, gprof, 2018-05-24 25 26.
-- numerical issue: mathematically consistent, but numerically unstable: 2018-01-16 17: #14 #17.
-  - distance square vs. intersection calculation; inconsistency lets simulation fail
-  - vector operations vs. coordinate-wise calculation #28, 2018-02-13 19 23.
-- complicated algorithm -> tests
-- computing limits -> cluster, parallelization, thinning, optimizations
-- caching
 
-### Optimizations
-
-- ray-tracing list 2017-05-26
-- kernel caching #15
-- production build without prints and debug outputs #73
-- algorithm optimization #21
+\paragraph{Parallel-Programming Optimizations}
 - parallelization #76
   - filter by range separately #30
   - order mathematical cases by frequency
+
+\paragraph{Memory Optimizations}
 - memory optimization #69 #70
+
+\paragraph{Performance Optimizations for Production Use}
+- production build without prints and debug outputs #73
+- kernel caching #15
 
