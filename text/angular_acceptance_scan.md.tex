@@ -1,0 +1,49 @@
+%!TEX TS-program = ../make.zsh
+
+\subsection{Scanning the Angular Acceptance of an Optical Module}
+\label{sec:angular_acceptance_scan}
+
+% Erst die Eichmessung ohne Hole-Ice, was die Kombination Pencil+Direct ausschließt, dann mit Hole-Ice.
+% Plane-Wave vs. Pencil-Beam
+% Direct Detection
+
+% https://github.com/fiedl/hole-ice-study/issues/98#issuecomment-409178654
+\begin{figure}[htbp]
+  \subcaptionbox{$2\ns$}{\halfimage{pencil-beam-2ns}}\hfill
+  \subcaptionbox{$4\ns$}{\halfimage{pencil-beam-4ns}}\hfill
+  \subcaptionbox{$9\ns$}{\halfimage{pencil-beam-9ns}}\hfill
+  \subcaptionbox{$100\ns$}{\halfimage{pencil-beam-100ns}}
+  \caption{Pencil-beam source, $\eta = \ang{45}$}
+  \label{fig:label}
+\end{figure}
+
+% https://github.com/fiedl/hole-ice-study/issues/98#issuecomment-409120923
+\begin{figure}[htbp]
+  \subcaptionbox{$2\ns$}{\halfimage{plane-wave-2ns}}\hfill
+  \subcaptionbox{$4\ns$}{\halfimage{plane-wave-4ns}}\hfill
+  \subcaptionbox{$9\ns$}{\halfimage{plane-wave-9ns}}\hfill
+  \subcaptionbox{$100\ns$}{\halfimage{plane-wave-100ns}}
+  \caption{Plane-wave source, $\eta = \ang{45}$}
+  \label{fig:label}
+\end{figure}
+
+% https://github.com/fiedl/hole-ice-study/issues/98
+\begin{figure}[htbp]
+  \subcaptionbox{pencil beam, direct detection}{\halfimage{angular-acceptance-direct-detection-pencil-beam-no-hole-ice}}\hfill
+  \subcaptionbox{plane waves, direct detection}{\halfimage{angular-acceptance-direct-detection-plane-waves-no-hole-ice}}\hfill
+  \subcaptionbox{pencil beam, no direct detection}{\halfimage{angular-acceptance-pencil-beam-no-hole-ice-no-direct-detection}}\hfill
+  \subcaptionbox{plane waves, no direct detection}{\halfimage{angular-acception-plane-waves-no-hole-ice-no-direct-detection}}
+  \caption{Angular-acception simulation without hole ice}
+  \label{fig:label}
+\end{figure}
+
+% https://github.com/fiedl/hole-ice-study/issues/99
+\begin{figure}[htbp]
+  \subcaptionbox{pencil beam, direct detection}{\halfimage{angular-acceptance-direct-detection-hole-ice-pencil-beam}}\hfill
+  \subcaptionbox{plane waves, direct detection}{\halfimage{angular-acceptance-direct-detection-hole-ice-plane-waves}}\hfill
+  \subcaptionbox{pencil beam, no direct detection}{\halfimage{angular-acceptance-no-direct-detection-hole-ice-pencil-beam}}\hfill
+  \subcaptionbox{plane waves, no direct detection}{\halfimage{angular-acceptance-no-direct-detection-hole-ice-plane-waves}}
+  \caption{Angular-acception simulation with hole ice}
+  \label{fig:label}
+\end{figure}
+
