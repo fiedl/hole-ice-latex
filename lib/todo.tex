@@ -3,10 +3,8 @@
 \usepackage{color}
 
 % Markierung einfügen (Kommentar während der Bearbeitung) % Parameter: Art, Kommentar
-\newcommand{\markierung}[2]{
-        \textcolor{red}{\textbf{#1:} #2} \\
-}
+\newcommand{\markierung}[2]{\textcolor{red}{\textbf{#1:} #2}}
 
 \newcommand{\todo}[1]{\markierung{To do}{#1}} % ToDo-Kommentar einfügen, Parameter: Kommentar
-\newcommand{\mref}[1]{\markierung{Verweis einfügen}{#1}} % Fehlenden Verweis markieren, Parameter: Kommentar
+\newcommand{\mref}[1]{\markierung{Missing reference}{#1}} % Fehlenden Verweis markieren, Parameter: Kommentar
 \newcommand\frage[1]{\markierung{Frage}{#1}} % Frage

@@ -91,7 +91,7 @@ If the photon does scatter within this medium, the distance $\gamma$ is set to t
 \paragraph{Order and Precedence of Cylinders}
 
 \begin{figure}[htbp]
-  \subcaptionbox{In a case where the inner cylinder is smaller, intuition suggests that the inner cylinder represents a special area within a more general area and should take precedence for a photon located within both cylinders.}{\includegraphics[width=0.48\textwidth]{img/cylinder-order-kuZ8deek}}
+  \subcaptionbox{In a case where the inner cylinder is smaller, intuition suggests that the inner cylinder represents a special area within a more general area and should take precedence for a photon located within both cylinders.}{\includegraphics[width=0.48\textwidth]{img/cylinder-order-kuZ8deek}}\hfill
   \subcaptionbox{If both overlapping cylinders have the same size, the choice which properties should be applied to a photon at a position within the overlap of both cylinders, is arbitrary. }{\includegraphics[width=0.48\textwidth]{img/cylinder-order-Yeifohm3}}
   \caption{Two-dimensional projection of nested or overlapping hole-ice cylinders with different ice properties. If a photon is at a position within the overlap of both cylinders, which ice properties should be applied for the propagation? The algorithm defines that the cylinder added last takes precedence.}
   \label{fig:kuZ8deek}
@@ -112,7 +112,7 @@ Additionally, this algorithm supports nested or overlapping cylinders, which can
 
 Ice tilt and absorption anisotropy have not been ported to this algorithm, yet, but can be added later on.\footnote{See: \url{https://github.com/fiedl/hole-ice-study/issues/48}.}
 
-The down side to this approach is that an important part of standard-clsim's media-propagation algorithm needed to be re-implemented, requiring evidence that the new algorithm is still doing what is expected. In order to provide this evidence, section \mref{cross checks} describes a series of cross checks to make sure the new algorithm induces a scattering and absorption behaviour as expected.
+The down side to this approach is that an important part of standard-clsim's media-propagation algorithm needed to be re-implemented, requiring evidence that the new algorithm is still doing what is expected. In order to provide this evidence, section \ref{sec:unit_tests_and_cross_checks} describes a series of cross checks to make sure the new algorithm induces a scattering and absorption behaviour as expected.
 
 Also, standard-clsim's medium-propagation has been ported to the new interfaces as drop-in replacement for the new medium-propagation algorithm, such that one can switch between both algorithms without a code rollback.\footnote{A guide on how to switch the medium-propagation algorithm is presented in appendix \ref{sec:how_to_switch_media_propagation}.}
 
