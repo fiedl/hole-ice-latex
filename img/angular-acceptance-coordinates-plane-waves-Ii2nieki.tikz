@@ -27,11 +27,14 @@
     \draw [rotate around = {\a : ($ (\a + 90 : 3.5) + (5,5) $)}, thick] ($ (\a + 90 : 3.5) + (5,5) - (1,0) $) -- ($ (\a + 90 : 3.5) + (5,5) + (1,0) $);
 
   % Ray labels
-  \foreach \a [count=\i] in {0, 45, ..., 180}
+  \foreach \a [count=\i] in {0, 90, 135, 180}
     \draw ($ (-\a - 90 : 4.2) + (5,5) $) node {\small $\eta_{\i} = \a^\circ$};
 
   \draw ($ (-0 - 90 : 4.7) + (5,5) $) node {\small $\cos \eta_{1} = 1$};
   \draw ($ (-180 - 90 : 4.7) + (5,5) $) node {\small $\cos \eta_{5} = 0$};
+
+  % Plane extent
+  \draw [decorate, decoration = {brace, mirror}, rotate around = {-45 : (5,5)}] ($ (180 + 90 : 4) + (5,5) - (1,0) $) -- ($ (180 + 90 : 4) + (5,5) + (1,0) $) node [midway, xshift=-10mm, yshift=-3mm] {\small plane extent $e$};
 
   % Shootding distance
   \draw [decorate, decoration = {brace}] (6.5,5) -- (6.5,1.5) node [midway, xshift=1.7cm] {start distance $d$};
