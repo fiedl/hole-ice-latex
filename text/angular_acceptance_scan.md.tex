@@ -16,6 +16,7 @@ Figure \ref{fig:weihee6X} (b) shows the measured \textbf{angular acceptance} $a\
   \label{fig:weihee6X}
 \end{figure}
 
+\label{sec:hole_ice_effects}
 When considering the \textbf{effect of hole ice on the detection of incoming photons}, the effect is considered to depend on the polar angle $\eta$ of the incoming photons. When the photons are coming from the side, $\eta = \sfrac{\pi}{2}, \cos \eta = 0$, the distance the incoming photons need to travel through the hole ice is minimal. Therefore, the effect of the hole ice is expected to be minimal from this direction.
 
 For photons approaching the optical module from below, $\eta = 0, \cos \eta = 1$, the hole-ice effect should be strong as the distance the photons need to travel through the hole ice is maximal. The photons are likely to be scattered away before reaching the optical module, effectively reducing the sensitivity for photons approaching the optical module from below as shown in figure \ref{fig:weihee6X} (b) by the blue curve in the region of $\cos \eta = 1$.
@@ -189,12 +190,43 @@ The following simulations will use plane waves as photon sources and direct dete
 
 
 \paragraph{Varying the Hole-Ice-Cylinder Radius in Simulations}
-- different radii: #82
-- show acceptance curves for different parameters and compare to expectations
+With the new medium-propagation algorithm (section \ref{sec:algorithm_b}), the hole-ice parameters can be variied.
+
+\docpar{Implementing angular-acceptance simulations for different hole-ice-cylinder radii is documented in \issue{82}.}
+
+Figure \ref{fig:neiyi3Al} (a) shows angular-acceptance curves from simulations with different hole-ice-cylinder radii. In these simulations, the hole-ice cylinder's center is set to be the center of the optical module. The effective scattering length of the hole ice is fixed, $\lambda\esca\hi = 50\cm$.
+
+\begin{figure}[htbp]
+  \subcaptionbox{Varying the radius of the hole-ice cylinder.}{\halfimage{angular-acceptance-vary-radius-82}}\hfill
+  \subcaptionbox{Varying the scattering length of the hole ice.}{\halfimage{angular-acceptance-vary-esca-83}}\hfill
+  \caption{Comparison of angular-acceptance simulations with different hole-ice parameters. For larger hole-ice radii and smaller hole-ice scattering lengths, the angular-acceptance curves show a stronger influence of the hole ice on the detection of photons at the optical module. The blue curve shows the a priori angular-acceptance curve $a\domhi(\eta)$ from \cite{icepaper} that approximates the effect of the hole ice. LLH gives the log-likelihood value of comparing the simulation curve to the a priori curve using a binomial likelihood function.}
+  \label{fig:neiyi3Al}
+\end{figure}
+
+When the hole-ice-cylinder radius is larger in the simulations, the hole-ice influence is larger because the ice volume occupied by the hole-ice cylinder is larger, making it more likely that photons approaching the detector module scatter within the hole ice.
+
+When increasing the hole-ice-cylinder radius, photons approaching the optical module from above (left-hand side of figure \ref{fig:neiyi3Al} a) are increasingly scattered ``around'' the optical module such that they hit the optical module in the sensitive area at the bottom, resulting in more accepted hits.
+
+Photons coming from below (right-hand side of figure \ref{fig:neiyi3Al} a) are increasingly scattered away before reaching the optical module when increasing the hole-ice-cylinder radius, resulting in less hits.
+
 
 \paragraph{Varying the Hole-Ice-Scattering-Length in Simulations}
-- different scattering lengths: #83
-- show acceptance curves for different parameters and compare to expectations
+In another series of simulations, the scattering length of the propagating photons within the hole-ice cylinder is variied.
+
+\docpar{Implementing angular-acceptance simulations for different hole-ice scattering lengths is documented in \issue{83}.}
+
+Figure \ref{fig:neiyi3Al} (b) shows angular-acceptance curves from simulations with different hole-ice scattering lengths. In these simulations, the hole-ice cylinder's center is set to be the center of the optical module. The radius of the hole-ice cylinder is fixed to $r = 30\cm$.
+
+When the scattering length within the hole-ice cylinder is shorter, photons propagating through the cylinder scatter more often.
+
+For smaller scattering lengths, photons approaching the optical module from below (right-hand side of figure \ref{fig:neiyi3Al} b) are more likely to be scattered away in the hole ice before reaching the optical module, resulting in less hits.
+
+On the left-hand side of figure \ref{fig:neiyi3Al} (b), where the photons are approaching the optical module from above, the effect of varying the scattering length is less prominent as compared to varying the cylinder radius (\ref{fig:neiyi3Al} a). The detection of photons approaching the optical module from above requires that photons flying by the optical module are scattered into the sensitive area of the module. For a plane wave of photons approaching the module from above, this is much more likely when increasing the hole-ice radius as compared to shortening the scattering length.
+
+Both series of angular-acceptance simulations, varying the hole-ice scattering length and varying the hole-ice-cylinder radius, show the expected hole-ice effects (page \ref{sec:hole_ice_effects}).
+
+As a next step, a series of angular-acceptance simulations are performed for hole-ice parameters suggested by other studies.
+
 
 \paragraph{Simulations for Hole-Ice Parameters From Other Studies}
 - results from martin
