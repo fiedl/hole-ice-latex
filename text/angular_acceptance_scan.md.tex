@@ -122,26 +122,34 @@ Also, this study does not consider inclined orientations of the optical modules,
 % Consider DOM orientation: https://github.com/fiedl/hole-ice-study/issues/53
 
 
-#### compare simulations without hole ice to the reference curve
-- Erst die Eichmessung ohne Hole-Ice, was die Kombination Pencil+Direct ausschließt, dann mit Hole-Ice.
-- pencil no-direct folgt der kurve am besten, weil unter der haube die hartkodierte winkelakzeptanzkurve aus dem icepaper verwendet wird.
-- wenn direct detection verwendet wird, wird die kurve nicht verwendet!
-- da beim hole ice ja gerade davon ausgegangen wird, dass photonen nahe des dom nocheinmal streuen, verwende ich folgend direct detection
-- da pencil beam ausgeschlossen, verwende ich plan waves und direct detection
+\paragraph{Angular-Acceptance Simulations Without Hole Ice}
+In order to compare the different approaches that need to be considered when implementing simulations to scan the angular acceptance, that is to say whether to use pencil beams or plane waves as photon sources, and whether to use direct detection or the optical module's a priori angular acceptance $a\dom(\eta)$ to model the sensitivity, angular-acceptance simulations have been conducted using the new propagation algorithm, but without any hole-ice cylinders.
 
+\docpar{These angular-acceptance simulations without hole ice have been documented in \issue{98}.}
 
-#### simulate hole ice and scan influence of hole-ice on angular acceptance
+Figure \ref{fig:Shai8yah} shows the results of the angular-acceptance scans, comparing the above approaches, each in comparison to the angular-acceptance curve $a\dom(\eta)$ from \cite{icepaper} (``nominal'' curve in figure \ref{fig:weihee6X}).
 
-- ice paper 2013: #80
-- show acceptance curves for different parameters and compare to expectations
-- different radii: #82
-- different scattering lengths
+% https://github.com/fiedl/hole-ice-study/issues/98
+\begin{figure}[htbp]
+  \subcaptionbox{pencil beams, a priori angular acception}{\halfimage{angular-acceptance-pencil-beam-no-hole-ice-no-direct-detection}}\hfill
+  \subcaptionbox{plane waves, a priori angular acception}{\halfimage{angular-acception-plane-waves-no-hole-ice-no-direct-detection}}
+  \subcaptionbox{pencil beams, direct detection}{\halfimage{angular-acceptance-direct-detection-pencil-beam-no-hole-ice}}\hfill
+  \subcaptionbox{plane waves, direct detection}{\halfimage{angular-acceptance-direct-detection-plane-waves-no-hole-ice}}\hfill
+  \caption{Comparison of angular-acceptance-scan simulations with different approaches, all without hole ice. In (a), the simulation curve follows the a priori curve by design as the a priori curve is used as DOM acception criterion. With direct detection, (c) and (d), the a priori curve is not put into the simulation.}
+  \label{fig:Shai8yah}
+\end{figure}
 
+The first simulation, using pencil beams and the a priori angular acceptance as acceptance criterion, figure \ref{fig:Shai8yah} (a), follows the a priori angular acceptance curve $a\dom(\eta)$ by design. When deactivating scattering and absorption in the bulk ice entirely, all photons would hit the optical module, and all photons would have still the original direction. All non-angular acceptance criteria would be absorbed in the gauging factor $g$ and both curves, the simulation curve and the a priori curve, would match exactly in the limit of many started photons $N\rightarrow\infty$.
 
+When switching from pencil beams to plane waves, \ref{fig:Shai8yah} (b), more photons approaching the optical module from above, in the region of $\cos \eta = -1$, are accepted because there are photons that start from above, but shifted in the $x$-$y$ plane such that they will fly by the DOM and then be scattered and hit the DOM with an angle that is accepted by the DOM. This effect increases when increasing the extent $e$ of the plane waves.
 
+\todo{Double check this by starting a plane wave with a smaller extent, for example 50cm.}
 
+When switching to direct detection as acception criterion, figure \ref{fig:Shai8yah} (d), the a priori angular acceptance $a\dom(\eta)$ is no longer put into the simulation. Nevertheless, the simulation curve and the a priori curve have roughly the same shape. \authorname{Rongen} argues that the dominant factor for the shape of the angular-acceptance curve is determined by geometrical considerations \cite{martindardupdate}, which are reproduced by the simulation with direct detection.
 
+Further studies could investigate whether finding the proper plane extent $e$ and starting distance $d$ would suffice to make both curves match.\followup
 
+When switching to pencil beams with direct detection, figure \ref{fig:Shai8yah} (c), the simulation essentially becomes a scan for where the sensitive area of the photomultiplier tube ends in the optical module (compare figure \ref{fig:kieQuoh1}).
 
 
 
