@@ -5,13 +5,15 @@
 
 IceCube's digital optical modules (DOMs) are more sensitive to accepting, that is to say to registering incoming photons from certain direction as from others. This is due to the detector design as the photomultiplier tube (PMT) is facing downwards as illustrated in figure \ref{fig:weihee6X} (a). Therefore, a photon coming from below is more likely to hit the PMT and be detected than a photon coming from above. Also the quantum efficiency of the PMT depends on the impact angle of the incoming photon.
 
+\todo{quantum efficiency: this is more general: also glas and gel effects are included in the nominal curve. see 2016-02-18.}
+
 Figure \ref{fig:weihee6X} (b) shows the measured \textbf{angular acceptance} $a\dom(\eta)$ of the IceCube DOMs by plotting the \textbf{relative sensitivity} from lab measurements for each polar angle representing the direction of incoming photons. \cite{icepaper} The \textbf{sensitivity} is the fraction of the incoming photons that are registered by the detector. The sensitivity is normalized \textbf{relative} to the optimal incoming angle, which is from below, where the relative sensitivity is defined to be 1. Note that the polar angle $\eta$ is measured from below: For photons coming from below, $\eta = 0$. For photons coming from above, $\eta = \pi$.
 
 \question{Are sensitivity and acceptance the same?}
 
 \begin{figure}[htbp]
   \subcaptionbox{Side view of a IceCube digital optical module (DOM). The photomultiplier tube (PMT) in each DOM is facing downwards. Incoming photons are shown in the left upper cornder of the illustration. They are moving towards the DOM under a polar angle $\eta$ measured from below. Image taken from \cite{martindardupdate}, slide 9.}{\halfimage{angular-acceptance-schematics-martin-feeJ0yah}}\hfill
-  \subcaptionbox{Angular acceptance $a(\eta)$: Sensitivity of the DOM for registering incoming photons depending on the polar angle $\eta$ relative to the sensitivity for registering photons from the optimal incoming angle $\eta = 0, \cos \eta = 1$. The ``nominal'' curve $a\dom(\eta)$ does not consider hole-ice effects and is based on lab measurements. The ``hole ice'' curve $a\domhi(\eta)$ is based on previous simulations approximating the effects of the hole ice on the sensitivity for registering incoming photons. Plot taken from \cite{icepaper}, figure 7.}{\halfimage{ice-paper-fig7}}
+  \subcaptionbox{Angular acceptance $a(\eta)$: Sensitivity of the DOM for registering incoming photons depending on the polar angle $\eta$ relative to the sensitivity for registering photons from the optimal incoming angle $\eta = 0, \cos \eta = 1$. The ``nominal'' curve $a\dom(\eta)$ does not consider hole-ice effects and is based on lab measurements. The ``hole ice'' curve $a\domhi(\eta)$ is based on previous simulations using the \noun{Photonics} software \cite{lundberg} approximating the effects of the hole ice on the sensitivity for registering incoming photons. Plot taken from \cite{icepaper}, figure 7.}{\halfimage{ice-paper-fig7}}
   \caption{Angular acceptance: The sensitivity of IceCube's digital optical modules (DOMs) depends on the polar angle $\eta$ of the direction of incoming photons relative to the DOM.}
   \label{fig:weihee6X}
 \end{figure}
@@ -225,7 +227,51 @@ On the left-hand side of figure \ref{fig:neiyi3Al} (b), where the photons are ap
 
 Both series of angular-acceptance simulations, varying the hole-ice scattering length and varying the hole-ice-cylinder radius, show the expected hole-ice effects (page \ref{sec:hole_ice_effects}).
 
+\todo{Martin suggests in POCAM_holice_munich, slide 3, that the scattering length determines the position of the maximum, the size of the bubble column reduces the sensitivity in the forward region (right hand side)}
+
 As a next step, a series of angular-acceptance simulations are performed for hole-ice parameters suggested by other studies.
+
+\paragraph{Simulation of Hole-Ice Parameters From ...}
+
+- ice paper esca = 50cm, r = 30cm, #80
+
+- albrecht karle's h2 model \cite{holeicestudieswithyag}: geometric scattering length L_scatt = 50cm, scattering length = geometric scattering length on air bubbles, hole ice radius = 30cm, based on measurements with a YAG-laser.
+
+> These were derived many years ago, and are characterised by the scattering length of the bubble column. The H2 model is typically referred to as the "baseline" model, which corresponds to a scattering length of 50cm. In simulation, the effects of the H* models are parametrised via angular acceptance curves (see above) that determine the probability to accept a photon based on its arrival direction (not position) when it intersects with the DOM surface. The derivation of these angular acceptance curves assumed that the entire drill hole is full of the scattering centres. However from the Sweden camera images we suspect that this hypothesis is incorrect, and the bubbles instead concentrate in the centre of the drill hole rather than throughout.
+
+- \todo{other hole-ice models: \url{https://wiki.icecube.wisc.edu/index.php/Hole_ice}}
+- on slack, martin has argued why noone could kill the h2 for very long
+
+> mrongen [7:53 PM 2018-03-26]
+> Ok getting back to the bigger picture:
+> The overall state of observations IMHO only leaves us with three plausible true realizations:
+>  1. There is no bubble column
+>  2. It is (usually) small and centered around the DOM
+>  3. It is (usually) at the cable position
+>
+> These hypothesis (no bubble column being the null hypothesis against which the other two are tested) are actually fairly easy to test given the usual machinery. Use the new PPC with photon deletion on the cable, use direct detection (is that still in there?) and scan scattering length, size for both geometrical hypothesis (3 might need a small adjustment in PPC...) if the LLH improvement is significant that's it.
+>
+> A cross check for hypothesis 1 is also to see which scattering length (in a simulation without the cable and the column filling the entire drill hole) fits simulation data with the cable only. If it is 50cm that kind of explains why H2 has been so hard to kill (edited)
+
+- Dima's Model, Angular acceptance through flasher unfolding, 2015
+  https://wiki.icecube.wisc.edu/index.php/MSU_Forward_Hole_Ice
+  https://github.com/fiedl/hole-ice-study/issues/80#issuecomment-410478799
+
+- MSU Forward Hole Ice
+  trying to combine H2 and Dima's model
+
+
+- SpiceHD:
+
+> See above. In principle, this is the best physically-motivated model, as photons are only accepted if they intersect the DOM in the active photocathode region, whereas angular acceptance models have the possibility to accept photons that intersect the top side of the DOM. Photons are directly propagated through a simulated bubble column. The parameters of the model are the size of the bubble column and the scattering length. However, it was discovered that this model actually found the location of the cable, not the bubble column. Once the cable position is finally determined from single LED data, this model can be revisited. But currently it is not advisable to use this model for simulation production used in high profile physics analyses. It should be considered only a test case/alternative model. It is not yet a realistic picture of the reality in the detector.
+
+- POCAM munich paper, S.9, martin tests his direct detection
+  martin simulates entire drill hole filled (r = 30cm) with esca=125cm, sca = 7.5cm
+  which maches the ppc spline model and the h2 curve
+
+- POCAM, S. 10, r = 0.6r_dom, esca = 14cm, between Dima and H2
+
+
 
 
 \paragraph{Simulations for Hole-Ice Parameters From Other Studies}
