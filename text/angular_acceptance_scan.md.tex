@@ -152,24 +152,53 @@ Further studies could investigate whether finding the proper plane extent $e$ an
 When switching to pencil beams with direct detection, figure \ref{fig:Shai8yah} (c), the simulation essentially becomes a scan for where the sensitive area of the photomultiplier tube ends in the optical module (compare figure \ref{fig:kieQuoh1}).
 
 
+\paragraph{Angular-Acceptance Simulations With Hole Ice}
+With the new propagation algorithm, the same simulations can be performed, gathering the relative frequencies $\tilde{h}(\eta_i)$ of photons started under an angle $\eta_i$ being accepted as hits by the optical module, but this time adding a hole-ice cylinder.
 
-% https://github.com/fiedl/hole-ice-study/issues/98
-\begin{figure}[htbp]
-  \subcaptionbox{pencil beam, direct detection}{\halfimage{angular-acceptance-direct-detection-pencil-beam-no-hole-ice}}\hfill
-  \subcaptionbox{plane waves, direct detection}{\halfimage{angular-acceptance-direct-detection-plane-waves-no-hole-ice}}\hfill
-  \subcaptionbox{pencil beam, no direct detection}{\halfimage{angular-acceptance-pencil-beam-no-hole-ice-no-direct-detection}}\hfill
-  \subcaptionbox{plane waves, no direct detection}{\halfimage{angular-acception-plane-waves-no-hole-ice-no-direct-detection}}
-  \caption{Angular-acception simulation without hole ice}
-  \label{fig:label}
-\end{figure}
+In a first attempt, arbitrary properties for the hole-ice cylinder are used, assuming a cylinder radius $r:=r\dom$ being the same as the radius $r\dom$ of the optical module, and assuming an arbitrary effective scattering length $\lambda\hi\esca = 1\m$.
+
+\docpar{These angular-acceptance simulations with hole ice are documented in \issue{99}.}
+
+Figure \ref{fig:eVapie9t} shows the results of the angular-acceptance scans with hole ice, comparing the different approaches (direct detection vs. angular acceptance, and plane waves vs. pencil beams), each in comparison to the a priori angular-acceptance curve $a\domhi(\eta)$ approximating the influence of hole ice from \cite{icepaper} (``hole ice'' curve in figure \ref{fig:weihee6X}).
+
+\begin{equation}
+  a\domhi(\eta) = \sum_{j = 0}^{10} b_j\,\cos(\eta)^j, \ \ \ \eta \in [0; \pi]
+\end{equation}
+
+$$ b_0 = 0.32813, \ \ b_1 = 0.63899, \ \ b_2 = 0.20049, $$
+$$ b_3 = -1.2250, \ \ b_4 = -0.14470, \ \ b_5 = 4.1695, $$
+$$ b_6 = 0.76898, \ \ b_7 = -5.8690, \ \ b_8 = -2.0939, $$
+$$ b_9 = 2.3834, \ \ b_{10} = 1.0435 $$
 
 % https://github.com/fiedl/hole-ice-study/issues/99
 \begin{figure}[htbp]
-  \subcaptionbox{pencil beam, direct detection}{\halfimage{angular-acceptance-direct-detection-hole-ice-pencil-beam}}\hfill
+  \subcaptionbox{pencil beams, a priori angular acception}{\halfimage{angular-acceptance-no-direct-detection-hole-ice-pencil-beam}}\hfill
+  \subcaptionbox{plane waves, a priori angular acception}{\halfimage{angular-acceptance-no-direct-detection-hole-ice-plane-waves}}\hfill
+  \subcaptionbox{pencil beams, direct detection}{\halfimage{angular-acceptance-direct-detection-hole-ice-pencil-beam}}\hfill
   \subcaptionbox{plane waves, direct detection}{\halfimage{angular-acceptance-direct-detection-hole-ice-plane-waves}}\hfill
-  \subcaptionbox{pencil beam, no direct detection}{\halfimage{angular-acceptance-no-direct-detection-hole-ice-pencil-beam}}\hfill
-  \subcaptionbox{plane waves, no direct detection}{\halfimage{angular-acceptance-no-direct-detection-hole-ice-plane-waves}}
-  \caption{Angular-acception simulation with hole ice}
-  \label{fig:label}
+  \caption{Comparison of angular-acception-scan simulations with different approaches, all with a hole-ice cylinder with arbitrary properties, assuming an effective hole-ice scattering length of $\lambda\hi_\e=1\m$ and a hole-ice-cylinder radius of $r=r\dom$.}
+  \label{fig:eVapie9t}
 \end{figure}
+
+When using plane waves as photon sources, figure \ref{fig:eVapie9t} (b) and (d), the behaviour of photons approaching the optical module from below matches the results $a\domhi(\eta)$ from the previous simulations \cite{icepaper} already reasonably well for these hole-ice parameters.
+
+The following simulations will use plane waves as photon sources and direct detection as acception criterion.
+
+\todo{explane this choice. pencil beam does not look good with direct detection. direct detection feels like the better choice because no a priori angular acceptance is used, and the photons are expected to change their direction in close proximity to the DOM when scattering there within the hole ice.}
+\question{Is this a good explanation?}
+
+
+
+#### simulate hole ice and scan influence of hole-ice on angular acceptance
+
+- ice paper 2013: #80 -> check this issue for updates on why the do not match the reference curve
+
+- show acceptance curves for different parameters and compare to expectations
+- different radii: #82
+- different scattering lengths
+- compare curves for direct vs. angular, pencil vs. plane with hole ice
+
+
+
+
 
