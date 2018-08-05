@@ -41,7 +41,7 @@
 build/_minted*
 
 ## Tikz generated images
-img/*.pdf
+# img/*.pdf # There are also other pdfs!
 
 ## Text conversion temp files
 text/*.tmp.tex

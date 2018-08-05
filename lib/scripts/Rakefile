@@ -3,6 +3,8 @@
 #
 # Just type `rake` to run it.
 
+require 'pry'
+
 task :default => [:info, :compile, :clean_markdown, :open]
 
 pdf_viewer = "open -a /Applications/Skim.app"
@@ -139,7 +141,7 @@ task :clean do
   for extension in %w(aux bcf fdb_latexmk fls log pdf run.xml synctex.gz)
     sh "rm build/*.#{extension} build/**/*.#{extension} || true"
   end
-  for extension in %w(pdf log aux)
+  for extension in %w(log aux)
     sh "rm img/*.#{extension} || true"
   end
 end
