@@ -6,29 +6,58 @@
 ## Neutrinos
 ## Neutrino Interactions Relevant to IceCube
 ## Cherenkov-light Emission
+- wave length: visible, near uv
+- see \cite{ppcpaper}, section 1
 
-\subsection{Photon Scattering Model}
+\subsection{Photon Absorption and Scattering}
 \label{sec:scattering}
 
-% + what happens at medium changes
-- ``Refraction at the boundary is supported but reflection is ignored since it is assumed that refractive index variations are continous'' \cite{lundberg}
+The propagation of light through a medium depends on the optical properties of that medium, in particular the velocity of light within that medium, the scattering probability and the absorption probability. \cite{lundberg}
+% lundberg, page 4
 
-% https://github.com/fiedl/hole-ice-study/issues/52 - Effective scattering length
+The absorption of light for the relevant wavelength range is caused by electronic and molecular excitation processes \cite{lundberg}
+% lundberg, page 4
+and is quantified by the \textbf{absorption length} $\lambda\abs$, which is the mean of the exponentially distributed free path length to absorption \cite{lundberg}.
+% lundberg
+Therefore, in accordance with the \noun{Beer-Lambert law}, the absorption length is the path length that light needs to travel within a medium to have its intensity drop to $\sfrac{1}{\e}$ of its original intensity. \cite{lexikonderphysik}
+% lexikonderphysik, Band 1, Absorptionslänge
+% Absorption lengths in the south-polar ice are in the order of $100\m$ and can in clear ice layers in the absence of dust even exceed $200\m$. \cite{ackermann}
+% ackermann, page 5, paragraph 12
+Absorption lengths in the south-polar ice vary between $20\m$ in dusty regions and $280\m$ in very clear ice layers. \cite{ackermann}\cite{ppcpaper}\cite{icepaper}
+
+The scattering of light off microscopic scattering centers, such as submillimeter-sized air bubbles and micron-sized dust grains \cite{Price1997}\cite{ackermann} is the dominant scattering mechanism in glacial ice \cite{Askebjer1997}\cite{lundberg}. This scattering can be modelled using the more general \noun{Mie scattering} theory, which describes the scattering of electromagnetic radiation off small, spherical masses of material with refractive indices differing from the refractive index of its surroundings. \cite{Mie1908}\cite{ackermann}\cite{lundberg}
+
+\noun{Mie scattering} gives the distribution of the scattering angle $\theta$ for any wavelength and scattering center size. For ice, this distribution is approximated using a one-parameter \noun{Henyey-Greenstein} (HG) phase function $p_\text{HG}(\theta; \tau)$, where the one parameter $\tau$ is the mean cosine of the scattering angle. \cite{lundberg}
 
 \newcommand\meancostheta{\langle \cos \theta \rangle}
-- ``photon propagation depends on the optical properties of the medium, in particular on the velocity of light and the absorption and scattering cross sections'' \cite{lundberg}
-- ``Absorption of visible and near UV photons in pure water and ice is due to electronic and molecular excitation processes'' \cite{lundberg}
-- scattering by scattering centres of general sizes described by Mie scattering theory [9, G. Mie, Beiträge zur Optik trüber Medien, speziell kolloidaler Metalllösungen, 1908], dominant scattering in glacial ice [10, Brice, Bergström, Optical properties of deep ice at the South Pole: Scattering, 1997] \cite{lundberg}
-- approximating Mie scattering with Henyey-Greenstein (HG) phase functions, $\meancostheta$, mean of cosine of mean scattering angle \cite{lundberg}
-- absorption length and scattering length are mean free paths of exponential distributions \cite{lundberg}
-- effective scattering length defined as $\lambda\esca = \frac{\lambda\sca}{1 - \meancostheta}$. \cite{lundberg}
-- in anisotropic is analogous to geometric scattering length in isotropic scattering \cite{lundberg}
-- distance which light propagates thorugh a turbid medium before the photon directions are completely randomized \cite{lundberg}
-- $\lambda\esca = \lambda\sca \sum_{i = 0}^\infty \meancostheta^i \rightarrow \frac{\lambda\sca}{1-\meancostheta}$ in the limit of many scatters by projection \cite{lundberg}
+$$ p_\text{HG}(\theta; \tau) = \frac{1 - \tau^2}{2(1 + \tau^2 - 2\tau\, \cos \theta)^\frac{3}{2}}, \ \ \ \tau = \meancostheta $$
 
-- ``light scattering in deep ice described by scattering on microscopic scattering centers, such as submillimeter sized air bubbles and micron-sized dust gains'' [Price and Bergström, 1997b, \cite{ackermann}]
-- general case, scattering of EM radiation off small particles [Mie, 1908, \cite{ackermann}]
-- ``particle as closed region, e.h. small mass of material with refractive indersx that differs from refractive index of its surroundigs'' \cite{ackermann}
-- assumes spherical particles, ignore interference effects since the average distance between scattering particles is large compared to the wavelength \cite{ackermann}
-- anisotropic scattering: $\meancostheta > 0$: preferentially forward, $\meancostheta = 0$: forward-backward symmetric. \cite{ackermann}
-- geometric scattering length, scattering mean free path, average distance between scatterings \cite{ackermann}
+The south-polar ice has shown to be preferentially forward scattering with a mean cosine of the scattering angle of $\meancostheta = 0.94$ with only a weak dependence on the wavelength. \cite{ackermann}
+% ackermann, paragraph 9
+
+The \textbf{scattering length} $\lambda\sca$, which is also called \textbf{geometric} scattering length, is the mean of the exponentially distributed free path and thereby the average distance between scatterings. \cite{ackermann}
+
+% https://github.com/fiedl/hole-ice-study/issues/52 - Effective scattering length
+A related and often used quantity is the \textbf{effective scattering length} $\lambda\esca$, which is the distance that light needs to propagate through a turbid medium before the photon directions are completely randomized. \cite{lundberg}
+
+\begin{equation}
+  \lambda\esca = \frac{\lambda\sca}{1 - \meancostheta}
+\end{equation}
+
+In a medium with isotropic scattering, the geometric and the effective scattering length are the same. In a preferentially forward scattering medium like the south-polar ice, the original direction of a sample of photons is tendentially retained for several scattering steps until the photon direction of the sample is isotropized. The projection of the net velocity vector on the original direction is decreased on average by $\meancostheta$ for each scattering. \cite{lundberg}
+
+After $n$ scatterings, the effectively transported forward distance along the original direction is $\lambda\sca\,\sum_{i=0}^n \meancostheta^i$, such that in the limit of many scatterings, $n \rightarrow \infty$, the effectively transported forward distance becomes the effective scattering length. \cite{lundberg}\cite{ackermann}
+
+$$ \lim_{n \rightarrow \infty} \lambda\sca\,\sum_{i=0}^n \meancostheta^i = \frac{\lambda\sca}{1 - \meancostheta} = \lambda\esca $$
+
+% Typical scattering length:
+% average esca = 25m \cite{lundberg}
+% scattering lengths between 5m and 90m in the detector volume \cite{ppcpaper}
+% effective scattering coefficient for 400nm between 0.011/m and 0.2/m \cite{icepaper} fig. 16, corresponding to esca=5m to 90m esca
+
+Typical effective scattering lengths within the south-polar ice are in the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $30\cm$ to $5.4\m$.
+
+% https://github.com/fiedl/hole-ice-study/issues/51 - point particles
+Light interference effects are ignored during photon propagation as the average distance between the scattering centers is large compared to the photon wavelength. \cite{ackermann}
+
+Also, despite modelling different ice regions with abrupt boundaries in the simulations of this study, the physical boundaries are assumed such that refractive index variations are continuous. Hence reflection at the medium boundaries is ignored in simulations. \cite{lundberg}
