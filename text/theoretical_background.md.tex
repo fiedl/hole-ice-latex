@@ -1,6 +1,34 @@
-# Theoretical Background
+%!TEX TS-program = ../make.zsh
+
+\section{Theoretical Backtround}
+\label{sec:theoretical_background}
+
 ## Neutrinos
 ## Neutrino Interactions Relevant to IceCube
 ## Cherenkov-light Emission
-## Photon Scattering Model
+
+\subsection{Photon Scattering Model}
+\label{sec:scattering}
+
 % + what happens at medium changes
+- ``Refraction at the boundary is supported but reflection is ignored since it is assumed that refractive index variations are continous'' \cite{lundberg}
+
+% https://github.com/fiedl/hole-ice-study/issues/52 - Effective scattering length
+
+\newcommand\meancostheta{\langle \cos \theta \rangle}
+- ``photon propagation depends on the optical properties of the medium, in particular on the velocity of light and the absorption and scattering cross sections'' \cite{lundberg}
+- ``Absorption of visible and near UV photons in pure water and ice is due to electronic and molecular excitation processes'' \cite{lundberg}
+- scattering by scattering centres of general sizes described by Mie scattering theory [9, G. Mie, Beiträge zur Optik trüber Medien, speziell kolloidaler Metalllösungen, 1908], dominant scattering in glacial ice [10, Brice, Bergström, Optical properties of deep ice at the South Pole: Scattering, 1997] \cite{lundberg}
+- approximating Mie scattering with Henyey-Greenstein (HG) phase functions, $\meancostheta$, mean of cosine of mean scattering angle \cite{lundberg}
+- absorption length and scattering length are mean free paths of exponential distributions \cite{lundberg}
+- effective scattering length defined as $\lambda\esca = \frac{\lambda\sca}{1 - \meancostheta}$. \cite{lundberg}
+- in anisotropic is analogous to geometric scattering length in isotropic scattering \cite{lundberg}
+- distance which light propagates thorugh a turbid medium before the photon directions are completely randomized \cite{lundberg}
+- $\lambda\esca = \lambda\sca \sum_{i = 0}^\infty \meancostheta^i \rightarrow \frac{\lambda\sca}{1-\meancostheta}$ in the limit of many scatters by projection \cite{lundberg}
+
+- ``light scattering in deep ice described by scattering on microscopic scattering centers, such as submillimeter sized air bubbles and micron-sized dust gains'' [Price and Bergström, 1997b, \cite{ackermann}]
+- general case, scattering of EM radiation off small particles [Mie, 1908, \cite{ackermann}]
+- ``particle as closed region, e.h. small mass of material with refractive indersx that differs from refractive index of its surroundigs'' \cite{ackermann}
+- assumes spherical particles, ignore interference effects since the average distance between scattering particles is large compared to the wavelength \cite{ackermann}
+- anisotropic scattering: $\meancostheta > 0$: preferentially forward, $\meancostheta = 0$: forward-backward symmetric. \cite{ackermann}
+- geometric scattering length, scattering mean free path, average distance between scatterings \cite{ackermann}
