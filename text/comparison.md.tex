@@ -3,10 +3,93 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Comparison to Other Sutides}
-\label{sec:comparison}
+\subsection{Comparison to Other Hole-Ice-Simulation Methods}
+\label{sec:comparison_methods}
 
-\subsection{Comparing Angular-Acceptance Curves}
+\subsubsection{A Priori Modification of Angular-Acception Curves}
+
+% https://github.com/fiedl/hole-ice-study/issues/10
+
+Modifying the simulated angular-acceptance curve $a(\eta)$ of the optical modules to effectively account for the influence of hole ice on the detection of photons in simulations, is the default approach in \clsim (see sections \ref{sec:a_priori_angular_acceptance} and \ref{sec:hole_ice_approximation}).
+
+\docpar{Information on the nominal and the hole-ice-approximating angular-acceptance curves are provided or linked in \issue{10}.}
+
+The respective angluar-acceptance curves have been obtained using lab measurements and simulations using the \photonics photon-propagation software. \cite{icepaper}\cite{lundberg}\cite{photonics}
+
+Figure \ref{fig:Wee4ahYa} shows three modified angular-acceptance curves that approximate the hole-ice effect in comparison to the optical module's angular acceptance based on the lab measurement. The modified curves H1, H2, and H3 assumed that the entire drill hole would be filled with hole ice, corresponding to a hole-ice-cylinder radius of $30\cm$ and assumed geometric hole-ice-scattering lengths of $\lambda\sca\hi = 100\cm$ (H1), $\lambda\sca\hi = 50\cm$ (H2), and $\lambda\sca\hi = 30\cm$ (H3) respectively.
+
+\begin{figure}[htbp]
+  \smallerimage{h2-dima-baselines-jpa14}
+  \caption{caption \todo{Produce better image with log, with h0, without dima's model}}
+  \label{fig:Wee4ahYa}
+\end{figure}
+
+Using modified angular-acceptance curves for the optical modules to approximate the hole-ice effect has the advantage that new parameters gained from calibration studies can be inserted into the existing simulations just by replacing the polynomial parameters used for the angular acceptance of the optical modules.
+
+Also, using modified acceptance curves is faster than simulating the hole ice directly as the many scattering steps that correspond to the photons scattering within the hole ice are not actually simulated and just effectively accounted for using when the algorithm decides whether a photon hit is accepted by an optical module.
+
+This method, however relies on strong assumptions: The lab measurements the acceptance curves are based on, have been performed using manifactured ice rather than south-polar ice. The hole-ice modifications are based purely on simulations and do not use any IceCube calibration information.
+
+Furthermore, this method assumes all optical modules having exactly the same properties regarding positioning and relative orientation. The optical modules are assumed to be perfectly centered within the drill hole as well as in the bubble column.
+
+The H2 acceptance curve, which is used in standard-\clsim simulations by default, is used as reference curve for other angular-acceptance plots in this study.
+
+
+\subsubsection{Angular-Acceptance Fitting Using Flasher Data}
+\label{sec:dimas_model}
+
+% Dima's model
+% https://github.com/fiedl/hole-ice-study/issues/102
+%
+% Flasher unfolding, flasher fits
+% \cite{flasherdataderivedicemodels}
+%
+% d.h. man nimmt nicht Eis-Eigenschaften an, sondern fittet die Winkelakzeptanz direkt an Flasher-Daten
+%
+% angular-acceptance-h2-vs-dima-102
+%
+\chirkin suggests a hole-ice model, often refered to as \textit{Dima's model}, resulting in an angular-acceptance curve, $a\domdima(\eta;p)$, different from the a priori curves for the H1, H2, H3 models.\cite{flasherdataderivedicemodels}
+
+The curve is parameterized using a single parameter $p\in\reals$ that has been determined as $p \in [0.2;0.4]$ using flasher studies. \cite{msuforwardholeice} In this model, the properties $\HH$ of the hole ice, that is to say the hole-ice-cylinder radius $r$ and the scattering length $\lambda\sca\hi$ within the hole-ice are unknown.
+
+\begin{align}
+  a\domdima(\eta;p) = & \ 0.34 \cdot (1 + 1.5\,\cos(\eta) - \cos(\eta)^{\sfrac{3}{2}}) \nonumber \\
+      & + p \cdot \cos(\eta) \cdot  (\cos(\eta)^2 - 1)^3 \\
+      & \ p \in [0.2;0.4] \nonumber
+  \label{eq:adima}
+\end{align}
+
+Figure \ref{fig:Vohn9Oov} shows this angular-acceptance curve, $a\domdima(\eta;p)$, for the parameters $p=0.2$, $p=0.3$, and $p=0.4$, compared to the a priori angular-acceptance curve $a\domhi(\eta)$ of the H2 model and the angular-acceptance curve of an optical module $a\dom(\eta)$ without hole ice.
+
+\begin{figure}[htbp]
+  \smallerimage{h2-vs-dima-vs-h0-102}
+  \caption{Comparing the a priori angular-acceptance curve from \cite{icepaper} to Dimas's model \cite{flasherdataderivedicemodels}. Also, the angular acceptance of the optical module (DOM) without any hole ice is shown.}
+  \label{fig:Vohn9Oov}
+\end{figure}
+
+Notably, the effect of the hole ice on photons approaching the optical module directly from above or below are weaker in this model compared to the H2 approximation curve. However, the overall acceptance in the lower half sphere is higher, and the overall acceptance in the upper half sphere is lower as in the H2 approximation curve.
+
+This approach does not rely on specific assumptions on the properties of the hole ice, but uses flasher calibration data to measure the mean angular-acceptance behaviour of IceCube's optical modules.
+
+Neverthelss, this method relies on the same assumptions regarding the equality of all optical modules: All optical modules are assumed to have the same relative position and orientation with respect to the hole ice.
+
+
+\subsubsection{Direct Photon Propagation With \ppc}
+
+\chirkin and \rongen have performed simulations with direct propagation through hole ice, similar to this study, but using \ppc for the photon propagation rather than \clsim. \cite{martinspicehddard}\cite{martindardupdate}\cite{pocam}\cite{icrc17pocam}\cite{ppcpaper}
+
+\sourcepar{The source code of \ppc can be found at \url{http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/projects/ppc}.}
+
+Simulating the propagation of photons through the hole ice by simulating the scattering directly makes the assumption obsolete that all optical modules need to be equally positioned and oriented with respect to the hole ice. All optical modules can be individually calibrated using flasher data. \cite{martinspicehddard}
+
+The basic propagation algorithm is the same in \ppc and \clsim. The algorithm for propagating the photons through different media, relies on the same principle of converting randomized numbers of interaction lengths to a geometric distances, but is implemented differently: Ice layers and hole-ice cylinders are hard-coded in \ppc whereas in \clsim's new medium-propagation algorithm, they are treated as generic medium changes (see section \ref{sec:algorithm_b}). Both, \ppc and \clsim, can be run on clusters of graphics processing units.
+
+Hardware requirements and performance of \ppc and \clsim are comparable. Due to micro optimizations, \ppc tends to run slightly faster. \mref{}
+
+\ppc does only support one hole-ice cylinder per string. The main cable of the detector string is not implemented as absorbing object but rather accounted for by using a direction-dependent shadowing factor for incoming photons. \cite{ppcsource}\cite{ppcforhumans}
+
+
+\subsubsection{Comparing Angular-Acceptance Curves}
 \label{sec:angular_acceptance_comparison}
 
 % https://github.com/fiedl/hole-ice-study/issues/104
