@@ -7,6 +7,7 @@
 \label{sec:comparison_methods}
 
 \subsubsection{A Priori Modification of Angular-Acception Curves}
+\label{sec:a_priori_modification_of_angular_acception_curves}\label{sec:a_priori_curve}
 
 % https://github.com/fiedl/hole-ice-study/issues/10
 
@@ -46,7 +47,14 @@ The H2 acceptance curve, which is used in standard-\clsim simulations by default
 %
 % d.h. man nimmt nicht Eis-Eigenschaften an, sondern fittet die Winkelakzeptanz direkt an Flasher-Daten
 %
-% angular-acceptance-h2-vs-dima-102
+% https://wiki.icecube.wisc.edu/index.php/MSU_Forward_Hole_Ice
+%
+% Another advantage of using Dima's hole ice instead of H2 to extend the parametrization is that
+% Dima's hole ice has a somewhat simple formula with a single parameter p as systematic, while the
+% H2 model was made via fitting the angular acceptance curve of different simulated hole ices with
+% different scattering lengths which means each of the fits turned out somewhat different as seen in
+% the figure above and one parametrization would not be as easily transferable to the hole ice at
+% different scattering parameters.
 %
 \chirkin suggests a hole-ice model, often refered to as \textit{Dima's model}, resulting in an angular-acceptance curve, $a\domdima(\eta;p)$, different from the a priori curves for the H1, H2, H3 models.\cite{flasherdataderivedicemodels}
 
@@ -89,18 +97,12 @@ Hardware requirements and performance of \ppc and \clsim are comparable. Due to 
 \ppc does only support one hole-ice cylinder per string. The main cable of the detector string is not implemented as absorbing object but rather accounted for by using a direction-dependent shadowing factor for incoming photons. \cite{ppcsource}\cite{ppcforhumans}
 
 
-\subsubsection{Comparing Angular-Acceptance Curves}
-\label{sec:angular_acceptance_comparison}
+\subsection{Comparison to Hole-Ice Parameters From Other Studies}
+\label{sec:angular_acceptance_comparison}\label{sec:parameter_comparison}
 
 % https://github.com/fiedl/hole-ice-study/issues/104
 
-Based on laser measurements, \authorname{Karle} suggested a number of hole ice models \cite{holeicestudieswithyag}, from which the so called \textbf{H2 model} has been the dominant model in IceCube until 2015. This model suggests a geometric scattering length of $50\cm$ for the hole ice, and a hole-ice-cylinder radius of $30\cm$. Figure \ref{fig:xaeg2Mee} shows the result of an angular-acceptance simulation using the new medium-propagation algorithm with direct detection and plane waves in comparison to the a priori angular-acception curve from \cite{icepaper}.
 
-\begin{figure}[htbp]
-  \smallerimage{angular-acceptance-karle-h2-xaeg2Mee}
-  \caption{Simulation with parameters from the so called \textit{H2 model} \cite{holeicestudieswithyag}, which describes the hole ice as cylinder of $30\cm$ radius filling the entire drill hole, with a geometric scattering length of $50\cm$, corresponding to an effective scattering length of $\lambda\hi\esca = 0.33\m$, using the new medium-propagation algorithm (section \ref{sec:algorithm_b}) with direct detection as acception criterion and plane waves as photon sources (green curve). In comparison, the a priori angular-acceptance curve from \cite{icepaper} (see also figure \ref{fig:icepaper}) is shown (blue curve).}
-  \label{fig:xaeg2Mee}
-\end{figure}
 
 % https://github.com/fiedl/hole-ice-study/issues/80
 %
@@ -129,46 +131,33 @@ Based on laser measurements, \authorname{Karle} suggested a number of hole ice m
 % acceptance curves assumed that the entire drill hole is full of the scattering centres. However from
 % the Sweden camera images we suspect that this hypothesis is incorrect, and the bubbles instead
 % concentrate in the centre of the drill hole rather than throughout.
-
-% https://wiki.icecube.wisc.edu/index.php/MSU_Forward_Hole_Ice
 %
-% Another advantage of using Dima's hole ice instead of H2 to extend the parametrization is that
-% Dima's hole ice has a somewhat simple formula with a single parameter p as systematic, while the
-% H2 model was made via fitting the angular acceptance curve of different simulated hole ices with
-% different scattering lengths which means each of the fits turned out somewhat different as seen in
-% the figure above and one parametrization would not be as easily transferable to the hole ice at
-% different scattering parameters.
+\subsubsection{YAG H2 Parameters}
+Based on laser measurements, using a Yttrium-Aluminium-Granat (YAG) laser, \authorname{Karle} suggested a number of hole ice models \cite{holeicestudieswithyag}, from which the so called \textit{H2 model} is the dominant hole-ice model in IceCube. This model suggests a geometric scattering length of $50\cm$ for the hole ice, and a hole-ice-cylinder radius of $30\cm$, and is the basis for the modified angular-acception curve with hole-ice approximation described in section \ref{sec:a_priori_modification_of_angular_acception_curves}.
+
+Using the new direct photon propagation though hole ice with \clsim, one can simulate the propagation through hole ice with parameters suggested by the H2 model, scan the angular acceptance of an optical module within the simulation, and compare the result to the existing a priori angular-acceptance curve (section \ref{sec:a_priori_curve}) as well as the angular-acceptance curve suggested by Dima's model (section \ref{sec:dimas_model}).
+
+\docpar{This angular-acceptance simulation using the H2 hole-ice parameters is documented in \issue{80}.}
+
+Figure \ref{fig:xaeg2Mee} shows the result of this angular-acceptance simulation in comparison to the a priori angular-acception curve with hole-ice approximation \cite{icepaper} and Dima's model \cite{flasherdataderivedicemodels}.
+
+\begin{figure}[htbp]
+  \smallerimage{angular-acceptance-karle-h2-xaeg2Mee}
+  \caption{Angular-acceptance simulation with hole-ice parameters from the so called \textit{H2 model} \cite{holeicestudieswithyag}, which describes the hole ice as cylinder of $30\cm$ radius filling the entire drill hole, with a geometric scattering length of $50\cm$, corresponding to an effective scattering length of $\lambda\hi\esca = 8.33\m$, using the new medium-propagation algorithm (section \ref{sec:algorithm_b}) with direct detection as acception criterion and plane waves as photon sources. In comparison, the a priori angular-acceptance curve from \cite{icepaper} and the angular-acceptance curve of Dima's model \cite{flasherdataderivedicemodels} are shown.}
+  \label{fig:xaeg2Mee}
+\end{figure}
+
+For photons approaching the optical module from below (right-hand side of the plot), the simulation rather follows Dima's model, but records more detected photons in total. For photon approaching from above (left-hand side of the plot), the form of the simulation curve is similar to the a priori curve, in particluar with respect to the plateau on the left hand side, but, again, the simulation records more photons in total.
 
 
-% Rechte Seite passt nicht gut. -> Dimas Modell.
-% SpiceHD simuliert auch direkt.
+\subsubsection{DARD Parameters}
 
-% Dima: Flasher-Unfolding, \cite{flasherdataderivedicemodels}
-% d.h. man nimmt nicht Eis-Eigenschaften an, sondern fittet die Winkelakzeptanz direkt an Flasher-Daten
-%
-% Das ist dann Dimas
-
-
-- H2-Parameter
-- Dimas Modell
 - DARD-Parameter im Vgl. mit Geant4-Simulationen
+
+
 - Flasher-Fit Martin, SpiceHD, Martins beste Werte
 - POCAM,
 
-
-
-\authorname{Chirkin} suggests a hole-ice model resulting in an angular-acceptance curve different from the a priori curve from \cite{icepaper}. Figure (b) shows the simulation with the H2 parameters in comparison to Chirkin's model.
-
-angular-acceptance-h2-vs-dima-102
-
-- \todo{other hole-ice models: \url{https://wiki.icecube.wisc.edu/index.php/Hole_ice}}
-
-- Dima's Model, Angular acceptance through flasher unfolding, 2015
-  \url{https://wiki.icecube.wisc.edu/index.php/MSU_Forward_Hole_Ice}
-  \url{https://github.com/fiedl/hole-ice-study/issues/80#issuecomment-410478799}
-
-- MSU Forward Hole Ice
-  trying to combine H2 and Dima's model
 
 
 
