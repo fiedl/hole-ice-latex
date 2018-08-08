@@ -150,9 +150,26 @@ Figure \ref{fig:xaeg2Mee} shows the result of this angular-acceptance simulation
 For photons approaching the optical module from below (right-hand side of the plot), the simulation rather follows Dima's model, but records more detected photons in total. For photon approaching from above (left-hand side of the plot), the form of the simulation curve is similar to the a priori curve, in particluar with respect to the plateau on the left hand side, but, again, the simulation records more photons in total.
 
 
-\subsubsection{DARD Parameters}
+\subsubsection{\noun{DARD} Parameters}
 
-- DARD-Parameter im Vgl. mit Geant4-Simulationen
+In the \noun{DARD} study (\noun{Data Aquisition for a flasheR DOM}), LED measurements are used to determine the hole-ice properties. The different flasher LEDs of an optical module are turned on in sequence, and the light detected by the same DOM is measured. The process is then compared to detailed \noun{Geant4} simulations for different hole-ice parameters in order to find the optimal hole-ice parameters to explain the data. \cite{martindardupdate}\cite{martinspicehddard}
+
+The \noun{DARD} study assumes a fixed hole-ice radius of $r=30\cm$. The best fit value for the geometric scattering length of the hole ice has been determined as $\lambda\hi\sca = 10\cm$, which is considerably lower than other estimates. \cite{martindardupdate}
+
+Using the new direct photon propagation though hole ice with \clsim, one can simulate the propagation through hole ice with parameters suggested by \noun{DARD}, scan the angular acceptance of an optical module within the simulation, and compare the result to the existing a priori angular-acceptance curve as well as the angular-acceptance curve suggested by Dima's model.
+
+\docpar{This angular-acceptance simulation for the hole-ice parameters suggested by the \noun{DARD} study, is documented in \issue{105}.}
+
+Figure \ref{fig:eePai1sh} shows the result of this angular-acceptance simulation in comparison to the a priori angular-acception curve with hole-ice approximation \cite{icepaper} and Dima's model \cite{flasherdataderivedicemodels}.
+\begin{figure}[htbp]
+  \smallerimage{angular-acceptance-dard-eePai1sh}
+  \caption{Angular-acceptance simulation with hole-ice parameters from the \noun{DARD} study \cite{martindardupdate}, which suggest a hole-ice cylinder of $30\cm$ radius and a geometric scattering length of $\lambda\sca\hi = 10\cm$, corresponding to an effective scattering length of $\lambda\hi\esca = 1.67\m$, using the new medium-propagation algorithm (section \ref{sec:algorithm_b}) with direct detection as acception criterion and plane waves as photon sources. In comparison, the a priori angular-acceptance curve from \cite{icepaper} and the angular-acceptance curve of Dima's model \cite{flasherdataderivedicemodels} are shown.}
+  \label{fig:eePai1sh}
+\end{figure}
+
+For photons approaching the optical module from below (right-hand side of the plot), the simulation curve rather follows the a priori acceptance curve, but shows a less sharp hole-ice drop-off effect. For $\cos\eta < 0.5$, that is to say for higher angles, the simulation registers relatively more photons, both in comparison to the a priori curve and to Dima's model.
+
+
 
 
 - Flasher-Fit Martin, SpiceHD, Martins beste Werte
