@@ -83,6 +83,7 @@ Neverthelss, this method relies on the same assumptions regarding the equality o
 
 
 \subsubsection{Direct Photon Propagation With \ppc}
+\label{sec:direct_photon_propagation_with_ppc}\label{sec:pocam}
 
 \chirkin and \rongen have performed simulations with direct propagation through hole ice, similar to this study, but using \ppc for the photon propagation rather than \clsim. \cite{martinspicehddard}\cite{martindardupdate}\cite{pocam}\cite{icrc17pocam}\cite{ppcpaper}
 
@@ -102,6 +103,35 @@ Hardware requirements and performance of \ppc and \clsim are comparable. Due to 
 
 % https://github.com/fiedl/hole-ice-study/issues/104
 
+\newcommand\ok{\ding{51}} %\checkmark
+\newcommand\same{\cellcolor{black!25}}
+\newcommand\greyedout{\cellcolor{black!25}}
+\newcommand\bad{\ding{55}}
+
+Simulations with direct photon propagation through hole ice of different parameter configurations $\HH$ allow to rate the compatibility of different hole-ice models. For example, generating simulation-based angular-acceptance curves allows to calculate the likelihood of two models being compatible. This, however, would require a more involved study of systematics of the specific simulation design, which is out of scope of this study, but should be considered by follow-up studies.\followup
+
+As a first step, angular-acceptance curves from simulations with hole-ice paramters from different studies are shown in this section. Table \ref{tab:angular_acceptance_compatibility} summarizes the findings, but does only provide a rough classification in \enquote{curves look similar} (\ok) and \enquote{curves do not look similar} (\bad).
+
+\begin{table}
+  \begin{center}
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{rr|ccccccc}
+                            & \small{\textbf{Method}}     & \clsim             & \ppc               & \clsim              & \clsim            & \clsim               & A priori   & Dima \\
+    \small{\textbf{Method}} & \small{\textbf{Parameters}} & $\HH_\text{POCAM}$ & $\HH_\text{POCAM}$ & $\HH_\text{YAG H2}$ & $\HH_\text{DARD}$ & $\HH_\text{SpiceHD}$ \\
+    \hline
+    \clsim                  & $\HH_\text{POCAM}$          & \same              & \greyedout         & \greyedout          & \greyedout        & \greyedout           & \greyedout & \greyedout \\
+    \ppc                    & $\HH_\text{POCAM}$          & \ok                & \same              & \greyedout          & \greyedout        & \greyedout           & \greyedout & \greyedout \\
+    \clsim                  & $\HH_\text{YAG H2}$         &                    &                    & \same               & \greyedout        & \greyedout           & \greyedout & \greyedout \\
+    \clsim                  & $\HH_\text{DARD}$           &                    &                    & \bad                & \same             & \greyedout           & \greyedout & \greyedout \\
+    \clsim                  & $\HH_\text{SpiceHD}$        &                    &                    & \ok                 & \bad              & \same                & \greyedout & \greyedout \\
+    A priori                &                             &                    &                    & \bad                & \ok               & \bad                 & \same      & \greyedout\\
+    Dima's model            &                             &                    &                    & \ok                 & \bad              & \ok                  & \bad       & \same
+  \end{tabular}
+  }
+  \end{center}
+  \caption{Compatibility of angular-acceptance curves $a(\eta)$. \textbf{Methods}: \underline{\clsim}: Angular-acceptance simulation with \clsim using the new medium-propagation algorithm with plane waves as photon sources and direct detection as acception criterion (section \ref{sec:angular_acceptance_scan}). \underline{\ppc}: POCAM-angular-acceptance simulation with \ppc using direct photon propagation through hole ice and direct detection (section \ref{sec:direct_photon_propagation_with_ppc}). \underline{A priori}: A priori angular-acceptance curve $a\domhi(\eta)$ for H2 parameters from \cite{icepaper} (section \ref{sec:hole_ice_approximation}). \underline{Dima}, \underline{Dima's model}: Angular-acceptance curve $a\domdima(\eta;p)$ from flasher unfolding studies \cite{flasherdataderivedicemodels} (section \ref{sec:dimas_model}). \textbf{Hole-Ice Parameters}: Each parameter set $\HH$ consists of a hole-ice-cylinder radius and a hole-ice scattering length. \underline{$\HH_\text{POCAM}$}: Several parameter sets were used in POCAM angular-acceptance simulations: (1) no hole ice, (2) $r = 0.6\,r\dom$, $\lambda\esca\hi=14\cm$, (3) $r = 1.8\,r\dom$, $\lambda\esca\hi = 125\cm$, (4) $r = 1.8\,r\dom$, $\lambda\esca\hi = 180\cm$ (section \ref{sec:pocam}). \underline{$\HH_\text{YAG H2}$}: from YAG laser measurements \cite{holeicestudieswithyag}, also called H2 model parameters, $r = 30\cm, \lambda\sca=50\cm$ (section \ref{sec:yag_h2_parameters}). \underline{$\HH_\text{DARD}$}: from single-DOM LED measurements \cite{martindardupdate}, $r=30\cm$, $\lambda\sca\hi = 10\cm$ (section \ref{sec:dard_parameters}). \underline{$\HH_\text{SpiceHD}$}: from 7-string LED flasher studies \cite{martinspicehddard} and camera observations \cite{rongenswedishcamera}, $r = 0.6\,r\dom$, $\lambda\esca\hi = 14\cm$ (section \ref{sec:spicehd_parameters}). \textbf{Rating}: \ok: Curves look roughly similar. \bad: Curves do not look similar.}
+  \label{tab:angular_acceptance_compatibility}
+\end{table}
 
 
 % https://github.com/fiedl/hole-ice-study/issues/80
@@ -133,6 +163,7 @@ Hardware requirements and performance of \ppc and \clsim are comparable. Due to 
 % concentrate in the centre of the drill hole rather than throughout.
 %
 \subsubsection{YAG H2 Parameters}
+\label{sec:yag_h2_parameters}
 Based on laser measurements, using a Yttrium-Aluminium-Granat (YAG) laser, \authorname{Karle} suggested a number of hole ice models \cite{holeicestudieswithyag}, from which the so called \textit{H2 model} is the dominant hole-ice model in IceCube. This model suggests a geometric scattering length of $50\cm$ for the hole ice, and a hole-ice-cylinder radius of $30\cm$, and is the basis for the modified angular-acception curve with hole-ice approximation described in section \ref{sec:a_priori_modification_of_angular_acception_curves}.
 
 Using the new direct photon propagation though hole ice with \clsim, one can simulate the propagation through hole ice with parameters suggested by the H2 model, scan the angular acceptance of an optical module within the simulation, and compare the result to the existing a priori angular-acceptance curve (section \ref{sec:a_priori_curve}) as well as the angular-acceptance curve suggested by Dima's model (section \ref{sec:dimas_model}).
@@ -151,6 +182,7 @@ For photons approaching the optical module from below (right-hand side of the pl
 
 
 \subsubsection{\noun{DARD} Parameters}
+\label{sec:dard_parameters}
 
 In the \noun{DARD} study (\noun{Data Aquisition for a flasheR DOM}), LED measurements are used to determine the hole-ice properties. The different flasher LEDs of an optical module are turned on in sequence, and the light detected by the same DOM is measured. The process is then compared to detailed \noun{Geant4} simulations for different hole-ice parameters in order to find the optimal hole-ice parameters to explain the data. \cite{martindardupdate}\cite{martinspicehddard}
 
@@ -172,6 +204,8 @@ For photons approaching the optical module from below (right-hand side of the pl
 
 
 \subsubsection{\noun{SpiceHD} Parameters}
+\label{sec:spicehd_parameters}
+
 The \noun{SpiceHD} study (\noun{South Pole ICE model with Hole ice fitting and Direct detection}) uses flasher data and direct photon propagation simulations with \ppc to determine the parameters of the hole ice. In this 7-string flasher study, LED flashes are sent from a central optical module and the numbers of photon hits are count at the optical modules of the six surrounding strings.
 
 Comparing the flasher data to simulations with different hole-ice parameters, that is to say scanning over the hole-ice-cylinder radius and the hole-ice scattering length, a range of hole-ice parameters is found to be suitable (see \mref{flasher scan comparison section}). When assuming a compatible hole-ice column radius as observed by camera images \mref{cite swedish camera paper}, the best fit hole-ice parameters have been determined as a hole-ice-cylider radius of $60\,\%$ of the radius of an optical module, $r=0.6\,r\dom$, and the hole-ice effective scattering length $\lambda\esca\hi = 14\cm$, which corresponds to a geometric scattering length of $\lambda\sca\hi = 0.84\cm$, which is even smaller than the geometric scattering length of $10\cm$ suggested by \noun{DARD}. \cite{martinspicehddard}
