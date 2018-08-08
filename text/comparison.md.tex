@@ -96,6 +96,34 @@ The basic propagation algorithm is the same in \ppc and \clsim. The algorithm fo
 Hardware requirements and performance of \ppc and \clsim are comparable. Due to micro optimizations, \ppc tends to run slightly faster. \mref{}
 
 \ppc does only support one hole-ice cylinder per string. The main cable of the detector string is not implemented as absorbing object but rather accounted for by using a direction-dependent shadowing factor for incoming photons. \cite{ppcsource}\cite{ppcforhumans}
+In particular, the cable cannot be modeled to reside inside the bubble-column cylinder. \cite{martinspicehddard}
+% martinspicehddard, slide 39:
+% > Current cable implementation deletes photon from
+% > a given range of azimuthal impact directions
+% > → cable is not allowed to be inside bubble
+% > → check with Sweden camera deployment footage
+% > Implement cable as asecond independent cylinder
+
+Since both propagation softwares, \ppc and \clsim with the new medium-propagation mechanism, are performing the same task, it is important to know whether both simulations produce the same or similar results regarding the effect of the hole ice. A detailled comparison of \ppc and \clsim results is out of scope of this study. But a first comparison can be achieved using \noun{POCAM} simulation results.\followup
+
+In feasability studies for the proposed \noun{Precision Optical CAlibraion Module} (\noun{POCAM}), direct photon propagation simulations with \ppc have been performed, assuming different hole-ice parameters, and producing effective angular-acceptance curves corresponding to those hole-ice parameters. \cite{pocam}\cite{icrc17pocam}
+
+Assuming the same hole-ice parameters respectively, angular-acceptance simulations can be performed in \clsim, allowing for a direct comparison of the \ppc and the \clsim results (figure \ref{fig:Ou7fux1o}).
+
+\docpar{The \clsim angular-acceptance simulations with hole-ice parameters from the \noun{POCAM} simulations are documented in \issue{103}.}
+
+\begin{figure}[htbp]
+  \subcaptionbox{No hole ice in both simulations.}{\halfimage{pocam-no-hole-ice}}\hfill
+  \subcaptionbox{Hole-ice-cylinder radius $r = 0.6\,r\dom$, hole-ice effective scattering length $\lambda\esca\hi = 14\cm$ in both simulations.}{\halfimage{pocam-06rdom-esca14cm}}\hfill
+  \subcaptionbox{Hole-ice-cylinder radius $r = 1.8\,r\dom$, hole-ice effective scattering length $\lambda\esca\hi = 125\cm$ in both simulations.}{\halfimage{pocam-18rdom-esca125cm}}\hfill
+  \subcaptionbox{Hole-ice-cylinder radius $r = 1.8\,r\dom$, hole-ice effective scattering length $\lambda\esca\hi = 170\cm$ in both simulations.}{\halfimage{pocam-18rdom-esca170cm}}\hfill
+  \caption{Comparison of effective angular-acceptance curves, which include hole-ice effects for varying hole-ice parameters, created with two independen propagation tools, \ppc and \clsim. As reference, the a priori effective angular-acceptance curve for H2 parameters from \cite{icepaper} is shown. Data source of the \ppc simulations is a series of \noun{POCAM} simulations \cite{icrc17pocam}. The radius of the optial module is $r\dom = 16.510\cm$. Both simulations roughly agree, but the \clsim simulation sees more photons for angles with $\cos \eta < 0.5$.}
+  \label{fig:Ou7fux1o}
+\end{figure}
+
+At a rough view, both simulations produce similar effective angular-acceptance results for different hole-ice parameters. For upper angles, however, this study's simulation systematically sees more photon hits than \ppc. As this has already been observed in section \ref{sec:angular_acceptance_simulations_without_hole_ice} (see figure \ref{fig:Shai8yah}) when introducing plane waves as photon sources, this effect could be a systematic problem of the implementation of the angular-acceptance simulations rather than of the propagation algorithm.
+
+Further investigations on this matter are required, but are out of scope of this study.\followup
 
 
 \subsection{Comparison to Hole-Ice Parameters From Other Studies}
