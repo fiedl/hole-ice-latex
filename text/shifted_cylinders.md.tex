@@ -1,0 +1,25 @@
+%!TEX TS-program = ../make.zsh
+
+\subsection{Simulating the Displacement of Optical Modules Relative to the Hole-Ice Columns}
+\label{sec:cylinder_shift}
+
+Optical modules do not necessarily need to be postioned well-centered relative to the hole ice. In practice, when the drill hole is refreezing, the optical module may be deposited displaced both relative to the drill hole as well as to the bubble column.
+
+The hole-ice effect on the detection of photons by an optical module that is not symetrically positioned relative to the hole ice cannot be modelled by an effective angular-acceptance curve because these curves always assume azimuthal symmetry. Nevertheless, the the asymmetry of the effect can be visualized using an angular-acceptance simulation, plotting the acceptance for polar angles $\eta \in [0;\pi[$ and for polar angles $\eta \in [\pi; 2\pi[$ in different colors in the same plot (figure \ref{fig:egieNg5l} b).
+
+\begin{figure}[htbp]
+  \subcaptionbox{\steamshovel display of the simulation scenario for $\eta = \pi$. The photons are started from a plane on the left-hand side of the image. There is a good chance that they cross the hole ice on their way to the optical module.}{\halfimage{asymmetry-example-steamshovel}}\hfill
+  \subcaptionbox{Effective angular acceptance resulting from this simulation. One simulation curve shows the acceptance of photons arriving from a polar angle $\eta \in [0;\pi[$, the other simulation curve shows the acceptance of photons arriving from $\eta \in [\pi; 2\pi[$. The red curve shows the H2 hole-ice-approximation angular-acceptance curve from \cite{icepaper}.}{\halfimage{asymmetry-example-angular-acceptance-with-comment}}
+  \caption{Simulation of a hole-ice cylinder, which is shifted relative to the position of the optical module. The optical module is shifted beyond the cylinder border such that it is partly within and partly outside of the cylinder. Photons approaching the optical module from one direction, $\eta = \pi$, need to travel through the maximal distance through the hole ice, photons from the opposite direction, $\eta = -\pi$, hit the optical module before reaching the hole-ice cylinder.}
+  \label{fig:egieNg5l}
+\end{figure}
+
+To model the displacement of optical modules relative to the hole ice in production simulations, both the positions of the optical modules and the positions of the hole-ice cylinders, or even cylinder sections for specific $z$-ranges can be configured independently.
+
+In this example simulation, the cylinder is shifted relative to the optical module while the photon sources, which start photons from different directions towards the optical module, are rotated around the optical module, not around the position of the cylinder.
+
+\docpar{The simulation with a shifted hole-ice cylinder is documented in \issue{8}.}
+
+In this example simulation, which uses the hole-ice-correction algorithm (section \ref{sec:algorithm_a}), the hole hole ice is modelled as cylinder with $30\cm$ radius and a hole-ice scattering length of $\sfrac{1}{10}$ of the scattering length of the surrounding bulk ice. The optical module is shifted by $20\cm$ from the central position, and therefore is shifted beyond the border of the hole ice in order to demonstrate an extreme effect. In practice, the optical module can only be shifted by a maximum of about $15\cm$ from the central position, because the drill hole is only $60\cm$ in diameter.
+
+Figure \ref{fig:egieNg5l} (a) shows the simulation scenario in \steamshovel, figure \ref{fig:egieNg5l} (b) shows the resulting angular-acceptance curves from the simulation, one for the angular range $\eta \in [0;\pi[$ and one for $\eta \in [\pi; 2\pi[$. One of these curves shows a more extreme hole-ice effect as more photons need to propagate through the hole ice to hit the optical module in comparison to the other curve.
