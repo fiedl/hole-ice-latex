@@ -27,6 +27,7 @@ In practice, simulating 1000 photons for visualization purposes and recording th
 
 
 \paragraph{Cluster Parallelization}
+\label{sec:cluster_parallelization}
 A different technique, which adds another layer of parallization on top of the simulation-step parallelization, is to run the same simulation on a cluster of machines, each equipped with one ore several GPUs. Each machine runs the same simulation, but with different parameters, such as different configurations, that is to say radii and scattering lengths of the hole-ice cylinders.
 
 This study uses this technique for parameter scans (sections \mref{parameter scan} and \mref{flasher scan}) where the same simulation is performed for different parameter sets in order to find a specific parameter set which best fits some kind of external requirement.
