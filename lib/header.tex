@@ -2,6 +2,7 @@
 
 \usepackage{fancyhdr}
 \usepackage{xspace}
+\usepackage{ifthen}
 
 \newcommand{\fancyfootfont}[1]{\footnotesize\textsf{#1}}
 
@@ -19,23 +20,33 @@
 %
 \preparesectionmarks
 
-\fancyhead[L,EL]{%
-  \footnotesize
-  \minipage{10cm}%
-    \textsf{%
-      \textbf{\ifdef{\shorttitle}{\shorttitle}{\runtitle}}%
-      \ifdef{\dokumentid}{\xspace, \dokumentid}{}%
-      \ifdef{\entwurf}{\xspace, Draft \entwurf}{}%
-      %\ifthenelse{\equal{\entwurf}{}}{
-      %	\datum
-      %}{
-      %	\textcolor{red}\entwurf\normalcolor
-      %} \\
-      %\xspace \ifthenelse{\equal{\currentsubsection}{}}{}{\thesubsection \ \ }\currentsection\ifthenelse{\equal{\currentsubsection}{}}{}{: \currentsubsection}
-      \ifdef{\currentsection}{\xspace, \currentsection}
-    }
-  \endminipage
+\newcommand\shorttitleheaderline{%
+  \textbf{\ifdef{\shorttitle}{\shorttitle}{\runtitle}}%
+  \ifdef{\dokumentid}{\xspace, \dokumentid}{}%
+  \ifdef{\entwurf}{\xspace, Draft \entwurf}{}%
+  %\ifthenelse{\equal{\entwurf}{}}{
+  %	\datum
+  %}{
+  %	\textcolor{red}\entwurf\normalcolor
+  %} \\
 }
+
+\fancyhead[EL]{\footnotesize\textsf{\shorttitleheaderline}}
+\ifdef{\currentsection}{\fancyhead[ER]{\ifthenelse{\equal{\currentsection}{}}{}{\footnotesize\textsf{\thesection\ \currentsection}}}}
+\ifdef{\currentsubsection}{\fancyhead[OL]{\ifthenelse{\equal{\currentsubsection}{}}{}{\footnotesize\minipage{8cm}\textsf{%
+  \thesubsection\ \currentsubsection%
+}\endminipage}}}
+
+%\fancyhead[OL]{%
+%  \footnotesize
+%  \minipage{10cm}%
+%    \textsf{%
+%
+%      %\xspace \ifthenelse{\equal{\currentsubsection}{}}{}{\thesubsection \ \ }\currentsection\ifthenelse{\equal{\currentsubsection}{}}{}{: \currentsubsection}
+%      \ifdef{\currentsection}{\xspace, \currentsection}
+%    }
+%  \endminipage
+%}
 
 \fancyhead[C]{}
 
