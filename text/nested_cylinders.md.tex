@@ -1,0 +1,29 @@
+%!TEX TS-program = ../make.zsh
+
+\subsection{Simulating Nested Hole-Ice Columns}
+\label{sec:nested_cylinders}
+
+Current descriptions of the hole ice characterize it as a relatively clear outer region with a radius of the entire drill hole, and a central column of about $8\cm$ radius filled with air bubbles, resulting in a small scattering length in this region. \cite{instrumentation,icrc17pocam,rongenswedishcamera,martinspicehddard}
+
+% How big is the bubble column?
+% 8cm diameter: \cite{icrc17pocam}. \cite{rongenswedishcamera}
+% 16cm diameter: \cite{martinspicehddard}, \cite{instrumentation} (section 5.4)
+% Asking the author: 16cm diameter is correct.
+% The camera images suggest half the DOM size as radius for the bubble column.
+
+The new medium-propagation algorithm (section \ref{sec:algorithm_b}) allows to simulate both ice columns as independent cylinders. How to arrange, shift, and size those cylinders, and how to configure their scattering and absorption properties in production simulations, needs to be determined in follow up studies.\followup
+
+As an example, the following simulation models two nested cylinders, an outer cylinder of $30\cm$ radius with a moderate geometric scattering length of $50\cm$ that resembles the drill hole, and an inner cylinder of $8\cm$ radius and a small geometric scattering length of $1\cm$ that represents the bubble column. With this configuration, the simulation scans the effective angular acceptance of the optical module, which is embedded in the center of the cylinders.
+
+\docpar{The implementation of this simulation is documented in \issue{7}.}
+
+The same simulation then is repeated, once with only the bubble column, and once with only the drill hole. Figure \ref{fig:haiv2IGi} shows the resulting effective angular-acceptance curves.
+
+\begin{figure}[htbp]
+  \subcaptionbox{\steamshovel visualization of the simulation scenario. The outer column represents the entire drill hole. The inner column is filled with small air bubbles and is therefore called bubble column.}{\halfimage{nested-steamshovel}\vspace*{3mm}}\hfill
+  \subcaptionbox{Effective angular acceptance of the optical module for different cylinder configurations, in the order of increasing hole-ice effect: Without hole-ice cylinders, with only a drill hole, with only a bubble column, and with drill hole and bubble column together.}{\halfimage{nested-angular-acceptance}}
+  \caption{Simulation of photon propagation through nested hole-ice cylinders.}
+  \label{fig:haiv2IGi}
+\end{figure}
+
+The simulation that simulates both, drill hole and bubble column, shows the strongest hole-ice effect. The next strongest hole-ice effect shows the simulation that only implements the bubble column. The least strongest effect shows the simulation that implements only the drill hole. As reference, a simulation without any hole ice is shown.
