@@ -31,6 +31,30 @@ As a first test, a simulation can be performed to verify that the cable causes a
   \label{fig:ochoCh7o}
 \end{figure}
 
+
+\subsubsection{Cable Inside the Bubble Column}
+
+% https://github.com/fiedl/hole-ice-study/issues/110
+
+In one class of hole-ice models that has not been studied, yet, the optical module is shifted such that the cable resides fully or partially within the bubble column. \cite{martinspicehddard}
+
+% \cite{martinspicehddard}, slide 39:
+% Current cable implementation in ppc deletes photon from
+% a given range of azimuthal impact directions
+% the cable is not allowed to be inside bubble column
+
+\begin{figure}[htbp]
+  \subcaptionbox{\steamshovel visualization of the simulation scenario. An opaque cable cylinder of $1\m$ height is placed besides the optical module, fully within the drill hole ice, and partially inside the bubble column.}{\halfimage{cable-inside-shifted-bc-steamshovel}\vspace*{4mm}}\hfill
+  \subcaptionbox{Effective angular acceptance of the optical module measured in the simulation. For photons approaching the optical module from the side where the cable is located, the number of photon hits is decreased compared to a simulation without cable. But the effect is smaller than the statistical error.}{\halfimage{cable-inside-shifted-bc-angular-acceptance}}\hfill
+  \caption{Simulation with opaque cable partially inside bubble column.}
+  \label{fig:caweNg6o}
+\end{figure}
+
+Placing a minimal opaque cable cylinder besides the optical module partially inside the bubble column in a simulation, using plane waves as photon sources, direct detection as hit acception criterion, and the new medium-propagation algorithm (section \ref{sec:algorithm_b}), the cable shadowing effect appears to be subdominant when measuring the effective anguluar acceptance (figure \ref{fig:caweNg6o}) compared to the effect of the bubble column and the drill hole ice.
+
+\docpar{This simulation is documented in \issue{110}.}
+
+
 \subsubsection{Can the Cable Effect Account for the Observed Hole Ice Effects?}
 
 % > mrongen [7:53 PM 2018-03-26]
@@ -48,7 +72,3 @@ As a first test, a simulation can be performed to verify that the cable causes a
 \url{https://github.com/fiedl/hole-ice-study/issues/101}
 
 
-\cite{martinspicehddard}, slide 39:
-> Currentcableimplementationdeletesphotonfrom
-> a given range of azimuthal impact directions
-> → cable is not allowed to be inside bubble
