@@ -1,13 +1,43 @@
 %!TEX TS-program = ../make.zsh
 
-\section{Theoretical Backtround}
+\section{Theoretical Background}
 \label{sec:theoretical_background}
 
 ## Neutrinos
 ## Neutrino Interactions Relevant to IceCube
+
+- track-like events, charged current interaction of high energy muon neutrino with nucleus, producing hadronic shower at the vertex and outgoing muon that emits cherenkov light in a cone along its track \cite{instrumentation}
+- electromagnetic or hadronic showers from interactions of all neutrino flavors, resulting in spherical light generation \cite{instrumentation}
+
+- "Three event topologies are taken into account when considering neutrino interactions in IceCube" \cite{skysearch}
+  - tracks; at TeV muons travel long distances, larger than several kilometers in the antarctic ice; light constantly emitted along the track \cite{skysearch,mmc}
+  - shower or cascade like events, charged current interactions of electron or tau neutrinos as well as neutral current interactions of any neutrino type \cite{skysearch}
+  - double bang, very high energy charged current tau tau anti neutrino interactions \cite{skysearch}
+
+- primary neutrino interaction channel is deep-inelastic scattering with nuclei in the detector material \cite{energyreco}
+- neutral and charged-current interactions, shower of hadrons created at the neutrino interaction vertex \cite{energyreco}
+- in charged-current interactions this is accompanied by an outgoing charged lepton \cite{energyreco}
+- cherenkov light is radiated by this primary lepton and in showers \cite{energyreco}
+
+- double bang: two cascades joind by a short track \cite{energyreco}
+
+- $\nu_e + N \rightarrow e + had$, charged current interaction, cascade signature \cite{energyreco}
+- $\nu_\mu + N \rightarrow \mu + had$, charged current interaction, track signatur, optional cascade \cite{energyreco}
+- $\nu_\tau + N \rightarrow \tau + had \rightarrow had$, charged current interaction, cascade, double bang signature \cite{energyreco}
+- $\nu_\tau + N \rightarrow \tau + had \rightarrow \mu + had$, charged current interaction, cascade + track signature \cite{energyreco}
+- $\nu_l + N \rightarrow \nu_l + had$, neutral current, cascade \cite{energyreco}
+
+\smallerimage{evidence2013-event-20} 1141 TeV shower, cascade completely contained \cite{evidence2013,energyreco}
+\smallerimage{evidence2013-event-5} mu started in the detector, deposited 71 TeV before leaving, track \cite{evidence2013,energyreco}
+
+
 ## Cherenkov-light Emission
 - wave length: visible, near uv
 - see \cite{ppcpaper}, section 1
+
+- charged particles resulting from neutrino interactions move through the ice faster than the phase velocity of light in ice, and therefore emit Cherenkov photons \cite{instrumentation}
+- per GeV of secondary particle shower energy, order of $10^5$ visible Cherenkov photons are created \cite{instrumentation}
+- produced by relativistic charged secondary particles \cite{skysearch}
 
 \subsection{Photon Absorption and Scattering}
 \label{sec:scattering}
