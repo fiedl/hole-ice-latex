@@ -9,6 +9,8 @@
 \usetikzlibrary{calc,positioning,shadows.blur,decorations.pathreplacing}
 \usepackage{etoolbox}
 
+\usepackage{hepnames}
+
 \tikzset{%
         brace/.style = { decorate, decoration={brace, amplitude=5pt} },
        mbrace/.style = { decorate, decoration={brace, amplitude=5pt, mirror} },
@@ -53,40 +55,40 @@
   \draw[round] (-0.7,0.7) rectangle (5.6,-3.5);
 
   \node at(0, 0)   {\particle[gray!20!white]
-                   {$u$}        {up}       {$2.3$ MeV}{1/2}{$2/3$}{R/G/B}};
+                   {$\Pup$}        {up}       {$2.3$ MeV}{1/2}{$2/3$}{R/G/B}};
   \node at(0,-1)   {\particle[gray!20!white]
-                   {$d$}        {down}    {$4.8$ MeV}{1/2}{$-1/3$}{R/G/B}};
+                   {$\Pdown$}        {down}    {$4.8$ MeV}{1/2}{$-1/3$}{R/G/B}};
   \node at(0,-2)   {\particle[gray!20!white]
-                   {$e$}        {electron}       {$511$ keV}{1/2}{$-1$}{}};
+                   {$\Pe$}        {electron}       {$511$ keV}{1/2}{$-1$}{}};
   \node at(0,-3)   {\particle[gray!20!white]
-                   {$\nu_e$}    {$e$ neutrino}         {$<2$ eV}{1/2}{}{}};
+                   {$\Pnu_\Pe$}    {$\Pe$ neutrino}         {$<2$ eV}{1/2}{}{}};
   \node at(1, 0)   {\particle
-                   {$c$}        {charm}   {$1.28$ GeV}{1/2}{$2/3$}{R/G/B}};
+                   {$\Pcharm$}        {charm}   {$1.28$ GeV}{1/2}{$2/3$}{R/G/B}};
   \node at(1,-1)   {\particle
-                   {$s$}        {strange}  {$95$ MeV}{1/2}{$-1/3$}{R/G/B}};
+                   {$\Pstrange$}        {strange}  {$95$ MeV}{1/2}{$-1/3$}{R/G/B}};
   \node at(1,-2)   {\particle
-                   {$\mu$}      {muon}         {$105.7$ MeV}{1/2}{$-1$}{}};
+                   {$\Pmu$}      {muon}         {$105.7$ MeV}{1/2}{$-1$}{}};
   \node at(1,-3)   {\particle
-                   {$\nu_\mu$}  {$\mu$ neutrino}    {$<190$ keV}{1/2}{}{}};
+                   {$\Pnu_\Pmu$}  {$\Pmu$ neutrino}    {$<190$ keV}{1/2}{}{}};
   \node at(2, 0)   {\particle
-                   {$t$}        {top}    {$173.2$ GeV}{1/2}{$2/3$}{R/G/B}};
+                   {$\Ptop$}        {top}    {$173.2$ GeV}{1/2}{$2/3$}{R/G/B}};
   \node at(2,-1)   {\particle
-                   {$b$}        {bottom}  {$4.7$ GeV}{1/2}{$-1/3$}{R/G/B}};
+                   {$\Pbottom$}        {bottom}  {$4.7$ GeV}{1/2}{$-1/3$}{R/G/B}};
   \node at(2,-2)   {\particle
-                   {$\tau$}     {tau}          {$1.777$ GeV}{1/2}{$-1$}{}};
+                   {$\Ptau$}     {tau}          {$1.777$ GeV}{1/2}{$-1$}{}};
   \node at(2,-3)   {\particle
-                   {$\nu_\tau$} {$\tau$ neutrino}  {$<18.2$ MeV}{1/2}{}{}};
+                   {$\Pnu_\Ptau$} {$\Ptau$ neutrino}  {$<18.2$ MeV}{1/2}{}{}};
   \node at(3,-3)   {\particle[orange!20!white]
-                   {$W^{\hspace{-.3ex}\scalebox{.5}{$\pm$}}$}
+                   {$\PWpm$}
                                 {}              {$80.4$ GeV}{1}{$\pm1$}{}};
   \node at(4,-3)   {\particle[orange!20!white]
-                   {$Z$}        {}                    {$91.2$ GeV}{1}{}{}};
+                   {$\PZz$}        {}                    {$91.2$ GeV}{1}{}{}};
   \node at(3.5,-2) {\particle[green!50!black!20]
-                   {$\gamma$}   {photon}                        {}{1}{}{}};
+                   {$\Pgamma$}   {photon}                        {}{1}{}{}};
   \node at(3.5,-1) {\particle[purple!20!white]
-                   {$g$}        {gluon}                    {}{1}{}{color}};
+                   {$\Pgluon$}        {gluon}                    {}{1}{}{color}};
   \node at(5,0)    {\particle[gray!50!white]
-                   {$H$}        {Higgs}              {$125.1$ GeV}{0}{}{}};
+                   {$\PHiggs$}        {Higgs}              {$125.1$ GeV}{0}{}{}};
   \node at(6.1,-3) {\particle
                    {}           {graviton}                       {}{}{}{}};
 
@@ -108,7 +110,7 @@
                  node[bottomlabel]
                  {12 fermions\\(+12 anti-fermions)\\increasing mass $\to$};
   \draw [mbrace] (2.5,-3.6) -- (5.5,-3.6)
-                 node[bottomlabel] {5 bosons\\(+1 opposite charge $W$)};
+                 node[bottomlabel] {5 bosons\\(+1 opposite charge $\PW$)};
 
   \draw [brace] (-0.5,.8) -- (0.5,.8) node[toplabel]         {standard matter};
   \draw [brace] (0.5,.8)  -- (2.5,.8) node[toplabel]         {unstable matter};
