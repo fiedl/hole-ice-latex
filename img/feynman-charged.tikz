@@ -1,0 +1,39 @@
+%!TEX TS-program = lualatex
+% tikz-feynman: doi:10.1016/j.cpc.2016.08.019 arXiv:1601.05437
+
+\RequirePackage{luatex85}
+\documentclass[border=10pt]{standalone}
+
+\usepackage{tikz-feynman}
+\tikzfeynmanset{compat=1.0.0}
+
+\usepackage{hepnames}
+
+\tikzset{
+  zboson/.style={decoration = {zigzag,segment length = 3mm, amplitude = 1mm},decorate}
+}
+
+\begin{document}
+\begin{tikzpicture}
+
+\begin{feynman}
+
+  \vertex (a);
+  \vertex (b) [below = of a];
+  \vertex (l1) [above left = of a] {$\Pnu_\Plepton$};
+  \vertex (l2) [above right = of a] {$\Plepton$};
+  \vertex (q1) [below left = of b] {\Pquark};
+  \vertex (q2) [below right = of b] {$\Pquark'$};
+
+  \vertex (w) [below = 0.75 of a, label = {left: \PWpm}];
+
+  \diagram*{
+    (l1) -- [fermion] (a) -- [fermion] (l2),
+    (q1) -- [fermion] (b) -- [fermion] (q2),
+    (a) -- [zboson] (b)
+  };
+
+\end{feynman}
+
+\end{tikzpicture}
+\end{document}
