@@ -1,8 +1,33 @@
-# Simulation Background
-## Monte-Carlo Simulations
-## Parallal Computing on Graphics Processing Units (GPUs)
-## Photon Propagation Algorithm
+%!TEX TS-program = ../make.zsh
 
-- random walk description of propagation \cite{absorption1997}
+\section{Simulation Background}
+\label{sec:simulation_background}
 
-## `clsim` Photon Propagation Simulation
+\subsection{Monte-Carlo Simulations}
+\label{sec:monte_carlo}
+
+% Sources: Lexikon der Physik, Spektrum-Verlag, "Monte-Carlo-Simulation", "Gesetz der großen Zahlen": \cite{physiklexikon}.
+
+A Monte-Carlo simulation is computational method that utilizes a large amount of random numbers. The method is named after the \textit{Monte Carlo Casino} in Monaco, hinting the randomness involved in gambling. \cite{physiklexikon}
+
+Samples of random numbers are drawn from given probability distributions. The numbers are used in deterministic calculations. The results are then evaluated to gain information about processes or quantities involved. This method is especially useful for systems with many degrees of freedom. \cite{physiklexikon}
+
+The suitability of this method for numerical or physics problems is based on the \textit{law of large numbers}: If an experiment involving random processes is repeated $n$ times, the relative frequency $h_n(A):=\sfrac{H(A)}{n}$ of an event $A$, which occurs $H(A)$ times in total in these $n$ experiments, approaches the \textit{probability} $p(A)$ of the event $A$ for large numbers $n$ with certainty. \cite{physiklexikon}
+
+$$
+  \lim_{n \rightarrow \infty} \text{P}(|h_n(A) - p(A)| < \epsilon) = 1, \ \ \ \epsilon \in \reals
+$$
+
+In the simulations of this study, photons are propagated through the ice based on drawing random numbers from known probability distributions in order to determine in each simulation step whether to scatter or to absorb a photon, and to determine the scattering angle for each scattering process. The simulation aims for each photon and each detector module to check whether the photon hits the module in the are that is sensitve to photons, that is to say whether the photon is detected by the detector module.
+
+The calculations in the propagation algorithm are deterministic. In principle, one could devise a mathematical function of input quantities and random variables that determines whether a photon is detected by an optical module. This task would be disproportionately complex, however, especially as the function would have to be revised for every change in the underlying models.
+
+Technical progress concerning computational devices, graphics processing units (GPUs) in particular, allow to devide the calculations into components that are easier to model and apply those to highly parallelized large-scale simulations.
+
+For a random-walk description of the propagation of photons, see \cite{absorption1997}. A first implementation of a photon propagation through ice is described in \cite{lundberg}. A study of propagation simulations using GPUs is presented in \cite{ppcpaper}.
+
+
+\subsection{Parallal Computing on Graphics Processing Units (GPUs)}
+\label{sec:parallel_computing}
+
+
