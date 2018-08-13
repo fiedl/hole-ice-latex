@@ -1,39 +1,44 @@
 %!TEX TS-program = ../make.zsh
 
-# Experimental Background
-## IceCube Detector
+\section{Experimental Background}
+\label{sec:experimental_background}
 
-- cubic-kilometer neutrino detector built into the ice at the South Pole \cite{instrumentation}
-- 5160 doms, deployed between 1450m and 2450m below the surface on 86 vertical strings, each consisting of 60 doms deployed along a single cable \cite{instrumentation}
-- in-ice array, IceTop, DeepCore \cite{instrumentation}
-- vertical spacing 17m, about 125m horizontal separation, hexagonal footprint on a triangular grid \cite{instrumentation}
-- energies TeV to PeV scale \cite{instrumentation}
+\subsection{\icecube Detector}
 
-\smallerimage{icecube-schematics-instrumentation} Image source: \cite{instrumentation}
+The \icecube neutrino detector is built into a cubic-likometer of the glacial ice at Earth's South Pole. 5160 photo detecting optical modules have been deployed between $1450\m$ and $2450\m$ below the surface. Construction has begun in 2015 with the deployment of the first optical modules. The detector is fully operational since 2010. \cite{instrumentation}
 
-- DeepCore denser instrumented, lower energy threshold. \cite{instrumentation}
+The optical modules are anchored on 86 vertical cables called strings, which are positioned on a triangular grid with an overall hexagonal footprint. The strings are about $125\m$ apart. Each string holds 60 optical modules with a vertical spacing of $17\m$. \cite{instrumentation}
+
+\begin{figure}[htbp]
+  \smallerimage{icecube-schematics-instrumentation}
+  \caption{Schematic overview of the \icecube detector. Image source: \cite{instrumentation}}
+  \label{fig:aiThai0e}
+\end{figure}
+
+Additional to this \textit{in-ice array}, which is designed to measure neutrinos with energies from the TeV to the PeV scale, the \textit{DeepCore} sub array hold additional optical modules in order to lower the detection energy threshold in this region of the detector to detect neutrinos with energies from $10\GeV$ to $100\GeV$. \cite{instrumentation}
 
 
+\subsection{Digital Optical Modules (DOMs)}
+\label{sec:doms}
 
-## Digital Optical Modules (DOMs)
+The basic detection unit in \icecube is the \textit{Digital Optical Module} (DOM). It consists of a glass sphere, a 10-inch photo multiplier tube (PMT), processing circuitry, and a flasher board with light-emitting diodes (LEDs) for calibration purposes (figure \ref{fig:aK4raigh}). \cite{instrumentation}
 
-\smallerimage{dom-components-instrumentation} Image source: \cite{instrumentation}
+\begin{figure}[htbp]
+  \subcaptionbox{The main components of the optical module are the photo multiplier tube (PMT), which detects impacting photons, the main electronics board that digitizes the signal and transmits the information to the surface, and the flasher board containing light-emitting diodes (LEDs) for calibration purposes. Image source: \cite{instrumentation}}{\halfimage{dom-components-instrumentation}}\hfill
+  \subcaptionbox{The components of the module are contained within a glasss sphere that can withstand high pressures. The space inbetween is filled with a gel to avoid optical effects at the medium boundaries. Image source: \cite{gallerynoharness}}{\includegraphics[width=0.35\textwidth]{img/DOMNoHarnessWhiteback_lg-gallery-2013}}
+  \caption{Schematic display of a ditigal optical module (DOM), \icecube's basic detection unit. The module has an outer diameter of about $35\cm$. 5160 of these modules have been deployed in the glacial ice.}
+  \label{fig:aK4raigh}
+\end{figure}
 
-\smallerimage{dom-schematics-firstyearperformance} Image source: \cite{firstyearperformance}
+% Other images:
+% dom-8-top-hemisphere-and-penetrator-gallery-2011, source: Megan Madsen, 2011, https://gallery.icecube.wisc.edu/internal/v/GraphicRe/graphics/dom/8-top-hemisphere-and-penetrator.png.html
+% dom-schematics-firstyearperformance, source: \cite{firstyearperformance}
 
-- basic detection unit in icecube is the digital optical module (DOM) \cite{instrumentation}
-- glass sphere, 10 inch PMT, light-emitting diode (LED) flasher board, processing circuitry \cite{instrumentation}
+The recorded signals from the PMT are digitized within the module before sending the signal to the surface in order to minimize the loss of information from degradation of analog signals sent over long distances. \cite{firstyearperformance}
 
-- sensitive to particles 10GeV to 10PeV creating light in the ice, up to 500m away \cite{instrumentation}
+The optical modules are optimized for detecting Cherenkov light emitted by particles with energies from $10\GeV$ to $10\PeV$ up to $500\m$ away from the optical module. \cite{instrumentation}
 
-- the signals are digitized in the optical sensors to minimize loss of information from degradataion of analog signals sent over long distances \cite{firstyearperformance}
 
-## DOM Angular Acceptance Characteristics
-## Angular Acceptance Approximations and Their Limitations
-% Outdated model for hole-ice properties
-% No different properties for each string/DOMs
-% DOM is wrongly considered centred in hole ice
-## Likelihood Methods for Comparing Simulations to Reference Data
 ## Ice Models to Characterize Photon Scattering and Absorption in the South-polar Ice
 
 - timeline of ice models: \url{https://docushare.icecube.wisc.edu/dsweb/Get/Document-79091/ice.pdf} \cite{flasherdataderivedicemodels}
