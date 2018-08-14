@@ -11,26 +11,26 @@ This section focuses on dealing with computational limits, introducing the techn
 
 
 \paragraph{Simulation-Step Parallelization}
-Each simulation step consists of only a few operations: Scattering the photon, checking for absorption, checking for collision with a detector module, and propagating the phton to the next scattering position (see \ref{sec:standard_photon_propagation_algorithm}). This small set of operations can be parallelized, performing the same calculations and operations simultaneously for several thousands of simulation steps with different values such as coordinates and directions each, on graphics processing units, which are designed for exactly this kind of work. Figure \ref{fig:Id3ioyie} illustrates this parallelization of simulation steps.
+Each simulation step consists of only a few operations: Scattering the photon, checking for absorption, checking for collision with a detector module, and propagating the photon to the next scattering position (see \ref{sec:standard_photon_propagation_algorithm}). This small set of operations can be parallelized, performing the same calculations and operations simultaneously for several thousands of simulation steps, each with different values such as coordinates and directions, on graphics processing units, which are designed for exactly this kind of work. Figure \ref{fig:Id3ioyie} illustrates this parallelization of simulation steps.
 
 \begin{figure}[htbp]
   \image{dima-parallel-photons-Id3ioyie}
-  \caption{Parallelization of simulation steps: tracking of photons entails the computationally identical steps: propagation to the next scatter, calculation of the new direction after scatter, and evaluation of intersection points of the photon track segment with the detector array. These same steps are computed simultaneously for thousands of photons. (Image and caption taken from \cite{ppcpaper}, figure 1.)}
+  \caption{Parallelization of simulation steps: Tracking of photons entails the computationally identical steps: Propagation to the next scatter, calculation of the new direction after scatter, and evaluation of intersection points of the photon track segment with the detector array. These same steps are computed simultaneously for thousands of photons. (Image and caption taken from \cite{ppcpaper}, figure 1.)}
   \label{fig:Id3ioyie}
 \end{figure}
 
 This parallelization leads to a performance improvement by factors of 150 and more when running the propagation simulation on a single GPU compared to running the same simulation on a single CPU core \cite{ppcpaper}.
 
-Standard \noun{clsim} as well as the hole-ice extended clsim can be run on CPUs, GPUs, or both using \noun{OpenCL} as abstraction layer.
+Standard \clsim as well as the hole-ice extended \clsim can be run on CPUs, GPUs, or both using \noun{OpenCL} as abstraction layer.
 
-In practice, simulating 1000 photons for visualization purposes and recording their paths, which requires a lot of memory, works best on a CPU. Simulating millions of photons, but only recording their final position, that is to say the position of absorption or hitting an optical module, works best a GPU.
+In practice, simulating 1000 photons for visualization purposes and recording their paths, which requires a lot of memory, works best on a CPU. Simulating millions of photons, but only recording their final position, that is to say the position of absorption or hitting an optical module, works best on GPUs.
 
 
 \paragraph{Cluster Parallelization}
 \label{sec:cluster_parallelization}
-A different technique, which adds another layer of parallization on top of the simulation-step parallelization, is to run the same simulation on a cluster of machines, each equipped with one ore several GPUs. Each machine runs the same simulation, but with different parameters, such as different configurations, that is to say radii and scattering lengths of the hole-ice cylinders.
+A different technique, which adds another layer of parallelization on top of the simulation-step parallelization, is to run the same simulation on a cluster of machines, each equipped with one ore several GPUs. Each machine runs the same simulation, but with different parameters, such as different configurations, that is to say radii and scattering lengths of the hole-ice cylinders.
 
-This study uses this technique for parameter scans (sections \mref{parameter scan} and \mref{flasher scan}) where the same simulation is performed for different parameter sets in order to find a specific parameter set which best fits some kind of external requirement.
+This study uses this technique for parameter scans (sections \ref{sec:parameter_scan} and \ref{sec:flasher}) where the same simulation is performed for different parameter sets in order to find a specific parameter set which best fits some kind of external requirement.
 
 
 \paragraph{Issues Concerning Graphics Processing Units}
@@ -39,7 +39,7 @@ Running and developing a simulation software for graphics processing units poses
 
 \paragraph{Parallel-Programming Optimizations}
 % https://github.com/fiedl/hole-ice-study/issues/76
-Applying parallel-programming optimization techniques listed in \mref{background section on parallel programming} may help to improve the performance of the algorithm that runs on the graphics processing units.
+Applying parallel-programming optimization techniques listed in section \ref{sec:parallel_computing} may help to improve the performance of the algorithm that runs on the graphics processing units.
 
 When optimizing code, \noun{Ahmdal's Law} gives the theoretical limit on how much a process can be sped up by optimizing one of its components. \cite{raytracingtips}
 
@@ -58,9 +58,9 @@ One important key concept to efficient parallel programming is to avoid executio
 
 One application of this concept in the hole-ice algorithm is to \textbf{filter hole-ice cylinders by range} in a \textbf{separate loop}.
 
-The algorithm needs to check in each simulation step, which hole-ice cylinders are in range of the photon, that is to say should be considered when calculating the propagation through the hole ice. Without this optimization, the cylinders are processed one by one in each simulation step. While, in each iteration of the cylinder loop, all photons in range of one specific cylinder are propagated through that cylinder, all other photons not in range of the cylidner, wait idly and thereby waste computation time. This is illustrated in figure \ref{fig:ceiV8Yai} (a).
+The algorithm needs to check in each simulation step, which hole-ice cylinders are in range of the photon, that is to say should be considered when calculating the propagation through the hole ice. Without this optimization, the cylinders are processed one by one in each simulation step. While, in each iteration of the cylinder loop, all photons in range of one specific cylinder are propagated through that cylinder, all other photons not in range of the cylinder, wait idly and thereby waste computation time. This is illustrated in figure \ref{fig:ceiV8Yai} (a).
 
-Even though the optimization adds time for the additional loop where the indices of the cylinders in range are saved into a local array, the main loop where the propagation through each cylinder is handled is much faster now, because it does not need to iterate over all cylinders in the detector but only over the cylinders in range of the photon as illustrated in figure \ref{fig:ceiV8Yai} (b).
+Even though the optimization adds time for the additional loop where the indices of the cylinders in range are saved into a local array, the main loop where the propagation through each cylinder is handled is much faster now, because it does not need to iterate over all cylinders in the detector but only over the cylinders in range of the photon and improves parallelization as illustrated in figure \ref{fig:ceiV8Yai} (b).
 
 \docpar{The implementation of this optimization is documented in \issue{30}.}
 
@@ -78,13 +78,13 @@ This technique is used in the implementation of the geometric cases for both the
 
 
 \paragraph{GPU-Specific Optimizations}
-In addition to the general principles of parallel programming (\mref{background section on parallel programming}), \authorname{House} and \authorname{Wyman} \cite{raytracingtips} list practical tips for optimizing GPU-ray-tracing code.
+In addition to the general principles of parallel programming (section \ref{sec:parallel_computing}), \authorname{House} and \authorname{Wyman} \cite{raytracingtips} list practical tips for optimizing GPU-ray-tracing code.
 
 Most notably, passing data structures by reference rather than by value proved to have significant performance impact because \textbf{allocating memory on a GPU is expensive}. This also includes simple structures like arrays of numbers, and even re-using the same array for several calculations rather than re-defining it. This technique has caused a performance improvement on GPUs by a factor of six in this study.
 
 \docpar{This optimization of re-using arrays is documented in \issue{70}.}
 
-\textbf{Optimizing mathematical operations} on paper is an important technique as each calculational operation that can be cut down on in a procedure that saves time when executing the procedure many times. In addition to simplifying equations mathematically, avoiding numerically expensive operations such as square roots improves performance.
+\textbf{Optimizing mathematical operations} on paper is an important technique as each calculation operation that can be cut down on in a procedure that saves time when executing the procedure many times. In addition to simplifying equations mathematically, avoiding numerically expensive operations such as square roots improves performance.
 
 GPUs support 4-dimensional vectors as native data types as well as native vector operations such as the dot product. Expressing equations in terms of vectors rather than simplifying equations on the coordinate level, resulted in improved performance and numerical accuracy.
 
@@ -100,13 +100,13 @@ Note that printing a profiling result may be more expensive as the computation t
 
 \begin{figure}[htbp]
   \image{profiling-paz4Eig6}
-  \caption{Performance profile of the average simulation step in average units (GPU clock cycles). Each row of the chart represents a different algorithm. In the first row, which shows an early stage of the new medium-propagation algorithm, the initial memory allocation within each simulation step takes a lot of time, especially when comparing to standard clsim (row 3). The second row shows the profile of the new medium-propagation algorithm after a memory issue has been fixed. Notable operations in each simulation step are the initial memory allocation for local variables, adding ice layers, adding hole-ice cylinders, sorting medium boundaries by distance to the photon and looping over the media to convert the interaction budget into geometrical distances.}
+  \caption{Performance profile of the average simulation step in arbitrary units (GPU clock cycles). Each row of the chart represents a different algorithm. In the first row, which shows an early stage of the new medium-propagation algorithm, the initial memory allocation within each simulation step takes a lot of time, especially when comparing to standard \clsim (row 3). The second row shows the profile of the new medium-propagation algorithm after a memory issue has been fixed. Notable operations in each simulation step are the initial memory allocation for local variables, adding ice layers, adding hole-ice cylinders, sorting medium boundaries by distance to the photon and looping over the media to convert the interaction budget into geometrical distances.}
   \label{fig:profiling-paz4Eig6}
 \end{figure}
 
 
 \paragraph{Performance Optimizations for Production Use}
-After implementing and debugging a new algorithm, a lot of debug outputs and other development tools are no longer required when running simulations. For those production simulations, the debug features can be turned off by \textbf{compiling the IceCube simulation framework for production} use rather than for debugging. Thereby, simulations run significantly faster as debug outputs often cost more time than the actual simulation itself.
+After implementing and debugging a new algorithm, a lot of debug outputs and other development tools are no longer required when running simulations. For those production simulations, the debug features can be turned off by \textbf{compiling the \icecube simulation framework for production} use rather than for debugging. Thereby, simulations run significantly faster as debug outputs often cost more time than the actual simulation itself.
 
 \docpar{How to switch between a debug build and a production build is documented in \issue{73}.}
 

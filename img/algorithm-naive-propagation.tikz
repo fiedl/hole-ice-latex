@@ -40,7 +40,7 @@
     \substep calculate new photon position $\delta x$ from the current position\\
     \substep update photon position};
   \node ()[substeps, right = 1mm of detect]{
-    \substep record detection};
+    \substep record detection if hit in sensitive area};
   \node ()[substeps, right = 1mm of scatter]{
     \substep record position\\
     \substep \rnd new direction};

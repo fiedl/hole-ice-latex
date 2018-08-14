@@ -1,52 +1,50 @@
 %!TEX TS-program = ../make.zsh
 
-\subsection{Implementing Hole-Ice Using a Generalized Medium-Propagation Algorithm to Replace the Existing Propagation Algorithm}
+\subsection{Hole-Ice Propagation With a Generalized Medium-Propagation Algorithm to Replace the Existing Propagation Algorithm}
 \label{sec:algorithm_b}
 
 % https://github.com/fiedl/hole-ice-study/issues/78
 
-A second approach to adding propagation through hole-ice cylinders to the standard propagation algorithm (section \ref{sec:standardphotonpropagationalgorithm}) implemented in \noun{clsim} is to rewrite the part of the algorithm that propagates the photon through different media, aiming to make this algorithm more generic and support hole-ice cylinders at the same level as other structures like ice layers.
+A second approach to adding propagation through hole-ice cylinders to the standard propagation algorithm (section \ref{sec:standardphotonpropagationalgorithm}) implemented in \clsim is to rewrite the part of the algorithm that propagates the photon through different media, aiming to make this algorithm more generic and support hole-ice cylinders at the same level as other structures like ice layers.
 
 \sourcepar{The source code of the implementation of this second approach can be found in appendix \ref{sec:algorithm_b_source} as well as in the code repository at \url{https://github.com/fiedl/clsim/tree/sf/hole-ice-2018/resources/kernels/lib}.}
 
-In order to propagate a photon through different media, the standard propagation algorithm converts the randomized number of interaction lengths $N$ into a geometrical distance $X:=\sum_i n_i\,\lambda_i,\ N = \sum_i n_i$ (equation \ref{eq:convertbudgettodistance} on page \pageref{eq:convertbudgettodistance}) based on the interaction lengths $\lambda_i$ of the different media. In its current implementation in \noun{clsim}, however, this conversion is hard-coded in a way that does support medium changes in the form of tilted ice layers but does not support other shapes such as cylinders of hole ice.
+In order to propagate a photon through different media, the standard propagation algorithm converts the randomized number of interaction lengths $N$ into a geometrical distance $X:=\sum_i n_i\,\lambda_i,\ N = \sum_i n_i$ (equation \ref{eq:convertbudgettodistance} on page \pageref{eq:convertbudgettodistance}) based on the interaction lengths $\lambda_i$ of the different media. In its current implementation in \clsim, however, this conversion is hard-coded in a way that does support medium changes in the form of tilted ice layers but does not support other shapes such as cylinders of hole ice.
 
-Figure \ref{fig:rieQu7sh} shows a flow chart of current clsim's media-propagation algorithm that does not support cylinder-shaped media.
+Figure \ref{fig:rieQu7sh} shows a flow chart of current \clsim's media-propagation algorithm that does not support cylinder-shaped media.
 
 \begin{figure}[htbp]
   \image{algorithm-clsim-medium-propagation}
-  \caption{Flow chart of standard-clsim's medium-propagation algorithm. Tilted ice layers and ice anisotropy are hard-coded. Media with other geometries such as hole-ice cylinders are not supported. This medium-propagation algorithm is replaced by the new algorithm described in this section.}
+  \caption{Flow chart of standard-\clsim's medium-propagation algorithm. Tilted ice layers and ice anisotropy are hard-coded. Media with other geometries such as hole-ice cylinders are not supported. This medium-propagation algorithm is replaced by the new algorithm described in this section.}
   \label{fig:rieQu7sh}
 \end{figure}
 
 In the approach described in this section, the medium-propagation algorithm is re-implemented in a way that does support cylinder-shaped media.
 
 \paragraph{Task}
-The task of this \textbf{medium-propagation algorithm} is to determine in each simulation step, which media, including ice layeres as well as hole-ice cylinders, are on the photon's path along its current direction and to convert the randomized scattering and absorption length budgets to geometrical distances according to the interaction lengths of the different media.
+The task of this \textbf{medium-propagation algorithm} is to determine in each simulation step, which media, including ice layers as well as hole-ice cylinders, are on the photon's path along its current direction and to convert the randomized scattering and absorption length budgets to geometrical distances according to the interaction lengths of the different media.
 
 \paragraph{Context}
-The medium-propagation algorithm is inserted into the clsim propagation algorithm's simulation step right after clsim has randomized the number of scattering lengths to the next scattering point, replacing clsim's original medium-propagation algorithm. After the medium-propagation algorithm follows the check whether the photon hits an optical module on the way from the current scattering point $A$ to the next scattering point $B$.
+The medium-propagation algorithm is inserted into the \clsim propagation algorithm's simulation step right after \clsim has randomized the number of scattering lengths to the next scattering point, replacing \clsim's original medium-propagation algorithm. After the medium-propagation algorithm follows the check whether the photon hits an optical module on the way from the current scattering point $A$ to the next scattering point $B$.
 
 The medium-propagation algorithm takes the following input parameters: Current photon position at point $A$, photon direction after scattering at point $A$, a list of the hole-ice cylinders with their coordinates, radii, scattering lengths and absorption lengths, a list of ice layers with their coordinates, scattering lengths and absorption lengths, the randomized number of scattering lengths to the next scattering point, the remaining number of absorption lengths to the absorption point, and the remaining geometric distance to absorption.
 
 As output parameters, the medium-propagation algorithm returns the updated number of remaining absorption lengths to the absorption point, the geometric distance to the next scattering point, and the updated remaining geometric distance to absorption.
 
 \paragraph{Procedure}
-A flow chart of the new medium-propagation algorithm that replaces standard-clsim's media-propagation algorithm is shown in figure \ref{fig:iez4Geih}.
+A flow chart of the new medium-propagation algorithm that replaces standard-\clsim's media-propagation algorithm is shown in figure \ref{fig:iez4Geih}.
 
 \begin{figure}[htbp]
   \image{algorithm-hole-ice-2018}
-  \caption{\todo{} Determine all medium changes (layers, hole ice) between two interaction points. Loop over all medium changes with different ice properties and calculate physical distance to the next interaction point}
+  \caption{Flow chart of the new medium-propagation algorithm. The algorithm determines all medium changes (layers, hole ice) between two interaction points. Then the algorithm loops over all medium changes with different ice properties and calculates the geometrical distances to the next interaction points.}
   \label{fig:iez4Geih}
 \end{figure}
-
-\todo{Add ice layers to input parameters in figure \ref{fig:iez4Geih}.}
 
 The new algorithm works with a generic list of media. For each medium the algorithm stores the scattering length, the absorption length, and the distance along the photon's direction from the current photon position to the medium's border. This way, the algorithm knows in which distance from the current position which medium's properties take effect.
 
 Due to this generic structure, homogeneous media with all kinds of shapes could be added to this list. In this first implementation, the algorithm adds un-tilted ice layers and cylinders. Tilted ice layers as well as absorption anisotropy are not re-implemented in this first implementation, but may be added later.\footnote{At the time of writing, ice tilt and absorption anisotropy are not re-implemented, yet. To check the current state of this issue, see \url{https://github.com/fiedl/hole-ice-study/issues/48}.}
 
-After adding ice layers and hole-ice cylinders to the media list, the algorithm sorts the list by ascending distance from the current photon position in order to have the list in the proper order.
+After adding ice layers and hole-ice cylinders to the media list, the algorithm sorts the list by ascending distance from the current photon position in order to have the list in the proper order for the following calculations.
 
 Finally, the algorithm loops over the media list and calculates the geometrical distances to the next scattering point and to the absorption point just like the previous media-propagation algorithm has done for ice layers only.
 
@@ -61,7 +59,7 @@ The flow chart of the whole media loop is shown in figure \ref{fig:nimuriX4}. Th
 
 \begin{figure}[htbp]
   \image{algorithm-media-loop-2018}
-  \caption{Loop over list of media and calculate geometrical distances to the next scattering point and to absorption}
+  \caption{Flow chart of the part of the new media-propagation algorithm that loops over list of media and calculates geometrical distances to the next scattering point and to the absorption point.}
   \label{fig:nimuriX4}
 \end{figure}
 
@@ -70,7 +68,7 @@ The flow chart of the whole media loop is shown in figure \ref{fig:nimuriX4}. Th
 
 \begin{figure}[htbp]
   \image{algorithm-media-loop-2018-calculation}
-  \caption{Calculate contribution of this medium to the geometrical distances to next scattering and to absorption}
+  \caption{Flow chart of the part of the new media-propagation algorithm that calculates the contribution of one specific medium to the geometrical distances to next scattering point and to the absorption point.}
   \label{fig:eewoo3Be}
 \end{figure}
 
@@ -101,7 +99,7 @@ When nesting or overlapping cylinders as shown in figure \ref{fig:kuZ8deek}, the
 
 In the left part (a) of the figure, the intuition might be: The smaller cylinder models a special area within the more general outer cylinder and, therefore, should take precedence. In the right part (b) of the figure, however, both cylinders have the same size. Here it is unclear which ice properties to apply for a position within the cylinders' overlap.
 
-To make this situation unambiguous, the algorithm defines that the media added to the list later take precedence over media added earlier. Therefore, when modelling nested cylinders, the algorithm requires to add the larger cylinder before adding the smaller cylinder to the definition list.
+To make this situation unambiguous, the algorithm defines that the media added to the list later take precedence over media added earlier. Therefore, when modeling nested cylinders, the algorithm requires to add the larger cylinder before adding the smaller cylinder to the definition list.
 
 \paragraph{Pros and Cons}
 This second approach allows to define cylinder-shaped areas with absolute scattering and absorption lengths, which meets the needs of the current understanding of the hole-ice phenomenon.
@@ -112,17 +110,17 @@ Additionally, this algorithm supports nested or overlapping cylinders, which can
 
 Ice tilt and absorption anisotropy have not been ported to this algorithm, yet, but can be added later on.\footnote{See: \url{https://github.com/fiedl/hole-ice-study/issues/48}.}
 
-The down side to this approach is that an important part of standard-clsim's media-propagation algorithm needed to be re-implemented, requiring evidence that the new algorithm is still doing what is expected. In order to provide this evidence, section \ref{sec:unit_tests_and_cross_checks} describes a series of cross checks to make sure the new algorithm induces a scattering and absorption behaviour as expected.
+The down side to this approach is that an important part of standard-\clsim's media-propagation algorithm needed to be re-implemented, requiring evidence that the new algorithm is still doing what is expected. In order to provide this evidence, section \ref{sec:unit_tests_and_cross_checks} describes a series of cross checks to make sure the new algorithm results in the expected scattering and absorption behavior.
 
-Also, standard-clsim's medium-propagation has been ported to the new interfaces as drop-in replacement for the new medium-propagation algorithm, such that one can switch between both algorithms without a code rollback.\footnote{A guide on how to switch the medium-propagation algorithm is presented in appendix \ref{sec:how_to_switch_media_propagation}.}
+Also, standard-\clsim's medium-propagation has been ported to the new interfaces as drop-in replacement for the new medium-propagation algorithm, such that one can switch between both algorithms without a code rollback.\footnote{A guide on how to switch the medium-propagation algorithm is presented in appendix \ref{sec:how_to_switch_media_propagation}.}
 
 \begin{table}
   \begin{tabelle}{l|L|L}
     & \textbf{Algorithm (a)} & \textbf{Algorithm (b)} \\
     \hline
     Approach
-      & Leave clsim medium propagation as it is and add \textbf{hole-ice effects as correction} afterwards
-      & Unify clsim medium propagation through layers and hole ice: Treat them as \textbf{generic medium changes} \\
+      & Leave \clsim medium propagation as it is and add \textbf{hole-ice effects as correction} afterwards
+      & Unify \clsim medium propagation through layers and hole ice: Treat them as \textbf{generic medium changes} \\
     Hole-ice properties
       & defined relative to bulk-ice properties
       & defined absolute \\
@@ -130,7 +128,7 @@ Also, standard-clsim's medium-propagation has been ported to the new interfaces 
       &
         \begin{itemize}
           \item[+] Small surface area of hole-ice code, well testable through unit tests
-          \item[+] Standard clsim almost untouched
+          \item[+] Standard \clsim almost untouched
         \end{itemize}
       &
         \begin{itemize}
@@ -144,12 +142,11 @@ Also, standard-clsim's medium-propagation has been ported to the new interfaces 
         \end{itemize}
       &
         \begin{itemize}
-          \item[--] Needed rewrite of clsim's medium-propagation code
+          \item[--] Needed rewrite of \clsim's medium-propagation code
           \item[--] Ice tilt and ice anisotropy not re-implemented, yet
         \end{itemize}
   \end{tabelle}
-  \caption{Comparison of the hole-ice-correction algorithm (a) and the new medium-propagation algorithm (b).}
+  \caption{Comparison of the hole-ice-correction algorithm (a) presented in section \ref{sec:algorithm_a} and the new generic medium-propagation algorithm (b) presented in section \ref{sec:algorithm_b}.}
 \end{table}
 
-\mref{discussion: comparison to other tools: standard-clsim, ppc, angular-acceptance approximation}
-
+A comparison to other methods to account for the hole-ice effect is presented in section \ref{sec:comparison_methods}.

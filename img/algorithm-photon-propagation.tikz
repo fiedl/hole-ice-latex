@@ -46,7 +46,7 @@
   };
   \node ()[substeps, right = 1mm of detect]{
     \substep update position and direction\\
-    \substep record detection};
+    \substep record detection if hit in sensitive area};
   \node ()[substeps, right = 1mm of absorb]{
     \substep update position\\
     \substep record absorption};

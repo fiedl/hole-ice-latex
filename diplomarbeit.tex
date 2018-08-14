@@ -33,7 +33,8 @@
 
 \bibliography{diplomarbeit}
 \begin{document}
-  \maketitle
+  \clearpage\maketitle
+  \thispagestyle{empty}
 
   \newpage
   \setcounter{tocdepth}{2}
@@ -46,9 +47,9 @@
 
   % Methods:
   % Everything needed to reproduce the work
+  \include{text/tools}
   \include{text/hole_ice_as_cylinders}
   \include{text/propagation_through_different_media}
-  \include{text/tools}
   \include{text/algorithm_a}
   \include{text/algorithm_b}
   \include{text/technical_issues_and_optimizations}
@@ -63,11 +64,18 @@
   \include{text/cable_simulations}
   \include{text/flasher}
 
-  % Discussion
+  % Discussion:
+  %
+  % What do the results mean?
+  % Why is it interesting?
+  % What does it change?
+  %
   \include{text/comparison}
+  \include{text/performance}
+  \include{text/ice_features_not_considered}
 
-  \include{text/gliederung}
-
+  % Conclusion
+  \include{text/conclusion}
 
   %\include{text/likelihood}
   %\include{text/hole_ice_trajectory_corrections}
@@ -92,6 +100,7 @@
   % reals, reals+, reals+0, naturals
   % DOM
   % PMT
+  % GeV, TeV, PeV
   % see also: https://tex.stackexchange.com/a/87223/70789
 
 

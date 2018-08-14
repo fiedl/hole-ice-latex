@@ -36,6 +36,7 @@
   \comment{start}{
     \substep photon position and direction\\
     \substep hole-ice cylinders\\
+    \substep ice layers\\
     \substep number of scattering lengths left to next scattering point\\
     \substep number of absorption lengths left to absorption\\
   };

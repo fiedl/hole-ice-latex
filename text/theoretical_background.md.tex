@@ -19,7 +19,7 @@ Within the \textit{standard model of particle physics} (see figure \ref{fig:Phei
 As the \textit{mass eigenstates} $\Pnu_i$ of neutrinos that describe neutrinos in the context of their propagation through spacetime, are not identical to the neutrino \textit{flavor eigenstates} $\Pnulepton$ that describe neutrinos participating in weak interactions, neutrinos are subject to quantum mechanical phenomena as \textit{neutrino oscillations}. \cite{particledatareview}
 
 $$
-  \ket{\Pnulepton} = \sum_i U_{\Plepton i}\,\ket{\Pnu_i}, \ \ \ i \in \{ 1,2,3 \}, \ \ \ \Plepton \in \{ \Pe, \Pmu, \Ptau \}
+  \ket{\Pnulepton} = \sum_{i=1}^N U_{\Plepton i}\,\ket{\Pnu_i}, \ \ \ \Plepton \in \{ \Pe, \Pmu, \Ptau \}
 $$
 
 Determining the mixing matrix $U_{\Plepton i}$ that connects the mass eigenstates to the flavor eigenstates, is part of \icecube's scientific objectives.
@@ -36,17 +36,17 @@ The primary interaction channel for detecting neutrinos in \icecube is deep-inel
   \centering
   \subcaptionbox{Neutral-current neutrino interaction through $\PZz$ bosons.}{\includegraphics[width=0.3\textwidth]{img/feynman-neutral}\vspace*{2mm}}\hspace{1cm}
   \subcaptionbox{Charged-current neutrino interactions through $\PWpm$ bosons.}{\includegraphics[width=0.3\textwidth]{img/feynman-charged}}
-  \caption{Feynman diagrams showing neutrinos $\Pnulepton$ interacting with quarks $\Pquark$ of nuclei of the ice or nearby rock through $\PZz$ and $\PWpm$ bosons, producing leptons $\Plepton$, that is to say electrons $\Pe$, muons $\Pmu$, tau particles $\Ptau$, and quarks. Time evolves to the right in these diagrams.}
+  \caption{Feynman diagrams showing neutrinos $\Pnulepton$ interacting with quarks $\Pquark$ of nuclei of the ice or nearby rock through $\PZz$ and $\PWpm$ bosons, producing leptons $\Plepton$---that is to say electrons $\Pe$, muons $\Pmu$, tau particles $\Ptau$---and quarks. Time evolves to the right in these diagrams.}
   \label{fig:Phei1oob}
 \end{figure}
 
 These interactions lead to three different kind of event signatures in the \icecube detector.
 
 \paragraph{Shower- or Cascade-Like Events}
-In both, interactions through $\PZz$ bosons (\textit{neutral-current interactions}) and through $\PWpm$ bosons (\textit{charged-current interactions}), hardonic showers, that is to say cascades of secondary particles, are created as energy is transferred from the incoming neutrino to the outgoing quark. If the outgoing lepton is an electron, this may also create an accompanying electromagnetic shower. \cite{energyreco}
+In both, interactions through $\PZz$ bosons (\textit{neutral-current interactions}) and through $\PWpm$ bosons (\textit{charged-current interactions}), hadronic showers, that is to say cascades of secondary particles, are created as energy is transferred from the incoming neutrino to the outgoing quark. If the outgoing lepton is an electron, this may also create an accompanying electromagnetic shower. \cite{energyreco}
 
 \begin{align*}
-  & \text{neutral current:} & \Pnulepton + \text{nucleon} & \rightarrow \Pnulepton + \text{hadron}                              & \\
+  & \text{neutral current:} & \Pnulepton + \text{nucleon} & \rightarrow \Pnulepton + \text{hadron} \ \ \ \ \ \ \Plepton \in \{ \Pe, \Pmu, \Ptau \}                             & \\
   &                         &                             & \rightarrow \Pnulepton \text{ (escapes) } + \text{hadronic shower}  & \\ \\
   & \text{charged current:} & \Pnue + \text{nucleon}      & \rightarrow \Pe + \text{hadron}                                     & \\
   &                         &                             & \rightarrow \text{electromagnetic shower} + \text{hadronic shower}  & \\
@@ -61,7 +61,7 @@ If the outgoing lepton is a muon, this creates track-like event signatures as mu
 \end{align*}
 
 \paragraph{Double-Bang Events}
-If the outgoing lepton is a tau, the tau will create track, but the track will only be a couple of metres long, before the tau, which has sufficient mass, decays into another hadronic shower, creating a so called \textit{double-bang signature}, that is to say two hadronic showers joined by a short track. \cite{skysearch, energyreco, particledatareview}
+If the outgoing lepton is a tau, the tau will create a track, but the track will only be a couple of meters long, before the tau, which has sufficient mass, decays into another hadronic shower, creating a so-called \textit{double-bang signature}, that is to say two hadronic showers joined by a short track. \cite{skysearch, energyreco, particledatareview}
 
 \begin{align*}
   & \text{charged current:} & \Pnut + \text{nucleon}      & \rightarrow \Ptau + \text{hadron}                                   & \\
@@ -69,14 +69,14 @@ If the outgoing lepton is a tau, the tau will create track, but the track will o
   &                         &                             & \rightarrow \text{hadronic shower} + \text{hadronic shower}         & \\
 \end{align*}
 
-The event signatures, how they appear in the \icecube detector are visualized in figure \ref{fig:eeQuaef6}.
+The event signatures, how they appear in the \icecube detector, are visualized in figure \ref{fig:eeQuaef6}.
 
 \begin{figure}[htbp]
   \centering
-  \subcaptionbox{Cascade-like event: The cascade is completely contained within the detector and deposits a total of $1141\,TeV$ energy within the detector. Image and data source: \cite{evidence2013,energyreco}}{\halfimage{evidence2013-event-20}}\hfill
+  \subcaptionbox{Cascade-like event: The cascade is completely contained within the detector and deposits a total of $1141\TeV$ energy within the detector. Image and data source: \cite{evidence2013,energyreco}}{\halfimage{evidence2013-event-20}}\hfill
   \subcaptionbox{Track-like event: The muon track starts within the detector and deposits a total of $71\TeV$ of energy within the detector before it leaves the detector volume. Image and data source: \cite{evidence2013,energyreco}}{\halfimage{evidence2013-event-5}}\hfill
-  \subcaptionbox{Simulated double-bang event: The earlier (red) cascade has been created from the primary neutrino interaction vertex. The A tau travels from the position of the first cascade for a short distance, creating a track, before decaying into another later (green) cascade. Image source: \cite{nufact2018}}{\halfimage{nufact2018-double-bang}}\hfill
-  \caption{Visualization of examples for the different event signatures for neutrino events observed with \icecube. The spheres represent the energy registered by the respective detector module. The color indexes the time information: Red is the beginning of the event, green the middle, and blue the end of the event.}
+  \subcaptionbox{Simulated double-bang event: The earlier (red) cascade has been created from the primary neutrino interaction vertex. The tau travels from the position of the first cascade for a short distance, creating a track, before decaying into another later (green) cascade. Image source: \cite{nufact2018}}{\halfimage{nufact2018-double-bang}}\hfill
+  \caption{Visualization of examples for the different event signatures of neutrino events observed with \icecube. The spheres represent the energy registered by the respective detector module. The color indexes the time information: Red is the beginning of the event, green the middle, and blue the end of the event.}
   \label{fig:eeQuaef6}
 \end{figure}
 
@@ -84,7 +84,7 @@ The event signatures, how they appear in the \icecube detector are visualized in
 \subsection{Cherenkov-Light Emission}
 \label{sec:cherenkov}
 
-When charged particles, both the primary lepton and particles within the cascades, move through the detector medium faster than the phase velocity of light within this medium, they emit so called \textit{Cherenkov radiation}, which are photons with wavelengths in the visible and the near ultra violet spectrum. \cite{energyreco, instrumentation, skysearch}
+When charged particles, both the primary lepton and particles within the cascades, move through the detector medium faster than the phase velocity of light within this medium, they emit so-called \textit{Cherenkov radiation}, which are photons with wavelengths in the visible and the near ultra violet spectrum. \cite{energyreco, instrumentation, skysearch}
 
 The light emission is not isotropic: Photons are emitted under an angle $\phi$ relative to the direction of propagation of the charged particle. \cite{physiklexikon}
 
@@ -117,18 +117,18 @@ and is quantified by the \textbf{absorption length} $\lambda\abs$, which is the 
 % lundberg
 Therefore, in accordance with the \noun{Beer-Lambert law}, the absorption length is the path length that light needs to travel within a medium to have its intensity drop to $\sfrac{1}{\e}$ of its original intensity. \cite{lexikonderphysik}
 % lexikonderphysik, Band 1, Absorptionslänge
-% Absorption lengths in the south-polar ice are in the order of $100\m$ and can in clear ice layers in the absence of dust even exceed $200\m$. \cite{ackermann}
+% Absorption lengths in the South-Polar ice are in the order of $100\m$ and can in clear ice layers in the absence of dust even exceed $200\m$. \cite{ackermann}
 % ackermann, page 5, paragraph 12
-Absorption lengths in the south-polar ice vary between $20\m$ in dusty regions and $280\m$ in very clear ice layers. \cite{ackermann, ppcpaper, icepaper}
+Absorption lengths in the South-Polar ice vary between $20\m$ in dusty regions and $280\m$ in very clear ice layers. \cite{ackermann, ppcpaper, icepaper}
 
-The scattering of light off microscopic scattering centers, such as submillimeter-sized air bubbles and micron-sized dust grains \cite{Price1997}\cite{ackermann} is the dominant scattering mechanism in glacial ice \cite{Askebjer1997}\cite{lundberg}. This scattering can be modelled using the more general \noun{Mie scattering} theory, which describes the scattering of electromagnetic radiation off small, spherical masses of material with refractive indices differing from the refractive index of its surroundings. \cite{Mie1908}\cite{ackermann}\cite{lundberg}
+The scattering of light off microscopic scattering centers, such as sub-millimeter-sized air bubbles and micron-sized dust grains \cite{Price1997, ackermann} is the dominant scattering mechanism in glacial ice \cite{Askebjer1997, lundberg}. This scattering can be modeled using the more general \noun{Mie scattering} theory, which describes the scattering of electromagnetic radiation off small, spherical masses of material with refractive indices differing from the refractive index of its surroundings. \cite{Mie1908, ackermann, lundberg}
 
 \noun{Mie scattering} gives the distribution of the scattering angle $\theta$ for any wavelength and scattering center size. For ice, this distribution is approximated using a one-parameter \noun{Henyey-Greenstein} (HG) phase function $p_\text{HG}(\theta; \tau)$, where the one parameter $\tau$ is the mean cosine of the scattering angle. \cite{lundberg}
 
 \newcommand\meancostheta{\langle \cos \theta \rangle}
 $$ p_\text{HG}(\theta; \tau) = \frac{1 - \tau^2}{2(1 + \tau^2 - 2\tau\, \cos \theta)^\frac{3}{2}}, \ \ \ \tau = \meancostheta $$
 
-The south-polar ice has shown to be preferentially forward scattering with a mean cosine of the scattering angle of $\meancostheta = 0.94$ with only a weak dependence on the wavelength. \cite{ackermann}
+The South-Polar ice has shown to be preferentially forward scattering with a mean cosine of the scattering angle of $\meancostheta = 0.94$ with only a weak dependence on the wavelength. \cite{ackermann}
 % ackermann, paragraph 9
 
 The \textbf{scattering length} $\lambda\sca$, which is also called \textbf{geometric} scattering length, is the mean of the exponentially distributed free path and thereby the average distance between scatterings. \cite{ackermann}
@@ -140,9 +140,9 @@ A related and often used quantity is the \textbf{effective scattering length} $\
   \lambda\esca = \frac{\lambda\sca}{1 - \meancostheta}
 \end{equation}
 
-In a medium with isotropic scattering, the geometric and the effective scattering length are the same. In a preferentially forward scattering medium like the south-polar ice, the original direction of a sample of photons is tendentially retained for several scattering steps until the photon direction of the sample is isotropized. The projection of the net velocity vector on the original direction is decreased on average by $\meancostheta$ for each scattering. \cite{lundberg}
+In a medium with isotropic scattering, the geometric and the effective scattering lengths are the same. In a preferentially forward scattering medium like the South-Polar ice, the original direction of a sample of photons is tendentially retained for several scattering steps until the photon direction of the sample is isotropized. The projection of the net velocity vector on the original direction is decreased on average by $\meancostheta$ for each scattering. \cite{lundberg}
 
-After $n$ scatterings, the effectively transported forward distance along the original direction is $\lambda\sca\,\sum_{i=0}^n \meancostheta^i$, such that in the limit of many scatterings, $n \rightarrow \infty$, the effectively transported forward distance becomes the effective scattering length. \cite{lundberg}\cite{ackermann}
+After $n$ scatterings, the effectively transported forward distance along the original direction is $\lambda\sca\,\sum_{i=0}^n \meancostheta^i$, such that in the limit of many scatterings, $n \rightarrow \infty$, the effectively transported forward distance becomes the effective scattering length. \cite{lundberg, ackermann}
 
 $$ \lim_{n \rightarrow \infty} \lambda\sca\,\sum_{i=0}^n \meancostheta^i = \frac{\lambda\sca}{1 - \meancostheta} = \lambda\esca $$
 
@@ -151,9 +151,9 @@ $$ \lim_{n \rightarrow \infty} \lambda\sca\,\sum_{i=0}^n \meancostheta^i = \frac
 % scattering lengths between 5m and 90m in the detector volume \cite{ppcpaper}
 % effective scattering coefficient for 400nm between 0.011/m and 0.2/m \cite{icepaper} fig. 16, corresponding to esca=5m to 90m esca
 
-Typical effective scattering lengths within the south-polar ice are in the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $30\cm$ to $5.4\m$.
+Typical effective scattering lengths within the South-Polar ice are in the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$.
 
 % https://github.com/fiedl/hole-ice-study/issues/51 - point particles
 Light interference effects are ignored during photon propagation as the average distance between the scattering centers is large compared to the photon wavelength. \cite{ackermann}
 
-Also, despite modelling different ice regions with abrupt boundaries in the simulations of this study, the physical boundaries are assumed such that refractive index variations are continuous. Hence reflection at the medium boundaries is ignored in simulations. \cite{lundberg}
+Also, despite modeling different ice regions with abrupt boundaries in the simulations of this study, the physical boundaries are assumed such that refractive index variations are continuous. Hence reflection at the medium boundaries is ignored in simulations. \cite{lundberg}
