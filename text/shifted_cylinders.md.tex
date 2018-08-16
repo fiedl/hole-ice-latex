@@ -3,9 +3,9 @@
 \subsection{Simulating the Displacement of Optical Modules Relative to the Hole-Ice Columns}
 \label{sec:cylinder_shift}
 
-Optical modules do not necessarily need to be postioned well-centered relative to the hole ice. In practice, when the drill hole is refreezing, the optical module may be deposited displaced both relative to the drill hole as well as to the bubble column.
+Optical modules do not necessarily need to be positioned well-centered relative to the hole ice. In practice, when the drill hole is refreezing, the optical module may be deposited displaced both relative to the drill hole as well as to the bubble column.
 
-The hole-ice effect on the detection of photons by an optical module that is not symetrically positioned relative to the hole ice cannot be modelled by an effective angular-acceptance curve because these curves always assume azimuthal symmetry. Nevertheless, the the asymmetry of the effect can be visualized using an angular-acceptance simulation, plotting the acceptance for polar angles $\eta \in [0;\pi[$ and for polar angles $\eta \in [\pi; 2\pi[$ in different colors in the same plot (figure \ref{fig:egieNg5l} b).
+The hole-ice effect on the detection of photons by an optical module that is not symmetrically positioned relative to the hole ice cannot be modeled by an effective angular-acceptance curve because these curves always assume azimuthal symmetry. Nevertheless, the the asymmetry of the effect can be visualized using an angular-acceptance simulation, plotting the acceptance for polar angles $\eta \in [0;\pi[$ and for polar angles $\eta \in [\pi; 2\pi[$ in different colors in the same plot (figure \ref{fig:egieNg5l} b).
 
 \begin{figure}[htbp]
   \subcaptionbox{\steamshovel display of the simulation scenario for $\eta = \pi$. The photons are started from a plane on the left-hand side of the image. There is a good chance that they cross the hole ice on their way to the optical module.}{\halfimage{asymmetry-example-steamshovel}}\hfill
@@ -20,12 +20,14 @@ In this example simulation, the cylinder is shifted relative to the optical modu
 
 \docpar{The simulation with a shifted hole-ice cylinder is documented in \issue{8}.}
 
-In this example simulation, which uses the hole-ice-correction algorithm (section \ref{sec:algorithm_a}), the hole hole ice is modelled as cylinder with $30\cm$ radius and a hole-ice scattering length of $\sfrac{1}{10}$ of the scattering length of the surrounding bulk ice. The optical module is shifted by $20\cm$ from the central position, and therefore is shifted beyond the border of the hole ice in order to demonstrate an extreme effect. In practice, the optical module can only be shifted by a maximum of about $15\cm$ from the central position, because the drill hole is only $60\cm$ in diameter.
+In this example simulation, which uses the hole-ice-correction algorithm (section \ref{sec:algorithm_a}), the hole ice is modeled as cylinder with $30\cm$ radius and a hole-ice scattering length of $\sfrac{1}{10}$ of the scattering length of the surrounding bulk ice. The optical module is shifted by $20\cm$ from the central position, and therefore is shifted beyond the border of the hole ice in order to demonstrate an extreme effect. In practice, the optical module can only be shifted by a maximum of about $15\cm$ from the central position, because the drill hole is only about $60\cm$ in diameter.
 
 Figure \ref{fig:egieNg5l} (a) shows the simulation scenario in \steamshovel, figure \ref{fig:egieNg5l} (b) shows the resulting angular-acceptance curves from the simulation, one for the angular range $\eta \in [0;\pi[$ and one for $\eta \in [\pi; 2\pi[$. One of these curves shows a more extreme hole-ice effect as more photons need to propagate through the hole ice to hit the optical module in comparison to the other curve.
 
+\rongen has performed a series of simulations where the optical module is shifted randomly relative to the hole-ice column for each data point. The results shown in figure \ref{fig:zao5Mah0} indicate a wide spread of the effective acceptance curve for angles all lower angles, $\cos \eta > 0$. \cite{icrc17pocam}
+
 \begin{figure}[htbp]
-\smallerimage{angular-acceptance-dom-displacement-impact-martin-rongen}
-  \caption{\todo{study of shift}, Image source: \cite{icrc17pocam}}
-  \label{fig:label}
+  \smallerimage{angular-acceptance-dom-displacement-impact-martin-rongen}
+  \caption{Results from a series of simulations where the position of the optical module is shifted randomly relative to the hole-ice column for each data point. The displacement of the module especially widens the spread of the angular-acceptance curve for all lower angles, $\cos \eta > 0$. The \enquote{Default IceCube hole ice model} refers to the a priori angular-acceptance curve with H2 parameters from \cite{icepaper}. The \enquote{Direct fit to interstring flasher data} refers to the model described in section \ref{sec:dimas_model}. Image source: \cite{icrc17pocam}}
+  \label{fig:zao5Mah0}
 \end{figure}

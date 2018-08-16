@@ -37,7 +37,7 @@ Computations that are mathematically equivalent are not guaranteed to be numeric
 
 If such two calculations are performed within one algorithm, this may lead to meaningless results or simulation crashes.
 
-For example, one part of the hole-ice-correction algorithm used the \noun{Pythagorean Theorem} to calculate whether the distance of the photon from the hole-ice center. Comparing this to the hole-ice radius, the algorithm decided whether the photon is within or outside the cylinder. Another part of the algorithm calculated intersections of the photon trajectory with the hole-ice cylinder. Evaluating the scale parameters $s_1$ and $s_2$ (see figure \ref{fig:aeQuae2U} a), the algorithm decided again whether the photon is within or outside the hole ice.
+For example, one part of the hole-ice-correction algorithm used the \noun{Pythagorean Theorem} to calculate the distance of the photon from the hole-ice center. Comparing this to the hole-ice radius, the algorithm decided whether the photon is within or outside the cylinder. Another part of the algorithm calculated intersections of the photon trajectory with the hole-ice cylinder. Evaluating the scale parameters $s_1$ and $s_2$ (see figure \ref{fig:aeQuae2U} a), the algorithm decided again whether the photon is within or outside the hole ice.
 
 If the photon is near the hole-ice radius, one mechanism may come to the conclusion that the photon is within the hole-ice cylinder while the other mechanism considers the photon outisde the cylinder. If both mechanisms are used in the same algorithm, this leads to inconsistencies.
 

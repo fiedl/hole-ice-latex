@@ -6,13 +6,13 @@
 % https://github.com/fiedl/hole-ice-study/issues/35
 
 % \cite{instrumentation}: In-ice cable cross section, with a nominal 46 mm diameter and mass of 2 kg/m.
-The main cable of each detector string (figure \ref{fig:ahyoi7Ma}) allows to power the detector modules and to transfer data from the modules to the surface. The cable has a diameter of $46\mm$ \cite{instrumentation} and, as it is located in close proximity to the optical modules, shields the optical modules from a non-neglectable amount of incoming photons. The cable's mantle is black such that it will absorb photons rather than reflect them.
+The main cable of each detector string (figure \ref{fig:ahyoi7Ma}) allows to power the detector modules and to transfer data from the modules to the surface. The cable has a diameter of $46\mm$ \cite{instrumentation} and, as it is located in close proximity to the optical modules, shields the optical modules from a non-negligible amount of incoming photons. The cable's mantle is black such that it will absorb photons rather than reflect them.
 
 \begin{figure}[htbp]
   \subcaptionbox{Optical module deployment schematics. Image source:  \cite{instrumentation}}{\includegraphics[width=0.25\textwidth]{img/dom-cable-instrumentation}}\hfill
   \subcaptionbox{Rendered image of the optical module and the main cable. Image source: \cite{gallerydomcloseup}}{\includegraphics[width=0.35\textwidth]{img/DOMCloseUp-cropped-mirrored}}\hfill
   \subcaptionbox{Photo: Optical module deployment. Image source: \cite{publicgallerydomdeployment}}{\includegraphics[width=0.35\textwidth]{img/dom-deployment-15-IMG_0080-652058109-3}}
-  \caption{IceCube's optical module in relation to the main cable.}
+  \caption{\icecube's optical module in relation to the main cable.}
   \label{fig:ahyoi7Ma}
 \end{figure}
 
@@ -20,14 +20,14 @@ The main cable of each detector string (figure \ref{fig:ahyoi7Ma}) allows to pow
 
 Using the new medium-propagation algorithm, the cable can be simulated as one or several cylinders with limited $z$-range, which are configured for instant absorption.
 
-As a first test, a simulation can be performed to verify that the cable causes an asymmetric shadowing effect, that is to say shields photons approaching photons from one direction while not shielding photons approaching from the opposite direction. Figure \ref{fig:ochoCh7o} shows the effective angular sensitivity of the optical module measured in such a simulation and confirms that the asymmetric shadowing can be observed in simulations.
+As a first test, a simulation is performed to verify that the cable causes an asymmetric shadowing effect, that is to say shields photons approaching from one direction while not shielding photons approaching from the opposite direction. Figure \ref{fig:ochoCh7o} shows the effective angular sensitivity of the optical module measured in this simulation and confirms that the asymmetric shadowing can be observed in simulations.
 
 \docpar{This simulation, placing an opaque cylinder part besides the optical module, propagating the photons with the hole-ice-correction algorithm (section \ref{sec:algorithm_a}) and scanning the effective angular acceptance, is documented in \issue{35}.}
 
 \begin{figure}[htbp]
   \subcaptionbox{\steamshovel visualization of the simulation scenario. Photons approaching from different angles are either shielded by the cable or can reach the optical module unhindered.}{\halfimage{cable-shadow-steamshovel-commented}\vspace*{7mm}}\hfill
   \subcaptionbox{Effective angular acceptance of the optical module measured in the simulation. Photons approaching from the side of the cable are less likely to reach the optical module and be registered as a hit.}{\halfimage{cable-shadow-angular-acceptance-commented}}
-  \caption{Simulation with the main cable modelled as opaque cylinder placed besides the optical module.}
+  \caption{Simulation with the main cable modeled as opaque cylinder placed besides the optical module.}
   \label{fig:ochoCh7o}
 \end{figure}
 
@@ -50,12 +50,12 @@ In one class of hole-ice models that has not been studied, yet, the optical modu
   \label{fig:caweNg6o}
 \end{figure}
 
-Placing a minimal opaque cable cylinder besides the optical module partially inside the bubble column in a simulation, using plane waves as photon sources, direct detection as hit acception criterion, and the new medium-propagation algorithm (section \ref{sec:algorithm_b}), the cable shadowing effect appears to be subdominant when measuring the effective anguluar acceptance (figure \ref{fig:caweNg6o}) compared to the effect of the bubble column and the drill hole ice.
+Placing a minimal opaque cable cylinder besides the optical module partially inside the bubble column in a simulation, using plane waves as photon sources, direct detection as hit acceptance criterion, and the new medium-propagation algorithm (section \ref{sec:algorithm_b}), the cable shadowing effect appears to be subdominant when measuring the effective angular acceptance (figure \ref{fig:caweNg6o}) compared to the effect of the bubble column and the drill hole ice.
 
 \docpar{This simulation is documented in \issue{110}.}
 
 
-\subsubsection{Can Cable Effects Account for the Observed Hole Ice Effects?}
+\subsubsection{Can Cable Effects Account for the Observed Hole-Ice Effects?}
 
 % > mrongen [7:53 PM 2018-03-26]
 % > Ok getting back to the bigger picture:
@@ -68,24 +68,22 @@ Placing a minimal opaque cable cylinder besides the optical module partially ins
 % >
 % > A cross check for hypothesis 1 is also to see which scattering length (in a simulation without the cable and the column filling the entire drill hole) fits simulation data with the cable only. If it is 50cm that kind of explains why H2 has been so hard to kill (edited)
 
-An open question raised by the IceCube Calibration Group is whether the shielding by the main cable is sufficient to account for the effects observed by other studies that are typically attributed to the hole ice.\footnote{Internal correspondance. See for example \url{https://icecube-spno.slack.com/archives/C4FV72473/p1522086838000178}.}
+An open question raised by the \icecube Calibration Group is whether the shielding by the main cable is sufficient to account for the effects observed by other studies that are typically attributed to the hole ice.\footnote{Internal correspondence. See for example \url{https://icecube-spno.slack.com/archives/C4FV72473/p1522086838000178}.}
 
-Preliminary flasher simulations hint that simulating the cable, but no hole ice, is not enough to fit the flasher calibration data, and a hole ice of some kind is required to fit the data.\footnote{For progress on this matter, check \url{https://github.com/fiedl/hole-ice-study/issues/97} and \url{https://github.com/fiedl/hole-ice-study/issues/60}.} A detailed series of simuluations, however, is out of scope of this study and is suggested as follow-up study.\followup
-
-\todo{Reference image from flasher study where one can see the asymmetry?}
+Preliminary flasher simulations hint that simulating the cable, but no hole ice, is not enough to fit the flasher calibration data, and a hole ice of some kind is required to fit the data.\footnote{A cable has been simulated to check whether the cable shadow can account for the asymmetry in the flasher data seen for example in figure \ref{fig:ea9Zieh0} (page \pageref{fig:ea9Zieh0}). Preliminary results suggest that the cable alone cannot account for the asymmetry. For progress on this matter, check \url{https://github.com/fiedl/hole-ice-study/issues/97} and \url{https://github.com/fiedl/hole-ice-study/issues/60}.} A detailed series of simulations, however, is out of scope of this study and is suggested as follow-up study.\followup
 
 As an example, the following series of simulation compares the effective angular acceptance for a scenario where only a shadowing cable is considered, and a typical drill-hole-ice scenario.
 
 \docpar{This series of simulations is documented in \issue{101}.}
 
-This simulation uses the new medium-propagation algorithm (section \ref{sec:algorithm_b}), plane waves as photon sources, and direct detection as hit acception criterion. The cable is modeled as three opaque cylinder parts (see figure \ref{fig:Ohw1aibu} (a) in comparison to the illustrations in figure \ref{fig:ahyoi7Ma}). The drill-hole ice is modeled with properties suggested by the so called \textit{H2 model}, a hole-ice-cylinder darius of $30\cm$ and a geometric scattering length of $50\cm$ \cite{holeicestudieswithyag}.
+This simulation uses the new medium-propagation algorithm (section \ref{sec:algorithm_b}), plane waves as photon sources, and direct detection as hit acceptance criterion. The cable is modeled as three opaque cylinder parts (see figure \ref{fig:Ohw1aibu} (a) in comparison to the illustrations in figure \ref{fig:ahyoi7Ma}). The drill-hole ice is modeled with properties suggested by the so-called \textit{H2 model}, a hole-ice-cylinder radius of $30\cm$ and a geometric scattering length of $50\cm$ \cite{holeicestudieswithyag}.
 
 \begin{figure}[htbp]
   \subcaptionbox{\steamshovel visualization of the simulation scenario with cables: The cable is modeled as three opaque cylinder parts. See also figure \ref{fig:ahyoi7Ma} for comparison.}{\halfimage{cable-only-vs-h2-steamshovel}\vspace*{3mm}}\hfill
   \subcaptionbox{Effective angular acceptance curves for the optical module measured in simulations without hole ice, with only a cable, and with a hole-ice-cylinder of $30\cm$ radius and a geometric hole-ice scattering length of $50\cm$ (H2 model parameters).}{\halfimage{cable-only-vs-h2-angular-acceptance}}\hfill
-  \caption{Measuring the effective angular acceptance of an optical module in simulations: (1) without hole ice, (2) with only a drill hole, (3) with only a cable. The cable can account for the overall reduction of photon hits, but cannot account for the hole-ice effects in the direction along the string, that is to say the plateau in the angular-acceptance curve for $\cos \eta \approx -1$ and the effective sensitivity drop off for $\cos \eta \approx 1$.}
+  \caption{Measuring the effective angular acceptance of an optical module in simulations: (1) without hole ice, (2) with only a drill hole, (3) with only a cable. The cable can account for an overall reduction of photon hits, but cannot account for the hole-ice effects in the direction along the string, that is to say the plateau in the angular-acceptance curve for $\cos \eta \approx -1$ and the effective sensitivity drop off for $\cos \eta \approx 1$.}
   \label{fig:Ohw1aibu}
 \end{figure}
 
-As shown in figure \ref{fig:Ohw1aibu} (b), the cable can account for a total reduction in photon hits. For the specific hole-ice effects expected from earlier studies (see section \ref{sec:hole_ice_approximation}), that is to say a decreased number of photon hits for photons approaching from below, and an increased number of photons hits for photons approaching from above, however, the simulated cable cannot account for.
+As shown in figure \ref{fig:Ohw1aibu} (b), the cable can account for a total reduction in photon hits. For the specific hole-ice effects expected from earlier studies (see section \ref{sec:hole_ice_approximation}), that is to say a decreased number of hits for photons approaching from below, and an increased number of hits for photons approaching from above, however, the simulated cable cannot account for.
 

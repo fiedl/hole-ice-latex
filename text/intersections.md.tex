@@ -3,7 +3,7 @@
 \subsection{Calculating Intersections of Photon Trajectories With Hole-Ice Cylinders}
 \label{sec:intersections}
 
-### Analytic approach
+### Analytic Approach
 
 \image{intersection-Kahm4UeY}
 
@@ -124,7 +124,7 @@ s2.equals(ss2)  # True
 
 
 
-### Geometric approach
+### Geometric Approach
 
 It turns out, the simulation on the GPU is faster and more precise if one does not treat the coordinates, e.g. $A_x, A_y$ as separate quantities but keeps the calculations as much as possible vectorial and uses the GPU-native vector operation functions like `dot` for the vector scalar product ("dot product").
 
@@ -192,9 +192,4 @@ Or, as C code using the opencl native vector functions:
   const floating_t length_AX2 = length_AMprime + length_XMprime;
 \end{ccode}
 
-
-### TODO
-
-- \todo{how many jumps? this is a factor for:}
-- \todo{How much does it add to the simulation time?}
 
