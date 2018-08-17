@@ -42,65 +42,72 @@ The optical modules are optimized for detecting Cherenkov light emitted by parti
 \subsection{Properties of South-Polar Ice}
 \label{sec:ice}
 
-#### intro, method
-- antarctic ice has exceptional optical properties because air bubbles shrink and vanish under large pressure forming an air clathrate hydrate \cite{rongenswedishcamera}
-- using the LED flasher calibration system,
-- properties of the glacial ice of \icecube have been measured
-- average distance to absorption $\lambda\abs$
-- average distance between successive scatters $\lambda\sca$
-- angular distribution of the new direction \cite{icepaper}
-- ice in layers of arbitrary thickness of $10\m$
-- fit the parameters within these layers such that the properites are best interpreted as average of their true values over the thickness of the layers \cite{icepaper}
+The ice at the South Pole has exceptional optical properties, because air bubbles shrink and vanish under large pressure, forming a so-called \textit{clathrate hydrate}, where impurities are enclosed inside the ice crystal structure. \cite{rongenswedishcamera}
+
+Using \icecube's LED flasher calibration system (section \ref{sec:doms}), the properties of \icecube's glacial ice have been measured: The average distance to absorption, $\lambda\abs$, the average distance between successive scatters $\lambda\sca$, and the angular distribution of the new direction after scattering. \cite{icepaper}
+
+The ice has been divided into $z$-layers of an arbitrary thickness of $10\m$. The ice parameters have been fitted for each layer such that the properties are best interpreted as average of their true values over the thickness of the ice layers. \cite{icepaper}
 
 
-#### scattering
-The South-Polar ice has shown to be preferentially forward scattering with a mean cosine of the scattering angle of $\meancostheta = 0.94$ with only a weak dependence on the wavelength. \cite{ackermann}
-% ackermann, paragraph 9
-
-% Typical scattering length:
-% average esca = 25m \cite{lundberg}
-% scattering lengths between 5m and 90m in the detector volume \cite{ppcpaper}
-% effective scattering coefficient for 400nm between 0.011/m and 0.2/m \cite{icepaper} fig. 16, corresponding to esca=5m to 90m esca
-
-Typical effective scattering lengths within the South-Polar ice are in the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$.
-
-- air bubble do not cause absorption, only scattering \cite{absorption1997}
-- effective scattering coefficient $b_\text{e} := \sfrac{1}{\lambda\esca}$
-- wave-length dependence from theoretical models of light scattering in dusty ice and AMANDA measurements, $b_\text{e} = b_\text{e}(\nu = 400\nm) \cdot \left(\frac{\nu}{400\nm}\right)^{-\alpha}$, $\alpha$ global fit parameter
+\paragraph{Scattering}
+The measured effective scattering lengths $\lambda\esca$ range from $5\m$ to $90\m$, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$. The depth dependence of the scattering length is shown in figure \ref{fig:Ahxobai3} (a). \cite{icepaper}
 
 \begin{figure}[htbp]
-  \subcaptionbox{}{\halfimage{icepaper-fig-16-esca}}\hfill
-  \subcaptionbox{}{\halfimage{icepaper-fig-16-abs}}
-  \caption{Values of the absorption length $\lambda\abs$ and the effective scattering length $\lambda\esca$ for different depths. Plot taken from \cite[figure 16]{icepaper}. A detailled data table is given in \cite[table C1]{icepaper}.}
+  \subcaptionbox{Depth dependence of the effective scattering length $\lambda\esca$. The effective scattering coefficient $b_\text{e}:=\sfrac{1}{\lambda\esca}$ is the inverse effective scattering length.}{\halfimage{icepaper-fig-16-esca}\vspace*{2mm}}\hfill
+  \subcaptionbox{Depth dependence of the absorption length $\lambda\abs$. The absorption coefficient $a:= \sfrac{1}{\lambda\abs}$ is the inverse absorption length.}{\halfimage{icepaper-fig-16-abs}}
+  \caption{Values of the absorption length $\lambda\abs$ and the effective scattering length $\lambda\esca$ for different depths, but for a fixed photon wave length of $400\nm$. Plot taken from \cite[figure 16]{icepaper}. A detailled data table is given in \cite[table C1]{icepaper}.}
   \label{fig:Ahxobai3}
 \end{figure}
 
-#### absorption
-- Absorption lengths in the South-Polar ice vary between $20\m$ in dusty regions and $280\m$ in very clear ice layers. \cite{ackermann, ppcpaper, icepaper}
-- absorption coefficient $a := \sfrac{1}{\lambda\abs}$
-- for absorption: $a(\nu) = a_\text{dust}(\nu) + A \e^{-B/\nu} (1 + 0.01 \delta\tau)$, $a_\text{dust}(\nu) = a_\text{dust}(\nu = 400\nm) \left(\frac{\nu}{400\nm}\right)^{-\kappa}$, $\delta\tau(d) = T(d) - T(1730\m)$ for depth $d$
-- layer of ice containing the most dust at around $2000\m$ (``dust peak'')
+% - air bubble do not cause absorption, only scattering \cite{absorption1997}
 
-#### tilt
-- following the layers of dust concentration, ice layers also with tilt
+The wave length dependence is given by equation \ref{eq:escawavelength} \cite[section 4]{icepaper}, where $b_\text{e} := \sfrac{1}{\lambda\esca}$ is the effective scattering coefficient, $\nu$ the photon wave length, and $\alpha$ a global fit parameter. $b_\text{e}(\nu = 400\nm)$ is given by figure \ref{fig:Ahxobai3} (a) and \cite[table C4]{icepaper}. The global parameter $\alpha$ has been fitted to $\alpha = 0.90 \pm 0.03$ \cite[section 5.1]{ackermann}.
+
+\begin{equation}
+  b_\text{e}(\nu) = b_\text{e}(\nu = 400\nm) \cdot \left(\frac{\nu}{400\nm}\right)^{-\alpha}
+  \label{eq:escawavelength}
+\end{equation}
+
+The scattering prefers the forward direction, with a mean cosine of the scattering angle of $\meancostheta = 0.94$ \cite[paragraph 9]{ackermann} (or $\meancostheta = 0.90$ \cite{icepaper}).
+
+
+\paragraph{Absorption}
+The absorption lengths in the South-Polar ice vary between $10\m$ in dusty regions and $280\m$ in very clear ice layers. Their depth dependence is given in figure \ref{fig:Ahxobai3} (b). The absorption length, which is governed by the dust concentration, is especially low in the so-called ``dust peak'' at a depth of about $2000\m$. \cite{ackermann, ppcpaper, icepaper}
+
+The dependence of the absorption coefficient $a := \sfrac{1}{\lambda\abs}$ on the photon wave length $\nu$, the temperature difference $\delta\tau$ is given by equation \ref{eq:abswavelength} \cite{icepaper}.
+
+\begin{equation}
+  a(\nu) = a_\text{dust}(\nu) + A\,\e^{-\sfrac{B}{\nu}}\, (1 + 0.01 \cdot \delta\tau)
+  \label{eq:abswavelength}
+\end{equation}
+\begin{equation}
+  a_\text{dust}(\nu) = a_\text{dust}(\nu = 400\nm) \left(\frac{\nu}{400\nm}\right)^{-\kappa}
+\end{equation}
+
+The global parameters have been fitted to $A = (6954 \pm 973)\m^{-1}$, $B = (6618 \pm 71)\nm$, and $\kappa = 1.08 \pm 0.01$ \cite[section 5.2]{ackermann}.\footnote{The quantity $A$ in \cite{icepaper} corresponds to the quantity $A_\text{IR}$ in \cite{ackermann}. $B$ in \cite{icepaper} corresponds to $\lambda_0$ in \cite{ackermann}.}
+The temperature difference $\delta\tau(d) = T(d) - T(1730\m)$ for depths $d$ is given by equation \ref{eq:temperature} \cite{icepaper}.
+
+\begin{equation}
+  T(d) = 221.5\unit{K} - 0.00045319\,\frac{\text{K}}{\text{m}}\cdot d + 5.822 \cdot 10^{-6}\,\frac{\text{K}}{\text{m}^2} \cdot d^2
+  \label{eq:temperature}
+\end{equation}
+
+
+\paragraph{Ice-Layer Tilt and Ice Anisotropy}
+The absorption properties of the ice layers follow the dust concentration, which does not strictly follow the arbitrary $z$-layers, but is tilted. To model this feature, the ice layers can also be tilted by using an effective-$z$ coordinate, $z_\text{e}(x,y,z) = z + \text{relief}(x,y,z)$, which is shown in figure \ref{fig:wohr8uaY}. \cite{icepaper}
 
 \begin{figure}[htbp]
   \centering
-  \smallerimage{icepaper-fig-14-layers}
+  \includegraphics[width=0.5\textwidth]{img/icepaper-fig-14-layers}
   \caption{Ice layers along the average gradient direction within the ice. The relief is amplified by a factor of 3 to enhance the clarity of the layer structure. The lowest layer shown exhibits a shift of $56\m$ betweeen its shallowest and deepest points, which is the largest shift of all layers shown in the figure. Plot and caption taken from \cite[figure 14]{icepaper}.}
   \label{fig:wohr8uaY}
 \end{figure}
 
-#### anisotropy
-- anisotropic scattering amplitude, aligned with ice flow direction \cite{icrc17pocam}
+Furthermore, scattering and absorption show also a slight dependency on the propagation direction of the photons, aligned with the ice flow direction of the glacier. \cite{icrc17pocam}
 
+This study considers the dependencies of scattering and absorption length on depth, temperature and wavelength, but does not consider the ice-layer tilt and the ice anisotropy.
 
-#### ice models
-- timeline of ice models: \url{https://docushare.icecube.wisc.edu/dsweb/Get/Document-79091/ice.pdf} \cite{flasherdataderivedicemodels}
-
-
-
-
+An overview of the different ice models used in \icecube is given in \cite{flasherdataderivedicemodels}.
 
 \subsection{Hole Ice Around the Detector Strings}
 \label{sec:hole_ice}
