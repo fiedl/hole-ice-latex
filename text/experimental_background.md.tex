@@ -39,17 +39,70 @@ The recorded signals from the PMT are digitized within the module before sending
 The optical modules are optimized for detecting Cherenkov light emitted by particles with energies from $10\GeV$ to $10\PeV$ up to $500\m$ away from the optical module. \cite{instrumentation}
 
 
-## Ice Models to Characterize Photon Scattering and Absorption in the South-polar Ice
+\subsection{Properties of South-Polar Ice}
 \label{sec:ice}
 
-- timeline of ice models: \url{https://docushare.icecube.wisc.edu/dsweb/Get/Document-79091/ice.pdf} \cite{flasherdataderivedicemodels}
-- anisotropic scattering amplitude, aligned with ice flow direction \cite{icrc17pocam}
+#### intro, method
+- antarctic ice has exceptional optical properties because air bubbles shrink and vanish under large pressure forming an air clathrate hydrate \cite{rongenswedishcamera}
+- using the LED flasher calibration system,
+- properties of the glacial ice of \icecube have been measured
+- average distance to absorption $\lambda\abs$
+- average distance between successive scatters $\lambda\sca$
+- angular distribution of the new direction \cite{icepaper}
+- ice in layers of arbitrary thickness of $10\m$
+- fit the parameters within these layers such that the properites are best interpreted as average of their true values over the thickness of the layers \cite{icepaper}
+
+
+#### scattering
+The South-Polar ice has shown to be preferentially forward scattering with a mean cosine of the scattering angle of $\meancostheta = 0.94$ with only a weak dependence on the wavelength. \cite{ackermann}
+% ackermann, paragraph 9
+
+% Typical scattering length:
+% average esca = 25m \cite{lundberg}
+% scattering lengths between 5m and 90m in the detector volume \cite{ppcpaper}
+% effective scattering coefficient for 400nm between 0.011/m and 0.2/m \cite{icepaper} fig. 16, corresponding to esca=5m to 90m esca
+
+Typical effective scattering lengths within the South-Polar ice are in the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$.
 
 - air bubble do not cause absorption, only scattering \cite{absorption1997}
-- antarctic ice has exceptional optical properties because air bubbles shrink and vanish under large pressure forming an air clathrate hydrate \cite{rongenswedishcamera}
+- effective scattering coefficient $b_\text{e} := \sfrac{1}{\lambda\esca}$
+- wave-length dependence from theoretical models of light scattering in dusty ice and AMANDA measurements, $b_\text{e} = b_\text{e}(\nu = 400\nm) \cdot \left(\frac{\nu}{400\nm}\right)^{-\alpha}$, $\alpha$ global fit parameter
+
+\begin{figure}[htbp]
+  \subcaptionbox{}{\halfimage{icepaper-fig-16-esca}}\hfill
+  \subcaptionbox{}{\halfimage{icepaper-fig-16-abs}}
+  \caption{Values of the absorption length $\lambda\abs$ and the effective scattering length $\lambda\esca$ for different depths. Plot taken from \cite[figure 16]{icepaper}. A detailled data table is given in \cite[table C1]{icepaper}.}
+  \label{fig:Ahxobai3}
+\end{figure}
+
+#### absorption
+- Absorption lengths in the South-Polar ice vary between $20\m$ in dusty regions and $280\m$ in very clear ice layers. \cite{ackermann, ppcpaper, icepaper}
+- absorption coefficient $a := \sfrac{1}{\lambda\abs}$
+- for absorption: $a(\nu) = a_\text{dust}(\nu) + A \e^{-B/\nu} (1 + 0.01 \delta\tau)$, $a_\text{dust}(\nu) = a_\text{dust}(\nu = 400\nm) \left(\frac{\nu}{400\nm}\right)^{-\kappa}$, $\delta\tau(d) = T(d) - T(1730\m)$ for depth $d$
+- layer of ice containing the most dust at around $2000\m$ (``dust peak'')
+
+#### tilt
+- following the layers of dust concentration, ice layers also with tilt
+
+\begin{figure}[htbp]
+  \centering
+  \smallerimage{icepaper-fig-14-layers}
+  \caption{Ice layers along the average gradient direction within the ice. The relief is amplified by a factor of 3 to enhance the clarity of the layer structure. The lowest layer shown exhibits a shift of $56\m$ betweeen its shallowest and deepest points, which is the largest shift of all layers shown in the figure. Plot and caption taken from \cite[figure 14]{icepaper}.}
+  \label{fig:wohr8uaY}
+\end{figure}
+
+#### anisotropy
+- anisotropic scattering amplitude, aligned with ice flow direction \cite{icrc17pocam}
 
 
-\subsection{Hole Ice as Region of Different Ice Properties Around Detector Strings}
+#### ice models
+- timeline of ice models: \url{https://docushare.icecube.wisc.edu/dsweb/Get/Document-79091/ice.pdf} \cite{flasherdataderivedicemodels}
+
+
+
+
+
+\subsection{Hole Ice Around the Detector Strings}
 \label{sec:hole_ice}
 
 \begin{figure}[htbp]
