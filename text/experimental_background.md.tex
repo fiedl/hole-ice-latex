@@ -109,26 +109,37 @@ This study considers the dependencies of scattering and absorption length on dep
 
 An overview of the different ice models used in \icecube is given in \cite{flasherdataderivedicemodels}.
 
+
 \subsection{Hole Ice Around the Detector Strings}
 \label{sec:hole_ice}
 
+The so-called \textit{hole ice} is the refrozen water within the drill holes that were necessary to deploy the detector strings with the optical modules.
+
+For the \icecube detector, 68 boreholes with an approximate diameter of $60\cm$ to a depth of about $2500\m$ were created using a \textit{hot-water drilling} technique. Drilling one hole required about 48 hours time. \cite{instrumentation}
+
+When the glacial ice in the drill holes became water, the structures that were responsible for the specific properties of the bulk-ice layers were destroyed. Thus, the properties of the hole ice are considered largely independent of those of the surrounding bulk ice. The deployed instrumentation become frozen in place and optically coupled to the surrounding ice sheet when the water in the boreholes became ice again. \cite{instrumentation}
+
+In order to monitor the freeze-in process, a camera system consisting of two video cameras in separate spheres, each also equipped with four LEDs and three lasers, has been deployed along one of the detector strings. The cameras observed that the drill hole became completely refrozen within 15 days. \cite{instrumentation}
+
+The camera observations suggest two hole-ice components, a clear outer region, and an inner column of a smaller scattering length and a diameter of about $16\cm$ (figure \ref{fig:daeM6yot}). \cite{rongenswedishcamera,instrumentation}
+
 \begin{figure}[htbp]
-  \smallerimage{swedish-camera-downwards}
-  \caption{Image source: \cite{icrc17pocam}}
-  \label{fig:label}
+  \centering
+  \subcaptionbox{}{\thirdimage{camera2010-01}}\hfill
+  \subcaptionbox{}{\thirdimage{camera2010-02}}\hfill
+  \subcaptionbox{}{\thirdimage{camera2010-03}}\hfill
+  \subcaptionbox{}{\thirdimage{camera2010-04}}\hfill
+  \subcaptionbox{}{\thirdimage{camera2010-05}}\hfill
+  \subcaptionbox{}{\thirdimage{camera2010-06}}\hfill
+  \subcaptionbox{}{\halfimage{swedish-camera-downwards}}\hfill
+  \subcaptionbox{}{\halfimage{camera2018-01}}\hfill
+  \caption{Monitoring the freeze-in process using a camera system deployed within string number 80. The drill hole freezes from outside in as seen in (a) to (f). The final configuration that can still be observed in 2018 as seen in (h) still shows a diffuse column, called \enquote{bubble column}, on the right-hand side of images (g) and (h). Image sources: \cite{icrc17pocam, camera2010, camera2018}}
+  \label{fig:daeM6yot}
 \end{figure}
 
-- The hole ice is refrozen water. When the bulk ice within the drill hole became water the structures that were responsible for the specific properties of that bulk-ice layer were destroyed. The refreezing happens the same way everywhere in the drill hole.
+The observed freeze-in process from the outside in is consistent with the theory of \textit{cylindrical freezing}, where impurities or air bubbles are pushed inwards along the freezing boundaries until they merge in the center. \cite{rongenswedishcamera} After completing the freeze-in process, no long-term changes have been observed from 2010 to 2018. \cite{instrumentation, camera2010, camera2018}
 
-- camera suggests two hole-ice components: clear outer region, central column of small scattering length about 16cm diameter \cite{rongenswedishcamera,instrumentation}
-- cylindrical freezing: impurities or air bubbles are pushed along the freezing boundaries until they merge in the center \cite{rongenswedishcamera}
+In this study, when needing to differenciate between the different components of the hole ice, the outer clear component will be called \textit{drill-hole ice}, or \textit{drill-hole column}. The inner component with a shorter scattering length will be called \textit{bubble column}. Note, however, that there is no established nomenclature in the context of \icecube publications, yet.
 
-- 68 boreholes, approx 60cm diameter to depth of 250m using hot water drilling\cite{instrumentation}
-- instrumentation deployed into the water-filled holes, becoming frozen in place and optically coupled with the surrounding sheet \cite{instrumentation}
-- produce hole 48h, freezing about 2weeks \cite{instrumentation}
-
-- camera deployed to monitor the freeze-in process and optical properties of drill hole. Two video cameras in separate spheres, each also equipped with four LEDs and three lasers. \cite{instrumentation}
-- drill hole completely refrozen after 15 days \cite{instrumentation}
-- clear outer layer and central core of about 16cm diameter with smaller scattering length than bulk ice\cite{instrumentation}
-- no long-term changes have been observed \cite{instrumentation}
+In this study, the hole-ice columns will be modeled as cylinders. More complicated geometries such as accounting for the inevitable swinging of the drilling head, or pressure effects that could lead to a vertial gradient in the properties of the hole ice, are not subject of this study.\followup
 
