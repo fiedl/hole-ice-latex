@@ -1,0 +1,51 @@
+%!TEX TS-program = ../make.zsh
+
+% \clearpage\maketitle
+% \thispagestyle{empty}
+
+% How to convert the blue sigillum to black:
+%
+%     brew link --overwrite ghostscript
+%
+%     gs -sOutputFile=fau-siegel-schwarz.pdf -sDEVICE=pdfwrite -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH fau-siegel-blau.pdf
+%
+% https://unix.stackexchange.com/a/93971/91720
+
+\makeatletter
+\begin{titlepage}
+  \begin{center}
+  \begin{otherlanguage}{ngerman}
+
+    \LARGE \@title
+
+    \vspace{1cm}
+
+    \large
+
+    Diplomarbeit aus der Physik \medskip
+
+    Vorgelegt von cand. rer. nat. \\ \@author \medskip
+
+    \@date
+
+    \vspace{1cm}
+    \includegraphics[width=5cm, decodearray={0.2 0.5}]{img/fau-siegel-schwarz}
+    \vspace{1cm}
+
+    Friedrich-Alexander-Universität Erlangen-Nürnberg \medskip
+
+    Physikalisches Institut \medskip
+
+    Prof. Dr. Uli Katz \medskip
+
+    Dr. Thorsten Glüsenkamp
+
+
+
+  \end{otherlanguage}
+  \end{center}
+\end{titlepage}
+\makeatother
+
+
+
