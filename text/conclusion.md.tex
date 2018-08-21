@@ -3,40 +3,27 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-- Key results
-- Outlook
-- Detector Calibration Can/Cannot (?) Be Improved by Simulating Local Ice Properties Like Hole Ice
-- Suggested Follow-up Studies
-  - Flasher studies to find hole-ice parameters
+This study presents a method to simulate the propagation of photons through the hole ice (section \ref{sec:hole_ice}) of the \icecube neutrino observatory as extension to the standard \clsim (section \ref{sec:tools}) photon propagation simulation software.
 
-- this study
-- direct hole-ice proapgation
-- nested cylinders
-- individual dom displacement relative to hole ice
-- cables
-- direct detection
-- this means more calibration parameters
-- and minor effects like effective reflection
-- in bulk ice same propagation
-- but shielding of the doms for strong hole-ice parameters
+Two algorithms are presented to accomplish this task (sections \ref{sec:algorithm_a} and \ref{sec:algorithm_b}) where the latter is more suited to model the current understanding of the hole ice, but requires future re-implementation of the ice-layer-tilt and the ice-anisotropy features (section \ref{sec:ice_features_not_considered}). The validity of the algorithms is supported by unit tests and a series of cross checks (section \ref{sec:unit_tests_and_cross_checks}).
 
-- what to do with it
-  - individual dom positions
-  - individual hole-ice columns: position, radius, absorption length, scattering length
-  - nested cylinders
-  - cables
+The new algorithm allows to simulate hole-ice cylinders with different absorption lengths, scattering lengths (section \ref{sec:vary_sca}), and radii (section \ref{sec:vary_radius}). The optical modules can be positioned with individual displacements relative to the hole ice (section \ref{sec:cylinder_shift}). The algorithm supports the nesting of several hole-ice cylinders of different properties (section \ref{sec:nested_cylinders}) and the simulation of light-absorbing cables (section \ref{sec:cables}). Optical modules support direct detection (section \ref{sec:direct_detection}) and thereby can accept photon hits based on whether the photon hit the sensitive area of the optical module rather than based on the impact angle.
 
-- simulations with cable, bc, flasher, to see if hole ice is needed to explain flasher calibration data
-- especially if cable can account for h2 model
+The methods presented in this study allow for additional calibration parameters such as the hole-ice positions, the hole-ice radius and the hole-ice scattering length. An example on how to implement a flasher-calibration analysis with these parameters is presented in section \ref{sec:flasher}.
 
-- effective reflection
+Light propagation through the bulk ice of the \icecube detector is largely uneffected by the hole ice. But each photon that is detected by the optical modules, and every photon that is emitted by the calibration LEDs, needs to propagate through the hole ice and is effected by the properties of the hole ice.
 
-- need to quantify effect on detector precision
+Depending on the hole-ice properties, the optical modules are effectively shielded by the hole ice. A fraction of the photons is absorbed during the random walk through the hole ice, or effectively reflected by the hole ice (section \ref{sec:scattering_simulation}). If the optical modules are not perfectly centered within the hole ice, the magnitude of this effect depends on the azimuthal direction, which is also suggested by the existing calibration data (\ref{sec:flasher}).
 
-- in bulk ice same properties, but effective shielding of the doms via hole ice
+Simulating a light-absorbing cable next to the optical modules can account for some of the expected hole-ice effects (section \ref{sec:cables}). The azimuthal position of the main cable relative to each optical module represents another set of calibration parameters.
 
-- current approximation curve represents hole-ice parameters
-- when different hole-ice from other studies, e.g. ... from spicehd, new effective angular-acceptance curves need to be produced with \ppc or \clsim
-- for high-energy studies, approximation curves can be used
-- for low-statistics studies, direct simulation can reduce systematics
+Considering these effects, follow-up studies need to fit the new calibration parameters, especially the positions of the hole-ice cylinders relative to the positions of the optical modules, the radii of the hole-ice cylinders, the scattering length of the hole ice, and the position of the main cable relative to the optical module, to calibration data.
+
+Hole-ice effects on the detection of photons by \icecube's optical modules can be approximated using modified angular-acceptance curves as acceptance criterion of the optical modules (section \ref{sec:a_priori_curve}). Approximation curves currently in use correspond to hole-ice cylinders of the same size as the optical modules (radius about $16\cm$), and an effective scattering length of about $1\m$ (section \ref{sec:parameter_scan}).
+
+To account for the effect of hole ice suggested by other studies such as \noun{SpiceHD} (section \ref{sec:spicehd_parameters}), new approximation curves need to be produced using either \ppc or \clsim.
+
+For studies concentrating on events with many photons being detected by many different optical modules, the approximation curves are a suitable method for accounting for the effects of the hole ice, especially if considering simulation performance (section \ref{sec:performance}).
+
+For studies with less statistics and only a few optical modules involved, the direct propagation simulation of photons through the hole ice can reduce systematic uncertainties. Follow-up studies need to quantify the gain in detector precision by using this new simulation method.
 
