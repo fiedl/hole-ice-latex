@@ -3,12 +3,30 @@
 \subsection{List of Abbreviations}
 
 \begin{tabelle}{lL}
+  \clsim & OpenCL-based photon-tracking simulation using a (source-based) ray tracing algorithm modeling scattering and absorption of light in the deep glacial ice at the South Pole or Mediterranean sea water. See \cite{clsimreadme, clsimsource}. \\
   DOM & Digital Optical Module, primary instrumentation and detection unit in \icecube, see section \ref{sec:doms}. \\
+  H0 & Hypothesis stating that no hole ice exists in the \icecube detector. See \cite{yag}. \\
+  H1 & Hypothesis stating that hole ice exists in the \icecube detector with a hole-ice radius of $30\cm$, filling the entire drill hole, and a geometric hole-ice scattering length of $100\cm$. See \cite{yag}. \\
+  H2 & Hypothesis stating that hole ice exists in the \icecube detector with a hole-ice radius of $30\cm$, filling the entire drill hole, and a geometric hole-ice scattering length of $50\cm$. See \cite{yag}. \\
+  H3 & Hypothesis stating that hole ice exists in the \icecube detector with a hole-ice radius of $30\cm$, filling the entire drill hole, and a geometric hole-ice scattering length of $30\cm$. See \cite{yag}. \\
+  H4 & Hypothesis stating that hole ice exists in the \icecube detector with a hole-ice radius of $30\cm$, filling the entire drill hole, and a geometric hole-ice scattering length of $10\cm$. See \cite{yag}. \\
+  LED & Light-emitting diode, part of \icecube's flasher calibration system, see section \ref{sec:flasher}. \\
+  \ppc & photon propagation code. A photon-propagation simulation software. See \cite{ppcpaper, ppcsource, ppcforhumans}. \\
   PMT & Photo Multiplier Tube, instrument to detect light, component of \icecube's optical modules, see section \ref{sec:doms}. \\
-  LED & \todo{} \\
-  YAG & \todo{} \\
-  \ppc & \todo{} \\
-  \clsim & \todo{} \\
+  YAG & Yttrium-Aluminium-Garnet, synthetic material, used as laser medium in ice studies, see section \ref{sec:yag_h2_parameters}. \\
+\end{tabelle}
+
+\subsection{List of Quantities}\nopagebreak
+
+\begin{tabelle}{lL}
+  $\lambda\sca$ & geometric scattering length, in general or within the bulk ice, see section \ref{sec:scattering}. \\
+  $\lambda\sca\hi$ & geometric scattering length within the hole ice. \\
+  $\lambda\esca$ & effective scattering length, in general or within the bulk ice, $\lambda\esca = \frac{\lambda\sca}{1 - \meancostheta}$, see section \ref{sec:scattering}. \\
+  $\lambda\esca\hi$ & effective scattering length within the hole ice, $\lambda\esca\hi = \frac{\lambda\sca\hi}{1 - \meancostheta}$. \\
+  $\lambda\abs$ & absorption length, in general or within the bulk ice, see section \ref{sec:scattering}. \\
+  $\lambda\abs\hi$ & absorption length within the hole ice. \\
+  $r$ & radius of the hole-ice cylinder, see section \ref{sec:hole_ice}. \\
+  $r\dom$ & radius of \icecube's digital optical modules (DOMs), see section \ref{sec:doms}. \\
 \end{tabelle}
 
 
@@ -30,6 +48,7 @@
   $\ns$ & nanosecond, $10^{-9}\unit{s}$ \\
 \end{tabelle}
 
+\newpage
 \paragraph{Units of Energy} \mbox{}
 
 \begin{tabelle}{lL}
@@ -39,6 +58,7 @@
   $\TeV$ & tera electron volt, $10^{12}\unit{eV}$ \\
   $\PeV$ & peta electron volt, $10^{15}\unit{eV}$ \\
 \end{tabelle}
+\vfill
 
 \subsection{List of Mathematical Symbols}
 
