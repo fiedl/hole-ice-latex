@@ -41,13 +41,15 @@ In the loop over the different media along the photon's direction, the algorithm
 
 The flow chart of the whole media loop is shown in figure \ref{fig:nimuriX4}. The flow chart for the calculation of one medium's contribution is shown separately in figure \ref{fig:eewoo3Be}.
 
-\begin{figure}[htbp]
-  \image{algorithm-media-loop-2018}
+\begin{figure}[p]
+  \resizebox{\textwidth}{!}{%
+    \input{img/algorithm-media-loop-2018-tikzpicture}
+  }
+  \vspace*{5mm}
   \caption{Flow chart of the part of the new media-propagation algorithm that loops over list of media and calculates geometrical distances to the next scattering point and to the absorption point.}
   \label{fig:nimuriX4}
 \end{figure}
 
-\todo{In figure \ref{fig:nimuriX4}, replace "see fig." with the correct reference.}
 % \todo{In figure \ref{fig:nimuriX4}, it is not clear how the media loop determines the last medium: Does the photon scatter or be absorbed in this medium?}
 
 \begin{figure}[htbp]

@@ -6,77 +6,10 @@
 % http://www.texample.net/tikz/examples/android/
 %
 \documentclass[tikz,border=10pt]{standalone}
+
 \input{lib/common}
 \input{lib/flow_charts}
-\input{lib/dice_symbols}
 
 \begin{document}
-\begin{tikzpicture}
-  [
-    %scale=1,
-    node distance = 1.8cm,
-    every node/.style = {fill=white, font=\sffamily},
-    align = center
-  ]
-
-  % Nodes
-  \newcommand\process[3]{\node(#1)[process, #3]{#2}}
-  \newcommand\decision[3]{\node(#1)[decision, #3]{#2}}
-  \node(start)[start]{Start};
-  \decision{boundaryleft}{Medium\\boundary left\\?}{below = 2cm of start};
-
-  \process{next}{Take next medium boundary}{right = 4cm of boundaryleft};
-  \process{scadistance}{Calculate contribution of this medium\\up to the next medium boundary\\to the geometrical distance to the\\next \textbf{scattering} point}{below of = next};
-  \process{absdistance}{Calculate contribution of this medium\\up to the next medium boundary\\to the geometrical distance to \textbf{absorption}}{below = 5mm of scadistance};
-
-  \process{spendrestsca}{Calculate contribution of the last medium\\to the geometrical distance to the next scattering point}{below = 5cm of boundaryleft};
-  \process{spendrestabs}{Calculate contribution of the last medium\\to the geometrical distance to absorption}{below of = spendrestsca};
-
-  \decision{ifabsorbed}{Distance to\\absorption reached\\?}{below = 5mm of spendrestabs};
-  \process{propagateonlytoabs}{Only propagate to the absorption point}{right = 2.5cm of ifabsorbed};
-
-  \node(return)[stop, below = 2cm of ifabsorbed]{Return};
-
-  % % Comments
-  \newcommand\comment[2]{\node ()[substeps, right = 1mm of #1]{#2}}
-  \comment{start}{
-    \substep number of scattering lengths left to next scattering point\\
-    \substep number of absorption lengths left to absorption\\
-    \substep list of media. Each: distance to medium boundary, local scattering lenght, local absorption length
-  };
-  \comment{return}{
-    \substep geometrical distance to next scattering point\\
-    \substep geometrical distance to absorption
-  };
-
-  % Curly braces
-  \draw [decorate, decoration={brace,amplitude=10pt,raise=4pt}, yshift=0pt]
-  (absdistance.west) -- +(0,2.5) node [midway,xshift=-1.5cm] {See fig. ...};
-
-
-  % Arrows
-  \newcommand\connect[2]{\draw[->](#1)--(#2)}
-  \connect{start}{boundaryleft};
-  \connect{boundaryleft}{next};
-  \connect{next}{scadistance};
-  \connect{scadistance}{absdistance};
-  \draw [->] (absdistance) |- +(5,-1.5) |- (0,-1.5);
-
-  \connect{boundaryleft}{spendrestsca};
-
-  \connect{spendrestsca}{spendrestabs};
-  \connect{spendrestabs}{ifabsorbed};
-  \connect{ifabsorbed}{propagateonlytoabs};
-  \draw [->] (propagateonlytoabs) |- (0,-18.5);
-
-  \connect{ifabsorbed}{return};
-
-  % YES/NO labels
-  \node () [right = 1mm of boundaryleft, yshift = 3mm] {YES};
-  \node () [below = -1mm of boundaryleft, xshift = -5mm] {NO};
-
-  \node () [right = 1mm of ifabsorbed, yshift = 3mm] {YES};
-  \node () [below = -1mm of ifabsorbed, xshift = -5mm] {NO};
-
-\end{tikzpicture}
+  \input{algorithm-media-loop-2018-tikzpicture}
 \end{document}
