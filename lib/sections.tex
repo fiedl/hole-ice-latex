@@ -13,7 +13,7 @@
 % https://de.wikibooks.org/wiki/LaTeX-Wörterbuch:_chaptermark
 %
 \newcommand\preparesectionmarks{
-  \renewcommand\sectionmark[1]{\renewcommand\currentsection{##1}}
+  \renewcommand\sectionmark[1]{\renewcommand\currentsection{##1}\renewcommand\currentsubsection{}}
   \renewcommand\subsectionmark[1]{\renewcommand\currentsubsection{##1}}
   \renewcommand\subsubsectionmark[1]{\renewcommand\currentsubsubsection{##1}}
 }
