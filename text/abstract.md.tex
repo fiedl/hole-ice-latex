@@ -1,0 +1,46 @@
+%!TEX TS-program = ../make.zsh
+
+\thispagestyle{empty}
+\begin{abstract}
+
+- \icecube is a neutrino observatory at Earth's South Pole that uses glacial ice as detector medium where particles from neutrino interactions produce light as they move through the ice, which then is detected by an array of photon detectors deployed within the ice.
+
+- aiming to improve detector calibration and thereby the observatory's precision
+- this study
+- two algorithms / methods to
+- simulate propagation of light through hole ice
+- refrozen water in drill holes in the glacial ice
+- adding several more calibration parameters to ice models
+
+- validity supported by unit tests and series of cross checks
+
+- examples of application
+- simulation of one or several hole-ice cylinders with different properties
+- simulation of shadowing cables
+- calibration method using \icecube's LED flasher calibration system
+
+- light propagation through bulk ice largely uneffected
+- each photon detected and emitted by led
+- needs to propagate through hole ice and effected by its properties
+
+- depending on properties, optical modules are effectively shielded
+- a fraction absorbed
+- effectively reflexted
+- if optical modules not perfectly centered, magnitude depends on azimuthal direction of incoming photons
+- in agreement with calibration data
+
+- Simulating a light-absorbing cable next to the optical modules can account for some of the expected hole-ice effects
+
+- simulation methods agree with other study (ppc)
+
+
+Hole-ice effects on the detection of photons by IceCube’s optical modules can be approximated using modified angular-acceptance curves as acceptance criterion of the optical modules (section 7.1.1). Approximation curves currently in use correspond to hole-ice cylinders of the same size as the optical modules (radius about 16 cm), and an effective scattering length of about 1 m (section 6.3).
+
+To account for the effect of hole ice suggested by other studies such as SpiceHD (section 7.2.3), new approximation curves need to be produced using either ppc or
+clsim.
+
+For studies concentrating on events with many photons being detected by many different optical modules, the approximation curves are a suitable method for accounting for the effects of the hole ice, especially if considering simulation performance (section 7.3).
+For studies with less statistics and only a few optical modules involved, the direct propagation simulation of photons through the hole ice can reduce systematic uncertainties. Follow-up studies need to quantify the gain in detector precision by using this new simulation method.
+
+
+\end{abstract}
