@@ -36,7 +36,7 @@ The propagation algorithm can be made more efficient by moving the photon in eac
 
 In \icecube's standard photon propagation algorithm, a propagation step moves the photon not just by a small, fixed distance $\delta x$ but to the next interaction point at once. An interaction may be the photon scattering within the ice, the photon being absorbed by the ice, or the photon hitting an optical module. \cite{clsimsource, ppcpaper}
 
-At each scattering point, the algorithm randomizes the new photon direction based on the scattering angle distribution, and how far the photon will travel until it is scattered again.
+At each scattering point, the algorithm randomizes the new photon direction based on the scattering angle distribution, and how far the photon will travel until it is scattered again based on the scattering length.
 
 How far the photon will travel until it is absorbed is randomized just once when the photon is created.
 
@@ -60,9 +60,9 @@ Assuming the number of calculations in each scattering step is of the same order
 
 Propagating a photon through several media with different properties, that is to say different interaction probabilities, is more involved in this algorithm than in the basic one.
 
-If the algorithm calculates the distance to the next interaction point considering only the interaction properties of the ice at the current position of the photon as suggested by the basic algorithm, then the next interaction point would be calculated inaccurately if the medium properties change between two interaction points. The larger the scattering length gets in relation to the size of the ice areas with constant interaction properties the worse the inaccuracies become.
+If the algorithm calculates the distance to the next interaction point considering only the interaction properties of the ice at the current position of the photon as suggested by the basic algorithm, then the next interaction point would be calculated inaccurately if the medium properties change between two interaction points. The larger the scattering length gets compared to the size of the ice areas with constant interaction properties, the worse the inaccuracies become.
 
-This can be illustrated by an extreme example where the scattering length within the bulk ice is several meters long, but the photon would hit a cable with a diameter of only a couple of centimeters between two scattering points. The cable would absorb the photon at once. But if the next interaction point is calculated evaluating only the interaction properties at the position of the current scattering point, then the photon ignores the cable and continues on its path without being absorbed by the cable.
+This can be illustrated by an extreme example where the scattering length and the absorption length within the bulk ice are several meters long, but the photon would hit a cable with a diameter of only a couple of centimeters between two scattering points. The cable would absorb the photon at once. But if the next interaction point is calculated evaluating only the interaction properties at the position of the current scattering point, then the photon ignores the cable and continues on its path without being absorbed by the cable.
 
 The solution to this problem chosen for the standard propagation algorithm in \icecube is to implement medium transitions in the following manner:
 
@@ -75,7 +75,7 @@ Suppose, starting at interaction point $A$, the photon travels in $m :\in \natur
   \label{eq:convertbudgettodistance}
 \end{equation}
 
-Each distance $x_i$ is the length of the trajectory the photon spends in medium $M_i$. The first distance $x_1$ is the distance from the starting point $A$ to the medium border of $M_1$ and $M_2$ along the photon direction. The subsequent distances $x_i$ are the distances of the first medium border of $M_{i-1}$ and $M_i$ and the second medium border of $M_i$ and $M_{i+1}$ respectively along the photon direction. The last distance $x_m$ is determined by how much of the budget $N$ is left in the last medium, $x_m = n_m\,\lambda_m$, such that the overall budget $N:=\sum_{i=1}^m n_i$ is spent.
+Each distance $x_i$ is the length of the trajectory the photon spends in medium $M_i$. The first distance $x_1$ is the distance from the starting point $A$ to the medium border of $M_1$ and $M_2$ along the photon direction. The subsequent distances $x_i$ are the distances of the first medium border (of $M_{i-1}$ and $M_i$) and the second medium border (of $M_i$ and $M_{i+1}$) respectively along the photon direction. The last distance $x_m$ is determined by how much of the budget $N$ is left in the last medium, $x_m = n_m\,\lambda_m$, such that the overall budget $N:=\sum_{i=1}^m n_i$ is spent.
 
 Coming back to the extreme example where a cable lies ahead on the photon path, the algorithm now considers all media on the path along the photon direction in order to convert the number of interaction lengths into a geometrical distance to the interaction point. As the absorption length within the cable's medium is set to zero, all of the absorption-length budget is spent at the medium border to the cable, resulting in the final interaction point of the photon being right at the point where the photon enters the cable. Thus, this algorithm lets the photon be absorbed by the cable as intended.
 
