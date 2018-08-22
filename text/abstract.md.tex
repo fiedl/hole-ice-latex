@@ -1,46 +1,25 @@
 %!TEX TS-program = ../make.zsh
 
+\cleardoublepage
 \thispagestyle{empty}
 \begin{abstract}
 
-- \icecube is a neutrino observatory at Earth's South Pole that uses glacial ice as detector medium where particles from neutrino interactions produce light as they move through the ice, which then is detected by an array of photon detectors deployed within the ice.
+\icecube is a neutrino observatory at Earth's South Pole that uses glacial ice as detector medium where particles from neutrino interactions produce light as they move through the ice, which then is detected by an array of photo detectors deployed within the ice.
 
-- aiming to improve detector calibration and thereby the observatory's precision
-- this study
-- two algorithms / methods to
-- simulate propagation of light through hole ice
-- refrozen water in drill holes in the glacial ice
-- adding several more calibration parameters to ice models
+Aiming to improve detector calibration and thereby the observatory's precision, this study introduces methods to simulate the propagation of light through the \textit{hole ice}, which is the refrozen water in the drill holes that were needed to deploy the detector modules, adding several more calibration parameters to ice models.
 
-- validity supported by unit tests and series of cross checks
+The validity of the method is supported by unit tests, a series of cross checks, and by comparing simulation results to results gained from other studies.
 
-- examples of application
-- simulation of one or several hole-ice cylinders with different properties
-- simulation of shadowing cables
-- calibration method using \icecube's LED flasher calibration system
+As examples of application, this study implements the simulation of one or several hole-ice cylinders with different properties such as position, size, scattering length, and absorption length, the simulation of shadowing cables, and a calibration method using \icecube's light-emitting diode flasher calibration system.
 
-- light propagation through bulk ice largely uneffected
-- each photon detected and emitted by led
-- needs to propagate through hole ice and effected by its properties
+Whereas light propagating through the bulk ice is largely uneffected, the detector modules and the flasher system located within the hole ice are effectively shielded, because a fraction of the light is absorbed and another fraction reflected by the hole ice. For detector modules displaced within the hole ice, the magnitude of this effect depends on the azimuthal direction, which is in agreement with calibration data.
 
-- depending on properties, optical modules are effectively shielded
-- a fraction absorbed
-- effectively reflexted
-- if optical modules not perfectly centered, magnitude depends on azimuthal direction of incoming photons
-- in agreement with calibration data
+Simulating a light-absorbing cable next to the detector modules instead of a hole-ice cylinder can account for some of the observed effects, but not all of them, making a hole ice different from the bulk ice necessary to explain calibration data.
 
-- Simulating a light-absorbing cable next to the optical modules can account for some of the expected hole-ice effects
+Hole-ice effects on the detection of light by \icecube's detector modules can be approximated using modified angular-acceptance criteria for the simulated detector modules. The approximations currently in use correspond to simulated hole-ice cylinders of about $30\cm$ diameter and about $1\m$ effective scattering length.
 
-- simulation methods agree with other study (ppc)
+For studies involving events with many photons and many different detector modules such as high-energy muon-track signature events, this approximation method is suitable, especially when considering simulation performance. To account for the effect of hole-ice models suggested by current studies, however, new approximation curves are required to replace the ones currently in use.
 
-
-Hole-ice effects on the detection of photons by IceCube’s optical modules can be approximated using modified angular-acceptance curves as acceptance criterion of the optical modules (section 7.1.1). Approximation curves currently in use correspond to hole-ice cylinders of the same size as the optical modules (radius about 16 cm), and an effective scattering length of about 1 m (section 6.3).
-
-To account for the effect of hole ice suggested by other studies such as SpiceHD (section 7.2.3), new approximation curves need to be produced using either ppc or
-clsim.
-
-For studies concentrating on events with many photons being detected by many different optical modules, the approximation curves are a suitable method for accounting for the effects of the hole ice, especially if considering simulation performance (section 7.3).
-For studies with less statistics and only a few optical modules involved, the direct propagation simulation of photons through the hole ice can reduce systematic uncertainties. Follow-up studies need to quantify the gain in detector precision by using this new simulation method.
-
+For events with less photon statistics involving only few detector modules, the direct hole-ice propagation simulation can reduce systematic uncertainties, which, however, need to be quantified by follow-up studies.
 
 \end{abstract}
