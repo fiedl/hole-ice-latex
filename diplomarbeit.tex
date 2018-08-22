@@ -34,13 +34,16 @@
 
 \bibliography{diplomarbeit}
 \begin{document}
+
+  \pagestyle{empty}
   \input{config/titlepage}
   \input{config/second_titlepage}
 
-  \cleardoublepage
   \include{text/abstract}
+  \include{text/zusammenfassung}
 
   \cleardoublepage
+  \pagestyle{fancy}
   \setcounter{tocdepth}{2}
   \tableofcontents
 
