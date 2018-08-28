@@ -6,9 +6,7 @@
 \begin{document}
 
 \begin{tikzpicture}
-  \begin{scope}[scale=0.5,xshift=-23,yshift=320]
-    \duck
-  \end{scope}
+  \Huge
   \draw[black]
     (10,6) circle (4.45)
     (9,6) circle (4)
@@ -39,10 +37,10 @@
   \draw[thick,rotate=-26.5,black,<-]   (4.6,4.55) -- ++(0,0.8);
   \draw[thick,rotate=-26.5,black,<-]   (6.6,4.55) -- ++(0,0.8);
   \draw[thick,rotate=-26.5,black,<-]   (8.6,4.55) -- ++(0,0.8);
-  \node at (9.35,6.4) {\Large $\phi$};
+  \node at (9.35,6.4) {$\phi$};
 
   \draw[thick,<--] (-2,6) -- (0,6);
-  \node (p) at (-1,5.5) [black] {charged particle}
+  \node (p) at (-3,5.5) [black] {charged particle}
 \end{tikzpicture}
 
 \end{document}

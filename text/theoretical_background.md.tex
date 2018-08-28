@@ -36,14 +36,14 @@ The primary interaction channel for detecting neutrinos in \icecube is deep-inel
   \centering
   \subcaptionbox{Neutral-current neutrino interaction through $\PZz$ bosons.}{\includegraphics[width=0.3\textwidth]{img/feynman-neutral}\vspace*{2mm}}\hspace{1cm}
   \subcaptionbox{Charged-current neutrino interactions through $\PWpm$ bosons.}{\includegraphics[width=0.3\textwidth]{img/feynman-charged}}
-  \caption{Feynman diagrams showing neutrinos $\Pnulepton$ interacting with quarks $\Pquark$ of nuclei of the ice or nearby rock through $\PZz$ and $\PWpm$ bosons, producing leptons $\Plepton$---that is to say electrons $\Pe$, muons $\Pmu$, tau particles $\Ptau$---and quarks. Time evolves to the right in these diagrams.}
+  \caption{Feynman diagrams showing neutrinos $\Pnulepton$ interacting with quarks~$\Pquark$ of nuclei of the ice or nearby rock through $\PZz$ and $\PWpm$ bosons, producing leptons~$\Plepton$ (electrons~$\Pe$, muons~$\Pmu$, tau particles~$\Ptau$) and quarks. Time evolves to the right in these diagrams.}
   \label{fig:Phei1oob}
 \end{figure}
 
-These interactions lead to three different kind of event signatures in the \icecube detector.
+These interactions lead to three different kind of event signatures in the \icecube detector, visualized in figure \ref{fig:eeQuaef6}.
 
 \paragraph{Shower- or Cascade-Like Events}
-In both, interactions through $\PZz$ bosons (\textit{neutral-current interactions}) and through $\PWpm$ bosons (\textit{charged-current interactions}), hadronic showers, that is to say cascades of secondary particles, are created as energy is transferred from the incoming neutrino to the outgoing quark. If the outgoing lepton is an electron, this may also create an accompanying electromagnetic shower. \cite{energyreco}
+In both, interactions through $\PZz$ bosons (\textit{neutral-current interactions}) and through $\PWpm$ bosons (\textit{charged-current interactions}), hadronic showers are created as energy is transferred from the incoming neutrino to the outgoing quark. Hadronic showers are particle cascades originating from hadron particles. If the outgoing lepton is an electron, this may also create an accompanying electromagnetic shower, which is a particle cascade originating from particles primarily interacting through the electromagnetic interaction. \cite{energyreco}
 
 \begin{align*}
   & \text{neutral current:} & \Pnulepton + \text{nucleon} & \rightarrow \Pnulepton + \text{hadron} \ \ \ \ \ \ \Plepton \in \{ \Pe, \Pmu, \Ptau \}                             & \\
@@ -53,7 +53,7 @@ In both, interactions through $\PZz$ bosons (\textit{neutral-current interaction
 \end{align*}
 
 \paragraph{Track-Like Events}
-If the outgoing lepton is a muon, this creates track-like event signatures as muons travel long distances. TeV muons may travel several kilometers in the antarctic ice, while light is emitted along the track. \cite{skysearch, mmc}
+If the outgoing lepton is a muon, this creates track-like event signatures as muons travel long distances. TeV muons may travel several kilometers in the antarctic ice. \cite{skysearch, mmc}
 
 \begin{align*}
   & \text{charged current:} & \Pnum + \text{nucleon}      & \rightarrow \Pmu + \text{hadron}                                    & \\
@@ -61,15 +61,13 @@ If the outgoing lepton is a muon, this creates track-like event signatures as mu
 \end{align*}
 
 \paragraph{Double-Bang Events}
-If the outgoing lepton is a tau, the tau will create a track, but the track will only be a couple of meters long, before the tau, which has sufficient mass, decays into another hadronic shower, creating a so-called \textit{double-bang signature}, that is to say two hadronic showers joined by a short track. \cite{skysearch, energyreco, particledatareview}
+If the outgoing lepton is a tau, the tau will create a track. But the track will only be a couple of meters long as the tau then decays into another hadronic shower. This creates a so-called \textit{double-bang signature}, where two hadronic showers are joined by a short track. The shorter the joining track is, the more similar the event looks to a single-cascade-like event. \cite{skysearch, energyreco, particledatareview}
 
 \begin{align*}
   & \text{charged current:} & \Pnut + \text{nucleon}      & \rightarrow \Ptau + \text{hadron}                                   & \\
   &                         &                             & \rightarrow \text{tau track} + \text{hadronic shower}               & \\
   &                         &                             & \rightarrow \text{hadronic shower} + \text{hadronic shower}         & \\
 \end{align*}
-
-The event signatures, how they appear in the \icecube detector, are visualized in figure \ref{fig:eeQuaef6}.
 
 \begin{figure}[htbp]
   \centering
@@ -94,12 +92,21 @@ $$
 
 $n$ is the refractive index of the medium, $c'$ the speed of light within the medium, $c$ the speed of light in vacuum.
 
-The virtual photon field of the charged particle moving through the medium polarizes the atoms in the medium. Each resulting electric dipole is a source of electromagnetic radiation. But as each dipole arranges towards the charged particle, integrating over the whole spatial sphere around the charged particle, the net emitted radiation vanishes if the charged particle's velocity $v$ is smaller than the speed of light $c'$ in the medium. For higher velocities, the coulomb field of the charged particle can only polarize the atoms within a cone with an opening angle of $2\phi$, the \textit{Cherenkov cone}, resulting in a net photon emission perpendicular to the surface of the cone. \cite{physiklexikon}
+The virtual photon field of the charged particle moving through the medium polarizes the atoms in the medium. Each resulting electric dipole is a source of electromagnetic radiation. But as each dipole arranges towards the charged particle, integrating over the whole spatial sphere around the charged particle, the net emitted radiation vanishes if the charged particle's velocity $v$ is smaller than the speed of light $c'$ in the medium. For higher velocities, the Coulomb field of the charged particle can only polarize the atoms within a cone with an opening angle of $2\phi$, the \textit{Cherenkov cone}, resulting in a net photon emission perpendicular to the surface of the cone. \cite{physiklexikon}
 
-Per GeV of secondary particle shower energy within the detector, an order of $10^5$ visible Cherenkov photons are created. \cite{instrumentation}
+The spectral distribution of Cherenkov photons is given by equation \ref{eq:cherenkovspectrum}. A particle with $\pm z$ elementary charges that travels a distance $\d x$ emits $\d N$ Cherenkov photons with a wavelength range of $[\nu; \nu + \d\nu]$. $\alpha$ is the fine structure constant. \cite{katz2012}
+As $\d N \propto \sfrac{1}{\nu^2}$, the spectrum prefers photons with shorter wavelengths $\nu$.
+
+\begin{equation}
+  \frac{\d N}{\d x\,\d\nu} = \frac{2\pi\,\alpha\,z^2}{\nu^2}\cdot
+  \left( 1 - \frac{1}{\beta^2\,n^2} \right)
+  \label{eq:cherenkovspectrum}
+\end{equation}
+
+Per GeV of secondary particle shower energy within the detector, an order of $10^5$\nbsp visible Cherenkov photons are created. \cite{instrumentation}
 
 \begin{figure}[htbp]
-  \centering\includegraphics[width=0.3\textwidth]{img/cherenkov}
+  \centering\includegraphics[width=0.5\textwidth]{img/cherenkov}
   \caption{Visualization of the \textit{Cherenkov cone}: A charged particle moves through a medium with a velocity $v>c'$ greater than the phase velocity $c'$ of light within this medium. Due to the limited speed of light being smaller than the speed of the charged particle, polarization effects are not isotropic, but \textit{Cherenkov photons} are emitted under an angle $\phi$ relative of the direction of motion of the charged particle.}
   \label{fig:ehai2Ahj}
 \end{figure}
@@ -131,7 +138,6 @@ The South-Polar ice has shown to be preferentially forward scattering with a mea
 % ackermann, paragraph 9
 
 The \textbf{scattering length} $\lambda\sca$, which is also called \textbf{geometric} scattering length, is the mean of the exponentially distributed free path and thereby the average distance between scatterings. \cite{ackermann}
-
 % https://github.com/fiedl/hole-ice-study/issues/52 - Effective scattering length
 A related and often used quantity is the \textbf{effective scattering length} $\lambda\esca$, which is the distance that light needs to propagate through a turbid medium before the photon directions are completely randomized. \cite{lundberg}
 
@@ -154,5 +160,4 @@ Typical effective scattering lengths within the South-Polar ice are in the order
 
 % https://github.com/fiedl/hole-ice-study/issues/51 - point particles
 Light interference effects are ignored during photon propagation as the average distance between the scattering centers is large compared to the photon wavelength. \cite{ackermann}
-
 Also, despite modeling different ice regions with abrupt boundaries in the simulations of this study, the physical boundaries are assumed such that refractive index variations are continuous. Hence reflection at the medium boundaries is ignored in simulations. \cite{lundberg}
