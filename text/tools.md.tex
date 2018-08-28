@@ -1,12 +1,8 @@
 %!TEX TS-program = ../make.zsh
 
-\section{Methods}
-\label{sec:methods}
-
-\subsection{Tools}
 \label{sec:tools}
 
-\subsubsection{\icecube Simulation Framework}
+\subsection{\icecube Simulation Framework}
 
 This study uses the \noun{IceCube Simulation Framework}, short \icesim, in Version `V05-00-07`.
 
@@ -22,7 +18,7 @@ The framework, written in \noun{C++}\footnote{C++ programming language, \url{htt
 \docpar{A guide on how to install the \noun{IceCube Simulation Framework} with all the other tools needed for this study is provided at \url{https://github.com/fiedl/hole-ice-study/blob/master/notes/2018-01-23_Installing_IceSim_in_Zeuthen.md}.}
 
 
-\subsubsection{\clsim}
+\subsection{Photon Propagation With \clsim}
 
 The main tool of this study is the photon-tracking simulation software, \clsim. This software implements a ray-tracing algorithm described in section \ref{sec:standardphotonpropagationalgorithm}, modeling scattering and absorption of light in the deep-glacial ice at the South Pole or in Mediterranean sea water. \cite{clsimreadme}
 
@@ -37,7 +33,7 @@ Written in C++, \noun{Python} and \noun{OpenCL C}\footnote{OpenCL, Open Computin
 \docpar{A guide on how to install the modified version of \clsim can be found in appendix \ref{sec:howtoclsim} and on \url{https://github.com/fiedl/hole-ice-study/blob/master/notes/2018-01-23_Installing_IceSim_in_Zeuthen.md\#install-patched-clsim}.}
 
 
-\subsubsection{\steamshovel}
+\subsection{Photon Visualization With \steamshovel}
 
 \steamshovel (Figure \ref{fig:steamshovel}) is the event and data viewer software of \icecube. It allows to visualize the \icecube detector as well as events that have been recorded, reconstructed or simulated in the detector.
 
@@ -58,7 +54,7 @@ In order to visualize hole ice and propagating photons for this study, several p
 \sourcepar{The required \steamshovel patches are provided within the code repository of this study: \url{https://github.com/fiedl/hole-ice-study/tree/master/patches/steamshovel}}
 
 
-\subsubsection{Other Software Libraries}
+\subsection{Other Software Tools}
 
 In order to process data, to perform statistical analyses, and to plot data, this study uses several supplemantary software libraries, such as \noun{NumPy}\footnote{NumPy package for scientific computing, \url{http://www.numpy.org}}, \noun{Matplotlib}\footnote{Matplotlib plotting library, \url{http://matplotlib.org}} and \noun{Pandas}\footnote{Pandas Python Data Analysis Library, \url{http://pandas.pydata.org}}.
 
