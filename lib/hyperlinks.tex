@@ -4,9 +4,14 @@
 % %\usepackage{xr-hyper}
 
 \usepackage{xcolor}
-\definecolor{citelinkcolor}{rgb}{.23,.57,.23}
+\definecolor{bluelink}{rgb}{.247,.443,.729}
+\definecolor{greenlink}{rgb}{.23,.57,.23}
+\definecolor{redlink}{rgb}{.51,.169,.129}
 
-\usepackage[breaklinks, colorlinks, allcolors=black, citecolor=citelinkcolor]{hyperref}
+\newcommand\defaulthypersetup{\hypersetup{allcolors=black, citecolor=greenlink, linkcolor=bluelink, urlcolor=redlink}}
+%\newcommand\defaulthypersetup{\hypersetup{allcolors=black, citecolor=greenlink, linkcolor=redlink, urlcolor=bluelink}}
+
+\usepackage[breaklinks, colorlinks]{hyperref}\defaulthypersetup
 \usepackage[hyphenbreaks]{breakurl}
 
 % https://tex.stackexchange.com/a/50754/70789
