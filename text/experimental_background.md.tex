@@ -21,12 +21,13 @@ Additional to this \textit{in-ice array}, which is designed to measure neutrinos
 \subsection{Digital Optical Modules (DOMs)}
 \label{sec:doms}
 
-The basic detection unit in \icecube is the \textit{Digital Optical Module} (DOM). It consists of a glass sphere, a 10-inch photo multiplier tube (PMT), processing circuitry, and a flasher board with light-emitting diodes (LEDs) for calibration purposes (figure \ref{fig:aK4raigh}). \cite{instrumentation}
+The basic detection unit in \icecube is the \textit{Digital Optical Module} (DOM).
+Its main components are a photo multiplier tube (PMT), which detects impacting photons, a main electronics board, and a flasher board containing light-emitting diodes (LEDs) for calibration purposes (figure \ref{fig:aK4raigh} a). The DOM's components are contained within a glass sphere with an outer diameter of about $35\cm$ that can withstand high pressures (figure \ref{fig:aK4raigh} b). The space in between is filled with a gel to avoid optical effects at the medium boundaries. \cite{instrumentation}
 
 \begin{figure}[htbp]
-  \subcaptionbox{The main components of the optical module are the photo multiplier tube (PMT), which detects impacting photons, the main electronics board that digitizes the signal and transmits the information to the surface, and the flasher board containing light-emitting diodes (LEDs) for calibration purposes. Image source: \cite{instrumentation}}{\halfimage{dom-components-instrumentation}}\hfill
-  \subcaptionbox{The components of the module are contained within a glass sphere that can withstand high pressures. The space in between is filled with a gel to avoid optical effects at the medium boundaries. Image source: \cite{gallerynoharness}}{\includegraphics[width=0.35\textwidth]{img/DOMNoHarnessWhiteback_lg-gallery-2013}}
-  \caption{Schematic display of a digital optical module (DOM), \icecube's basic detection unit. The module has an outer diameter of about $35\cm$. 5160 of these modules have been deployed in the glacial ice.}
+  \subcaptionbox{Components of the optical module. Image source: \cite{instrumentation}}{\halfimage{dom-components-instrumentation}}\hfill
+  \subcaptionbox{Glass sphere containing the components of the optical module. Image source: \cite{gallerynoharness}}{\includegraphics[width=0.35\textwidth]{img/DOMNoHarnessWhiteback_lg-gallery-2013}}
+  \caption{Schematic display of a digital optical module (DOM), \icecube's basic detection unit.}
   \label{fig:aK4raigh}
 \end{figure}
 
@@ -44,24 +45,24 @@ The optical modules are optimized for detecting Cherenkov light emitted by parti
 
 The ice at the South Pole has exceptional optical properties, because air bubbles shrink and vanish under large pressure, forming a so-called \textit{clathrate hydrate}, where impurities are enclosed inside the ice crystal structure. \cite{rongenswedishcamera}
 
-Using \icecube's LED flasher calibration system, the properties of \icecube's glacial ice have been measured: The average distance to absorption, $\lambda\abs$, the average distance between successive scatters $\lambda\sca$, and the angular distribution of the new direction after scattering. \cite{icepaper}
+Using \icecube's LED flasher calibration system, the properties of \icecube's glacial ice have been measured: The average distance to absorption, $\lambda\abs$, the average distance between successive scatters $\lambda\sca$, and the angular distribution of the new direction after scattering.
 
-The ice has been divided into $z$-layers of an arbitrary thickness of $10\m$. The ice parameters have been fitted for each layer such that the properties are best interpreted as average of their true values over the thickness of the ice layers. \cite{icepaper}
+To fit these parameters for different depths, the ice has been divided into $z$-layers of an arbitrary thickness of $10\m$. The ice parameters have been fitted for each layer such that the properties are best interpreted as average of their true values over the thickness of the ice layers. \cite{icepaper}
 
 
 \paragraph{Scattering}
 The measured effective scattering lengths $\lambda\esca$ range from $5\m$ to $90\m$, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$. The depth dependence of the scattering length is shown in figure \ref{fig:Ahxobai3} (a). \cite{icepaper}
 
 \begin{figure}[htbp]
-  \subcaptionbox{Depth dependence of the effective scattering length $\lambda\esca$. The effective scattering coefficient $b_\text{e}:=\sfrac{1}{\lambda\esca}$ is the inverse effective scattering length.}{\halfimage{icepaper-fig-16-esca}\vspace*{2mm}}\hfill
-  \subcaptionbox{Depth dependence of the absorption length $\lambda\abs$. The absorption coefficient $a:= \sfrac{1}{\lambda\abs}$ is the inverse absorption length.}{\halfimage{icepaper-fig-16-abs}}
-  \caption{Values of the absorption length $\lambda\abs$ and the effective scattering length $\lambda\esca$ for different depths, but for a fixed photon wavelength of $400\nm$. Plot taken from \cite[figure 16]{icepaper}. A detailled data table is given in \cite[table C1]{icepaper}.}
+  \subcaptionbox{Depth dependence of the effective scattering length~$\lambda\esca$ and the effective scattering coefficient~$b_\text{e}:=\sfrac{1}{\lambda\esca}$.}{\halfimage{icepaper-fig-16-esca}\vspace*{2mm}}\hfill
+  \subcaptionbox{Depth dependence of the absorption length~$\lambda\abs$ and the absorption coefficient~$a:= \sfrac{1}{\lambda\abs}$.}{\halfimage{icepaper-fig-16-abs}}
+  \caption{Values of the absorption length $\lambda\abs$ and the effective scattering length $\lambda\esca$ for different depths, but for a fixed photon wavelength of $400\nm$. Plot taken from \cite[figure 16]{icepaper}. A detailed data table is given in \cite[table C1]{icepaper}.}
   \label{fig:Ahxobai3}
 \end{figure}
 
 % - air bubble do not cause absorption, only scattering \cite{absorption1997}
 
-The wavelength dependence is given by equation \ref{eq:escawavelength} \cite[section 4]{icepaper}, where $b_\text{e} := \sfrac{1}{\lambda\esca}$ is the effective scattering coefficient, $\nu$ the photon wave length, and $\alpha$ a global fit parameter. $b_\text{e}(\nu = 400\nm)$ is given by figure \ref{fig:Ahxobai3} (a) and \cite[table C4]{icepaper}. The global parameter $\alpha$ has been fitted to $\alpha = 0.90 \pm 0.03$ \cite[section 5.1]{ackermann}.
+The wavelength dependence is given by equation \ref{eq:escawavelength} \cite[section 4]{icepaper}, where $b_\text{e} := \sfrac{1}{\lambda\esca}$ is the effective scattering coefficient, $\nu$ the photon wavelength, and $\alpha$ a global fit parameter. $b_\text{e}(\nu = 400\nm)$ is given by figure \ref{fig:Ahxobai3} (a) and \cite[table C4]{icepaper}. The global parameter $\alpha$ has been fitted to $\alpha = 0.90 \pm 0.03$ \cite[section 5.1]{ackermann}.
 
 \begin{equation}
   b_\text{e}(\nu) = b_\text{e}(\nu = 400\nm) \cdot \left(\frac{\nu}{400\nm}\right)^{-\alpha}
@@ -99,7 +100,7 @@ The absorption properties of the ice layers follow the dust concentration, which
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.5\textwidth]{img/icepaper-fig-14-layers}
-  \caption{Ice layers along the average gradient direction within the ice. The relief is amplified by a factor of 3 to enhance the clarity of the layer structure. The lowest layer shown exhibits a shift of $56\m$ betweeen its shallowest and deepest points, which is the largest shift of all layers shown in the figure. Plot and caption taken from \cite[figure 14]{icepaper}.}
+  \caption{Ice layers along the average gradient direction within the ice. The relief is amplified by a factor of 3 to enhance the clarity of the layer structure. The lowest layer shown exhibits a shift of $56\m$ between its shallowest and deepest points, which is the largest shift of all layers shown in the figure. Plot and caption taken from \cite[figure 14]{icepaper}.}
   \label{fig:wohr8uaY}
 \end{figure}
 
@@ -139,7 +140,7 @@ The camera observations suggest two hole-ice components, a clear outer region, a
 
 The observed freeze-in process from the outside in is consistent with the model of \textit{cylindrical freezing}, where impurities or air bubbles are pushed inwards along the freezing boundaries until they merge in the center. \cite{rongenswedishcamera} After completing the freeze-in process, no long-term changes have been observed from 2010 to 2018. \cite{instrumentation, camera2010, camera2018}
 
-In this study, when needing to differenciate between the different components of the hole ice, the outer clear component will be called \textit{drill-hole ice}, or \textit{drill-hole column}. The inner component with a shorter scattering length will be called \textit{bubble column}. Note, however, that there is no established nomenclature in the context of \icecube publications, yet.
+In this study, when needing to differentiate between the different components of the hole ice, the outer clear component will be called \textit{drill-hole ice}, or \textit{drill-hole column}. The inner component with a shorter scattering length will be called \textit{bubble column}. Note, however, that there is no established nomenclature in the context of \icecube publications, yet.
 
-In this study, the hole-ice columns will be modeled as cylinders. More complicated geometries such as accounting for the inevitable swinging of the drilling head, or pressure effects that could lead to a vertial gradient in the properties of the hole ice, are not considered in this study.\followup
+In this study, the hole-ice columns will be modeled as cylinders. More complicated geometries such as accounting for the inevitable swinging of the drilling head, or pressure effects that could lead to a vertical gradient in the properties of the hole ice, are not considered in this study.\followup
 
