@@ -119,4 +119,25 @@ Finally, the displacement of the sending optical module within its hole-ice colu
 % https://github.com/fiedl/hole-ice-study/issues/94#issuecomment-413633720
 
 
+\subsection{Comparing Flasher-Calibration Data to a Flasher Simulation With Cable}
+\label{sec:flasher_with_cable}
 
+As shown in section \ref{sec:flasher}, calibration data indicates a strongly asymmetric shadowing effect when flashing the LEDs of a central optical module and measuring the amount of light detected by the surrounding optical modules. This effect may either be caused by the LEDs of the sending optical module being asymmetrically shielded, or by the receiving optical modules in two of the receiving strings being more shielded than in the other receiving strings, or by a combination of the two.
+
+As the main cable at the side of the sending optical module causes asymmetric shielding as shown in section \ref{sec:cables}, the question arises whether the cable shadow is sufficient to account for the asymmetries observed in the flasher calibration data. Figure \ref{fig:neen7Noo} (a) shows a flasher-simulation scenario where an opaque cable with $4\cm$ diameter is placed besides the sending optical module such that it would reduce the emitted light in the direction of the two strings that show a reduced amount of detected light in the calibration data.
+
+\begin{figure}[htbp]
+  \subcaptionbox{Top view of the detector strings with position of the shadowing cable. Image based on \cite{geometry}.}{\halfimage{flasher-scenario-with-cable}}\hfill
+  \subcaptionbox{Amount of light seen by the receiving optical modules. From left to right each peak corresponds to one of the strings 62, 54, 55, 64, 71, and 70.}{\halfimage{flasher-simulation-with-cable-vs-data}}
+  \caption{Flasher-simulation scenario with a shadowing cable besides the sending optical module.}
+  \label{fig:neen7Noo}
+\end{figure}
+
+\docpar{This flasher simulation with shadowing cable is documented in \issue{97}.}
+
+In this flasher simulation, the sending and the receiving optical modules are embedded in a bubble column of a radius of $83\,\%$ of the optical module and an effective bubble-column scattering length of $10\cm$, which are the best-fit parameters of the flasher scan in section \ref{sec:flasher} that only considers the supposedly unshadowed receiving strings 55, 64, 71, and 70. All bubble columns are positioned symmetrically relative to the embedded optical modules, such that the bubble columns only cause an overall reduction, but no azimuthal asymmetry. The distances of the sending optical module to the receiving strings range from $122.0\m$ to $125.4\m$ and average out at $124.5\m$, such that the different distances can only cause a peak reduction of about $2\,\%$.
+% https://github.com/fiedl/hole-ice-study/issues/60#issuecomment-417486136
+Therefore, in this scenario, the shadowing cable is the only remaining candidate to cause the observed peak reduction of about $32\,\%$ observed in the calibration data.
+However, comparing results of the flasher simulation with shadowing cable to the flasher-calibration data (figure \ref{fig:neen7Noo} b) makes it implausible that the shadowing cable alone could be the cause of the azimuthal asymmetry.
+
+Hole ice, on the other hand, is a suitable candidate to account for the observed asymmetric peak reduction. Assuming the entire drill hole being filled with hole ice, varying the effective hole-ice scattering from $60\cm$ to $40\cm$ can cause a peak reduction in the observer magnitude of $30\,\%$. As section \ref{sec:cylinder_shift} has shown that the displacement of the optical modules relative to the hole ice may cause strong asymmetric effects, it is plausible that a displacement of the optical modules relative to a hole ice with suitable optical properties is required to explain the asymmetric effects observed in calibration data.
