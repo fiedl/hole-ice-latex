@@ -2,31 +2,29 @@
 
 \subsection{Propagating Photons Through Different Media}
 
-\subsubsection{Very Basic Photon Propagation Algorithm}
+\subsubsection{Very Basic Photon-Propagation Algorithm}
 
-A first, very basic photon propagation algorithm, which is not actually implemented in \clsim, but is presented as comparative example, moves the photon by a small distance $\delta x$. At the new photon position, the algorithm checks for detection at an optical module and randomizes as a function of the scattering and absorption lengths whether the photon should be scattered or absorbed by the ice at this position. Then, the photon is propagated again by the same small distance $\delta x$. The same loop repeats until the photon either hits an optical module or is absorbed by the ice.
-
+A first, very basic photon-propagation algorithm, which is not actually implemented in \clsim, but is presented as comparative example, moves the photon by a small distance $\delta x$. At the new photon position, the algorithm checks for detection at an optical module and randomizes as a function of the scattering and absorption lengths whether the photon should be scattered or absorbed by the ice at this position. Then, the photon is propagated again by the same small distance $\delta x$. The same loop repeats until the photon either hits an optical module or is absorbed by the ice.
 Figure \ref{fig:ieph6Bie} illustrates a propagation scenario in a two-dimensional coordinate system. Figure \ref{fig:ohsa0miG} presents the algorithm as flow chart.
 
 \begin{figure}[htb]
   \smallerimage{photon-trajectory-naive-ieph6Bie}
-  \caption{Illustration of a basic photon propagation algorithm in a two-dimensional coordinate system. The photon is propagated by a small distance in each propagation step. At each position, the algorithm checks for absorption, scattering and whether an optical module has been hit.}
+  \caption{Illustration of a basic photon-propagation algorithm in a two-dimensional coordinate system. The photon is propagated by a small distance in each propagation step. At each position, the algorithm checks for absorption, scattering and whether an optical module has been hit.}
   \label{fig:ieph6Bie}
 \end{figure}
 
 \begin{figure}[p]
   \image{algorithm-naive-propagation}
-  \caption{Flow chart of a basic photon propagation algorithm. Interfaces, that is to say where the algorithm begins or ends, are displayed as violet pill shapes. Processes, that is to say things the algorithm is doing or calculating, are displayed as brown rounded boxes. Decisions are displayed as green rounded diamond shapes. One propagation step consists of moving the photon by a fixed small distance $\delta x$, checking for detection as well as randomizing scattering and absorption within the ice.}
+  \caption{Flow chart of a basic photon-propagation algorithm. Interfaces, where the algorithm begins or ends, are displayed as violet pill shapes. Processes, where the algorithm performs an operation or a calculation, are displayed as brown rounded boxes. Decisions are displayed as green rounded diamond shapes. One propagation step consists of moving the photon by a fixed small distance $\delta x$, checking for detection as well as randomizing scattering and absorption within the ice.}
   \label{fig:ohsa0miG}
 \end{figure}
 
 This very basic propagation algorithm can handle propagation through different media just by making the scattering and absorption probabilities depend on the current photon position and direction.
-
 Ice layers and ice layer tilt can be implemented by making the scattering and absorption probabilities depend on the current photon position, absorption anisotropy by making the absorption probability depend on the current photon direction as well. Hole-ice cylinders can be implemented by checking whether the current photon position is within any of a list of cylinders defined in any way, either by supplying a list of cylinder coordinates and radii, or by re-using the coordinates of the detector strings.
 
 This basic propagation algorithm, however, is very inefficient regarding computational performance: The algorithm moves the photon over long distances in small steps without changing the direction. For a typical geometric scattering length of two meters, moving the photon in steps of $\delta x = 1\mm$ per propagation step would mean performing 2000 propagation steps before changing the direction of motion.
 
-The propagation algorithm can be made more efficient by moving the photon in each propagation step not by a small distance $\delta x$ but by the whole distance to the next interaction point. This way, the above example would take only one propagation step rather than 2000. This performance improvement, however, comes at the cost that propagating through different media requires a different, more involved computational approach. This more efficient propagation algorithm, which is the standard photon propagation algorithm in \icecube, will be described in the next section.
+The propagation algorithm can be made more efficient by moving the photon in each propagation step not by a small distance $\delta x$ but by the whole distance to the next interaction point. This way, the above example would take only one propagation step rather than 2000. This performance improvement, however, comes at the cost that propagating through different media requires a different, more involved computational approach. This more efficient propagation algorithm, which is the standard photon-propagation algorithm in \icecube, will be described in the next section.
 
 
 \subsubsection{Standard Photon Propagation Algorithm}
@@ -34,38 +32,35 @@ The propagation algorithm can be made more efficient by moving the photon in eac
 \label{sec:standard_photon_propagation_algorithm}
 \label{sec:standard_clsim}
 
-In \icecube's standard photon propagation algorithm, a propagation step moves the photon not just by a small, fixed distance $\delta x$ but to the next interaction point at once. An interaction may be the photon scattering within the ice, the photon being absorbed by the ice, or the photon hitting an optical module. \cite{clsimsource, ppcpaper}
+In \icecube's standard photon-propagation algorithm, a propagation step moves the photon not just by a small, fixed distance $\delta x$ but to the next interaction point at once. An interaction may be the photon scattering within the ice, the photon being absorbed by the ice, or the photon hitting an optical module. \cite{clsimsource, ppcpaper}
 
 At each scattering point, the algorithm randomizes the new photon direction based on the scattering angle distribution, and how far the photon will travel until it is scattered again based on the scattering length.
-
 How far the photon will travel until it is absorbed is randomized just once when the photon is created.
 
-At each scattering point, the algorithm checks whether the photon will hit an optical module on the path to the next scattering point. Also, the algorithm checks whether the destined distance to absorption will be reached before the next scattering point. If the photon will be destroyed in this step, either by being absorbed in the ice, or by hitting an optical module, the final position is recorded. Otherwise, the photon proceeds to the next scattering position. This loop is repeated until the photon is either absorbed or hits an optical module. \cite{ppcpaper}
+For each propagation step, the algorithm checks whether the photon will hit an optical module on the path between two scattering points. Also, the algorithm checks whether the destined distance to absorption will be reached before the next scattering point. If the photon will be destroyed in this step, either by being absorbed in the ice, or by hitting an optical module, the final position is recorded. Otherwise, the photon proceeds to the next scattering position. This loop is repeated until the photon is either absorbed or hits an optical module. \cite{ppcpaper}
 
 Figure \ref{fig:Ar0vai8u} shows a flow chart of this algorithm. Figure \ref{fig:oheeL3ai} shows the same two-dimensional scenario as figure \ref{fig:ieph6Bie} in the previous section, but illustrates how the same photon trajectory is modeled by this algorithm with significantly less simulation steps.
 
 \begin{figure}[htbp]
   \smallerimage{photon-trajectory-oheeL3ai}
-  \caption{Illustration of \icecube's standard photon propagation algorithm in a two-dimensional coordinate system. The photon is propagated from one scattering point to the next scattering point in each propagation step. In each step, the algorithm checks for absorption and whether an optical module (DOM) is hit in between the two scattering points.}
+  \caption{Illustration of \icecube's standard photon-propagation algorithm in a two-dimensional coordinate system. The photon is propagated from one scattering point to the next scattering point in each propagation step. In each step, the algorithm checks for absorption and whether an optical module (DOM) is hit in between the two scattering points.}
   \label{fig:oheeL3ai}
 \end{figure}
 
 \begin{figure}[p]
   \image{algorithm-photon-propagation}
-  \caption{Flow chart of the standard photon propagation algorithm. One propagation step consists of moving the photon from one scattering point to the next scattering point. If the photon hits an optical module in between the two scattering points, the algorithm records a hit and destroys the photon. If the photon is absorbed in the ice in between the two scattering points, it will only be propagated to the position of absorption and it will not reach the next scattering point. When adding propagation through hole ice with a different scattering length to this algorithm, the calculation of the next scattering point needs to be modified accordingly.}
+  \caption{Flow chart of the standard photon-propagation algorithm. One propagation step consists of moving the photon from one scattering point to the next scattering point. If the photon hits an optical module in between the two scattering points, the algorithm records a hit and destroys the photon. If the photon is absorbed in the ice in between the two scattering points, it will only be propagated to the position of absorption and it will not reach the next scattering point. When adding propagation through hole ice with a different scattering length to this algorithm, the calculation of the next scattering point needs to be modified accordingly.}
   \label{fig:Ar0vai8u}
 \end{figure}
 
 Assuming the number of calculations in each scattering step is of the same order of magnitude in both described algorithms, the number of simulation steps translates to the total number of calculations the processing unit needs to perform for each photon. Thus, the algorithm that needs much less simulation steps is also much more efficient.
 
-Propagating a photon through several media with different properties, that is to say different interaction probabilities, is more involved in this algorithm than in the basic one.
-
+Propagating a photon through several media with different optical properties is more involved in this algorithm than in the basic one.
 If the algorithm calculates the distance to the next interaction point considering only the interaction properties of the ice at the current position of the photon as suggested by the basic algorithm, then the next interaction point would be calculated inaccurately if the medium properties change between two interaction points. The larger the scattering length gets compared to the size of the ice areas with constant interaction properties, the worse the inaccuracies become.
 
 This can be illustrated by an extreme example where the scattering length and the absorption length within the bulk ice are several meters long, but the photon would hit a cable with a diameter of only a couple of centimeters between two scattering points. The cable would absorb the photon at once. But if the next interaction point is calculated evaluating only the interaction properties at the position of the current scattering point, then the photon ignores the cable and continues on its path without being absorbed by the cable.
 
 The solution to this problem chosen for the standard propagation algorithm in \icecube is to implement medium transitions in the following manner:
-
 Rather than randomizing the geometrical distance $X:=\overline{AB}$ from the current interaction point $A$ to the next interaction point $B$ itself, the algorithm randomizes the number $N :\in \reals^+$ of interaction lengths the photon will travel to the interaction point, like a budget. This budget is spent by considering the different media on the way from the current interaction point along the photon's direction, and converting the number of interaction lengths into a geometrical distance according to the shares of the different media in the path of the photon between the two interaction points.
 
 Suppose, starting at interaction point $A$, the photon travels in $m :\in \naturals$ media $M_i$ with interaction lengths $\lambda_i$ for a distance of $x_i$ respectively until it reaches the next interaction point $B$. In each medium $M_i$, the algorithm spends $n_i: x_i = n_i\,\lambda_i$ of the budget $N:=\sum_1^m n_i$ that has been randomized at interaction point $A$ until it reaches interaction point $B$ in a distance $X:=\overline{AB}$.
@@ -80,7 +75,6 @@ Each distance $x_i$ is the length of the trajectory the photon spends in medium 
 Coming back to the extreme example where a cable lies ahead on the photon path, the algorithm now considers all media on the path along the photon direction in order to convert the number of interaction lengths into a geometrical distance to the interaction point. As the absorption length within the cable's medium is set to zero, all of the absorption-length budget is spent at the medium border to the cable, resulting in the final interaction point of the photon being right at the point where the photon enters the cable. Thus, this algorithm lets the photon be absorbed by the cable as intended.
 
 Ice layers, the tilt of the ice layers, and the absorption anisotropy are modeled in this algorithm by implementing the rules on how the interaction budget is spent accordingly.
-
 Adding cylinder-shaped areas to model hole ice or cables means to further extend these rules on how the scattering and absorption budgets are spent along the photon's trajectory.
 
-Two different algorithms for the photon propagation through cylinder-shaped areas are described in the following sections: Section \ref{sec:algorithm_a} describes a first approach where the propagation through the hole-ice cylinders is added as ex-post correction for the existing medium-propagation algorithm. Section \ref{sec:algorithm_b} describes a second approach where the existing medium-propagation algorithm is rewritten in order to support the propagation through hole-ice cylinders the same way as other medium transitions.
+Two different algorithms for the photon propagation through cylinder-shaped areas are described in the following sections: Section \ref{sec:algorithm_a} describes a first approach where the propagation through the hole-ice cylinders is added as subsequent correction for the existing medium-propagation algorithm. Section \ref{sec:algorithm_b} describes a second approach where the existing medium-propagation algorithm is rewritten in order to support the propagation through hole-ice cylinders the same way as other medium transitions.

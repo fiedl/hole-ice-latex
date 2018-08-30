@@ -1,13 +1,13 @@
 %!TEX TS-program = ../make.zsh
 
-\subsection{Unit Tests and Consistency Checks}
+\subsection{Unit Tests and Cross Checks}
 \label{sec:unit_tests_and_cross_checks}
 
-There are several techniques to ensure that the propagation algorithm produces results that meet the expectations. First, \clsim itself implements a number of consistency checks that check computational quantities for consistency. This is done for every running simulation. \cite{clsimsource}
+There are several techniques to ensure that the propagation algorithm produces results that meet the expectations. First, \clsim itself implements a number of tests that run in each simulation and check computational quantities for consistency. \cite{clsimsource}
 
-Second, as external check, one can define scenarios with known quantities for single photons and check whether the algorithm produces the expected results for those single photons. This is done with \textit{unit tests} and is presented in section \ref{sec:unit_tests}.
+Secondly, one can define scenarios with known quantities for single photons and check externally whether the algorithm produces the expected results for those single photons. This is done with \textit{unit tests} and is presented in section \ref{sec:unit_tests}.
 
-Third, as a check involving several photons, checks can be devised where all photons should behave the same way, for example all photons should be absorbed by a medium that is configured for instant absorption. This check is presented in section \ref{sec:instant_absorption_tests}.
+Thirdly, checks for a sample of photons can be devised where all photons should behave the same way, for example all photons should be absorbed by a medium that is configured for instant absorption. This check is presented in section \ref{sec:instant_absorption_tests}.
 
 Finally, a sample of propagated photons can be examined regarding their statistical properties, for example the sample's distributions of quantities like arrival time and path length. These tests are presented in sections \ref{sec:arrival_time} to \ref{sec:cross_check_71}.
 
@@ -15,16 +15,14 @@ Finally, a sample of propagated photons can be examined regarding their statisti
 ### Unit Tests With Single Photons
 \label{sec:unit_tests}
 
-In order to verify that individual components (``units'') of the implementation perform their tasks as expected, that is to say produce results as expected, unit tests were implemented for the algorithm that calculates intersections as well as for the hole-ice-correction algorithm.
+In order to verify that individual components (``units'') of the implementation produce results as expected, unit tests were implemented for the algorithm that calculates intersections as well as for the hole-ice-correction algorithm.
 
 \sourcepar{The unit tests for the intersection algorithm can be found at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/intersection/intersection_test.c}, the unit tests for the hole-ice-correction algorithm at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/hole_ice/hole_ice_test.c}.}
 
 \paragraph{Task} The task of unit tests is to test individual components of a software. In this case, the tests execute separate functions of the new algorithms with fixed input parameters and check whether the functions return the expected results, which, in preparation of the test, have been obtained by other means, either by a separate program, using a separate programming language, a separate algorithm, or via calculations by hand.
 
 In this study, unit tests define single photons that cross hole-ice cylinders in a pre-defined way and check whether the intersection algorithm determines the correct intersection points, whether the 2d-3d projections are handled correctly, and whether the hole-ice-correction algorithm determines the expected corrections for the geometric distances according to the hole-ice parameters provided by the test scenario.
-
 Extreme examples can be designed to produce simple results that can be calculated by hand and verified by intuition. For example, for hole-ice cylinders configured for instant absorption, the absorption point is identical to the intersection point of the photon trajectory and the cylinder.
-
 More complex examples require more involved calculations by hand or using other software like \noun{Python} scripts or computer algebra tools for calculating intersections.
 
 %specialized tools like \noun{GeoGebra}\footnote{GeoGebra mathematical tools, \url{https://www.geogebra.org}} (see figure \ref{fig:Uchie2aa}) for calculating intersections.
@@ -39,17 +37,14 @@ More complex examples require more involved calculations by hand or using other 
 
 \paragraph{Testing Framework}
 This study uses the \noun{gtest}\footnote{Google Test Framework, gtest, \url{https://github.com/google/googletest}} testing framework.
-
 % Notes: 2017-07-21
 This framework has been chosen due to its good documentation, wide adoption and slim architecture that made it possible to use the framework to test individual components of the new source code without interfering with the rest of the \icesim framework.
 
 \docpar{The introductory documentation of \noun{gtest} can be found at \url{https://github.com/google/googletest/blob/master/googletest/docs/primer.md}.}
 
-\paragraph{Pros and Cons}
+\paragraph{Limitations of Unit Tests}
 Unit tests are most useful to ensure stability when adjusting, refactoring or rewriting software components. Even after replacing a large part of the source code, unit tests can make sure that the software still produces the same results as before.
-
 Tests also allow for so-called test-driven development where the expected results are specified first, and then the software is built or changed iteratively until it produces the expected results.
-
 This technique works best when the components to be tested have small interfaces because the technique requires the tests to provide all input parameters for the components to be tested.
 
 Unexpected issues may arise when unit tests are run on another architecture as the production code. For example, the unit tests used in this study were insensitive to certain driver issues and numerical issues\footnote{See section \ref{sec:gpu_technical_issues}.} that did only occur when running the software on the GPUs of the computing cluster and did not occur when running the unit tests on the local CPU of the development machine.
@@ -63,6 +58,7 @@ To increase confidence in the new software, therefore, in addition to unit testi
 \label{sec:instant_absorption_tests}
 
 A simple high-level test can be performed by starting several photons towards a cylinder, which is configured for instant absorption. After propagating the photons using the new media-propagation algorithm and recording the path of each individual photon, one can verify the results making sure than no photon position is recorded inside the instant-absorption cylinder (figure \ref{fig:chiep7Is}).
+Additionally, one can visualize the simulation using the \steamshovel event viewer to verify that no photon enters the instant-absorption cylinder as shown in figure \ref{fig:moo9Eiqu}.
 
 \sourcepar{The implementation of this consistency check can be found in \issue{67}, \issue{47}, and \issue{22}.}
 
@@ -73,8 +69,6 @@ A simple high-level test can be performed by starting several photons towards a 
   \caption{Analyzing the simulation of photons propagating towards a hole-ice cylinder configured for instant absorption. No photon can be recorded within the hole-ice cylinder's radius.}
   \label{fig:chiep7Is}
 \end{figure}
-
-Additionally, one can visualize the simulation using the \steamshovel event viewer to verify that no photon enters the instant-absorption cylinder as shown in figure \ref{fig:moo9Eiqu}.
 
 % instant absorption: issue #22
 
@@ -104,18 +98,17 @@ A related, but more complex scenario is starting photons within two nested cylin
 % https://github.com/fiedl/hole-ice-study/issues/91
 
 One way to test the behavior of statistical properties of a sample of photons is to plot the arrival-time distribution of photons traveling from a central position to receiving optical modules around the starting position.
+Figure \ref{fig:eipau6Ag} shows arrival-time distributions for this scenario being carried out with a flasher experiment compared to two simulations with different hole-ice configurations each.
 
 \sourcepar{The source for the simulations and for creating these histograms can be found in \issue{91}.}
 
 \begin{figure}[htbp]
   \subcaptionbox{Top view of the detector strings in this simulation. The photons are started at the middle optical module of string 63, and are received by the optical modules of the surrounding strings 70, 71, 64, 55, 54, and 62.}{\includegraphics[width=.48\linewidth]{img/flasher-scenario}}
   \hfill
-  \subcaptionbox{For different hole-ice configurations, the simulation results in different photon-arrival-time distributions. The dashed lines indicate the mean arrival times. With stronger hole-ice effects, less photons arrive in total, the photons arrive later, and more distributed.}{\includegraphics[width=.48\linewidth]{img/arrival-time-distribution-eipau6Ag}}
-  \caption{Testing the arrival-time distribution of photons propagating from a central position to receiving optical modules around the starting position. The simulation includes hole-ice cylinders around the detector strings and is performed for several configurations to observe different strengths of the hole-ice effect.}
+  \subcaptionbox{For different hole-ice configurations, the simulation results in different photon-arrival-time distributions. The dashed lines indicate the mean arrival times.}{\includegraphics[width=.48\linewidth]{img/arrival-time-distribution-eipau6Ag}}
+  \caption{Creating arrival-time distributions for photons propagating from a central position to receiving optical modules around the starting position.}
   \label{fig:eipau6Ag}
 \end{figure}
-
-Figure \ref{fig:eipau6Ag} shows arrival-time distributions for this scenario being carried out with a flasher experiment compared to two simulations with different hole-ice configurations each.
 
 % arrival-time distribution #91, estimation see 2018-07-18.
 
@@ -126,12 +119,9 @@ From the comparison of the arrival-time distributions, note that the distributio
 % \todo{Check whether the simulation actually sets the time of the photon correctly in each simulation step.} -> https://github.com/fiedl/hole-ice-study/issues/111
 
 In the simulation where the hole-ice cylinders have a much larger radius, the effects of the hole ice should be stronger. Indeed, the comparison of the distributions shows three effects to expect from this assumption:
-
 First, in the simulation with stronger hole-ice effect, less photons arrive at the receiving optical modules in total as more photons are scattered away by the hole ice.
-
-Second, for stronger hole ice, the photons arrive later at the receiving optical modules, because they spend more time scattering randomly within the hole-ice cylinder before reaching the receiving optical module.
-
-Third, for stronger hole ice, the left-hand side of the distribution histogram is less steep, because with more scattering points on the photon's path, there is a larger number of possible paths, which leads to the arrival time being more distributed.
+Secondly, for stronger hole ice, the photons arrive later at the receiving optical modules, because they spend more time scattering randomly within the hole-ice cylinder before reaching the receiving optical module.
+Thirdly, for stronger hole ice, the left-hand side of the distribution histogram is less steep, because with more scattering points on the photon's path, there is a larger number of possible paths, which leads to the arrival time being more distributed.
 
 While these effects confirm the expectations qualitatively, examining other high-level observables allows to compare expectations to the simulations' results even quantitatively. This is the subject of the following sections, beginning with observing the photons' path-length distributions.
 
@@ -142,7 +132,6 @@ While these effects confirm the expectations qualitatively, examining other high
 % https://github.com/fiedl/hole-ice-study/issues/64
 
 Let the \textbf{Total path length} of a photon be the summed distance from the position where the photon is created, along the photon's path, to the position where the photon is absorbed.
-
 The total path length $X$ of photons that propagate in a medium with an absorption probability that is the same everywhere in the medium, for example within a confined area within the bulk ice, is expected to follow an exponential distribution with a rate parameter corresponding to the absorption probability, or equivalently the absorption length $\lambda$ within the medium.\footnote{If the photons do not depend on each other, the number of photons that are absorbed at a certain path length does only depend on the absorption probability, or equivalently on the absorption length $\lambda$, and the number of photons remaining at this path length. When a photon is absorbed, the number of remaining photons decreases. Thus, the change in the number of photons is proportional to the number of photons, causing the number of photons absorbed at a certain path length following an exponential distribution. See also appendix \ref{sec:exponential_distribution}.}
 
 \begin{equation}
@@ -167,7 +156,7 @@ The distribution of the total path length should follow an exponential decay cur
 
 \begin{figure}[htb]
   \image{cross-check-64-exponential-distribution.png}
-  \caption{Distribution of the total path length of simulated photons both started and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. As expected, the distribution follows an exponential curve. The fitted absorption length $\lambda_\text{abs}=0.1003\m \pm 0.0011\m$ is in agreement with the true absorption length of $0.1000\m$ used in the simulation.}
+  \caption{Distribution of the total path length of simulated photons both started and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. The distribution follows an exponential curve. The fitted absorption length is $\lambda_\text{abs}=0.1003\m \pm 0.0011\m$. The true absorption length used in the simulation is $0.1000\m$.}
 \end{figure}
 
 % [2018-05-14 16:33:11] fiedl@fiedl-mbp ~/hole-ice-study/scripts/FiringRange master ⚡
@@ -185,8 +174,6 @@ The distribution of the total path length should follow an exponential decay cur
 % steamshovel tmp/propagated_photons.i3
 
 Indeed, the simulation yields the expected distribution of the total path length. Via a curve fit, the absorption length $\lambdaabs$ can be determined for this simulation to be $\lambdaabs = 0.1003\m \pm 0.0011\m$, which is in accordance with the true absorption length of $0.1000\m$ used in the simulation.
-
-\todo{Number of significant digits}
 
 
 \subsubsection{Piecewise Exponential Distribution of the Total Path Length for One Medium Boundary}
@@ -215,7 +202,7 @@ This consistency check aims to verify that the medium-boundary transition is han
 %     > ~/hole-ice-study/results/cross_checks/cross_check_65.txt
 
 In a simulation, a pencil beam of $10^5$ photons is started in a distance of $2.0\m$ to cylinder center towards the hole-ice cylinder with a radius of $1.0\m$. The effective scattering length outside is set to $10^6\m$, inside to $100\m$. The absorption length outside is set to $1.0\m$, inside to $0.10\m$.
-As before, for each simulated photon, the total path length is recorded, that is to say the distance from the starting point of the photon along the photon's trajectory to the point where the photon is absorbed.
+As before, for each simulated photon, the total path length, from the starting point of the photon along the photon's trajectory to the point where the photon is absorbed, is recorded.
 
 \sourcepar{The implementation of this consistency check can be found in \issue{65}.}
 
@@ -230,10 +217,10 @@ Note that the histogram's bins are proportional to the number $m(x):=\sfrac{-\d 
 
 \begin{figure}
   \image{cross-check-65-histogram}
-  \caption{Distribution of the total path length of simulated photons started outside and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. As expected, the distribution follows two exponential curves. The fitted absorption lengths $\lambda_\text{abs,1} = 1.0161\m \pm 0.3099\m$ and $\lambda_\text{abs,2} = 0.1012\m \pm 0.0144\m$ are in agreement with the true absorption length outside of $1.0000\m$ and within the hole-ice cylinder of $0.1000\m$ set in the simulation.}
+  \caption{Distribution of the total path length of simulated photons started outside and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. The distribution follows two exponential curves. The fitted absorption lengths are $\lambda_\text{abs,1} = 1.016\m \pm 0.310\m$ and $\lambda_\text{abs,2} = 0.101\m \pm 0.014\m$. The true absorption length in the simulation is set to $1.000\m$ outside, and to $0.100\m$ within the hole-ice cylinder.}
 \end{figure}
 
-The simulation yields the expected distribution of the total path length. Via a curve fit, the absorption lengths $\lambda_\text{abs,1} = 1.0161\m \pm 0.3099\m$ and $\lambda_\text{abs,2} = 0.1012\m \pm 0.0144\m$ are in determined in accordance with the true absorption length outside of $1.0000\m$ and within the hole-ice cylinder of $0.1000\m$ set in the simulation.
+The simulation yields the expected distribution of the total path length. Via a curve fit, the absorption lengths $\lambda_\text{abs,1} = 1.016\m \pm 0.310\m$ and $\lambda_\text{abs,2} = 0.101\m \pm 0.014\m$ are in determined in accordance with the true absorption length outside of $1.000\m$ and within the hole-ice cylinder of $0.100\m$ set in the simulation.
 
 % Why does the histogram have a half-height bin at the medium border? https://github.com/fiedl/hole-ice-study/issues/65#issuecomment-389624749} — It's not due to binning as in https://github.com/fiedl/hole-ice-study/issues/67#issuecomment-389874539. I've tried that.
 
@@ -258,10 +245,10 @@ As the simulated photons may now cross two different medium boundaries, the dist
 
 \begin{figure}
   \image{cross-check-66-histogram}
-  \caption{Distribution of the total path length of simulated photons, which start outside the cylinder, and may be absorbed before, within or after passing the cylinder, using the new medium-propagation algorithm. As expected, the distribution follows three exponential curves. The fitted absorption lengths $\lambda_\text{abs,1} = 1.0213\m \pm 0.2227\m$, $\lambda_\text{abs,2} = 0.6845\m \pm 0.1888\m$ and $\lambda_\text{abs,3} = 1.0722\m \pm 0.2343\m$ are in agreement with the true absorption length outside of $1.0000\m$ and within the hole-ice cylinder of $0.7500\m$ set in the simulation.}
+  \caption{Distribution of the total path length of simulated photons, which start outside the cylinder, and may be absorbed before, within or after passing the cylinder, using the new medium-propagation algorithm. As expected, the distribution follows three exponential curves. The fitted absorption lengths are $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$, and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$. The true absorption length in the simulation is set to $1.00\m$ outside, and to $0.75\m$ within the hole-ice cylinder.}
 \end{figure}
 
-The simulation yields the expected distribution of the total path length. The absorption lengths $\lambda_\text{abs,1} = 1.0213\m \pm 0.2227\m$, $\lambda_\text{abs,2} = 0.6845\m \pm 0.1888\m$ and $\lambda_\text{abs,3} = 1.0722\m \pm 0.2343\m$ determined via a curve fit are in accordance with the true absorption length outside of $1.0000\m$ and within the hole-ice cylinder of $0.7500\m$ set in the simulation.
+The simulation yields the expected distribution of the total path length. The absorption lengths $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$ and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$ determined via a curve fit are in accordance with the true absorption length outside of $1.00\m$ and within the hole-ice cylinder of $0.75\m$ set in the simulation.
 
 
 ### Distance to Next Scattering Point in Relation to the Distance From the Hole-Ice Center
@@ -271,7 +258,7 @@ The simulation yields the expected distribution of the total path length. The ab
 
 The consistency checks of the previous sections refer to the absorption length. To examine the scattering-length behavior of the photons simulated using the new media-propagation algorithm, this consistency check observes the distance to the next scattering point in relation to the distance from the hole-ice center at each scattering point.
 
-In a simulation, a plane wave of 100 photons is started towards a hole-ice cylinder. Let the hole-ice radius be $0.5\m$. The scattering length within the hole-ice cylinder is $6\cm$, the scattering length in the surrounding bulk ice is $1.48\m$.
+In a simulation, a plane wave of 100 photons is started towards a hole-ice cylinder. Let the hole-ice radius be $0.50\m$. The scattering length within the hole-ice cylinder is $0.06\m$, the scattering length in the surrounding bulk ice is $1.48\m$.
 For each scattering step, the distance to the next scattering point and the current distance to the center of the hole-ice cylinder are recorded.
 
 \sourcepar{The implementation of this consistency check can be found in \issue{71}.}
@@ -284,21 +271,22 @@ For each scattering step, the distance to the next scattering point and the curr
 
 As the distance to the next scattering point should be exponentially distributed, governed by the scattering lengths within and without the hole-ice cylinder, the distance to the next scattering point should differ in the following three regions:
 
-Well within the hole-ice radius, the distance to the next scattering point should be in the range of the scattering length of the hole ice.
-
-Well outside the hole-ice radius, the distance to the next scattering point should be in the range of the scattering length of the surrounding bulk ice.
-
-In the vicinity of the hole-ice-cylinder radius, there should be a smooth transition. \todo{The technical reason is that the budget code handles both media here; TODO: physical explanation.}
+\begin{enumerate}
+  \item Well within the hole-ice radius, the distance to the next scattering point should be in the range of the scattering length of the hole ice.
+  \item Well outside the hole-ice radius, the distance to the next scattering point should be in the range of the scattering length of the surrounding bulk ice.
+  \item In the vicinity of the hole-ice-cylinder radius, there should be some kind of transition due to the complex geometrical simulation.
+\end{enumerate}
 
 \begin{figure}[htbp]
-  \subcaptionbox{All data points}{\includegraphics[width=0.32\linewidth]{img/cross-check-71-scatter}}\hfill
-  \subcaptionbox{Averaged for bins of a width of  $10\cm$}{\includegraphics[width=0.32\linewidth]{img/cross-check-71-bins}}\hfill
-  \subcaptionbox{Magnification of the vicinity of the hole-ice border}{\includegraphics[width=0.32\linewidth]{img/cross-check-71-bins-vicinity}}
-  \caption{For each scattering step of a simulation of photons entering a hole-ice cylinder, plot the distance to the next scattering step in relation to the current distance to the cylinder center. The curve of the local means is smeared out in the vicinity of the cylinder radius. The mean distance to the next scattering point within $80\,\%$ of the hole-ice radius is fitted to $0.07\m \pm 0.07\m$. The mean distance to the next scattering point outside of $120\,\%$ of the hole-ice radius is fitted to $1.37\m\pm 1.37\m$. }
+  \centering
+  \subcaptionbox{All data points}{\includegraphics[width=0.48\linewidth]{img/cross-check-71-scatter}}\hfill
+  \subcaptionbox{Averaged for bins of a width of  $10\cm$}{\includegraphics[width=0.48\linewidth]{img/cross-check-71-bins}}\hfill
+  \subcaptionbox{Magnification of the vicinity of the hole-ice border}{\includegraphics[width=0.48\linewidth]{img/cross-check-71-bins-vicinity}}
+  \caption{For each scattering step of a simulation of photons entering a hole-ice cylinder, plot the distance to the next scattering step in relation to the current distance to the cylinder center. The mean distance to the next scattering point within $80\,\%$ of the hole-ice radius is fitted to $0.07\m \pm 0.07\m$. The mean distance to the next scattering point outside of $120\,\%$ of the hole-ice radius is fitted to $1.37\m\pm 1.37\m$. The true scattering length in the simulation is set to $0.06\m$ inside, and to $1.48\m$ outside the hole-ice cylinder.}
   \label{fig:eeYoid2p}
 \end{figure}
 
-Assuming an exponential distribution of the distance to the next scattering point, the mean distance to the next scattering point within $80\,\%$ of the hole-ice radius is fitted to $0.07\m \pm 0.07\m$, the mean distance to the next scattering point outside of $120\,\%$ of the hole-ice radius is fitted to $1.37\m\pm 1.37\m$ (figure \ref{fig:eeYoid2p} b), which is in the range of the true scattering lengths of $6\cm$ and $1.48\m$ inside and outside the hole ice respectively.
+Assuming an exponential distribution of the distance to the next scattering point, the mean distance to the next scattering point within $80\,\%$ of the hole-ice radius is fitted to $0.07\m \pm 0.07\m$, the mean distance to the next scattering point outside of $120\,\%$ of the hole-ice radius is fitted to $1.37\m\pm 1.37\m$ (figure \ref{fig:eeYoid2p} b), which is in the range of the true scattering lengths of $0.06\m$ and $1.48\m$ inside and outside the hole ice respectively.
 
 When plotting the local average of the distance to the next scattering point for the vicinity of the hole-ice border (figure \ref{fig:eeYoid2p} c), the curve shows no abrupt jump but a transition between both domains as expected.
 
