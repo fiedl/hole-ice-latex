@@ -33,7 +33,7 @@ To compare the simulation results to the approximation curve, a binomial likelih
   L = \prod_{i=1}^N \binom{n}{k_i}\,p(\eta_i)^{k_i}\,(1-p(\eta_i))^{n-k_i}
 \end{equation}
 
-This likelihood can be interpreted as the probability that for a number of $N$ simulations, one simulation for each angle $\eta_i$, starting $n$ photons from the angle $\eta_i$ towards the optical module, $k_i$ photons will be accepted as hit by the optical module if the acceptance probability $p(\eta_i)$ for the angle $\eta_i$ is given by the approximation curve $a\domhi(\eta)$, $p(\eta_i) = \sfrac{1}{g}\,a\domhi(\eta_i)$. $g$ is a gauging factor (see section \ref{sec:gauging}), which is needed due to the normalization of $a\domhi(\eta)$.
+This likelihood can be interpreted as the probability that for a number of $N$ simulations, one simulation for each angle $\eta_i$, starting $n$ photons from the angle $\eta_i$ towards the optical module, $k_i$ photons will be accepted as hit by the optical module if the acceptance probability $p(\eta_i)$ for the angle $\eta_i$ is given by the approximation curve $a\domhi(\eta)$, $p(\eta_i) = \sfrac{1}{g}\,a\domhi(\eta_i)$. $g$ is a scaling factor (see section \ref{sec:gauging}), which is needed due to the normalization of $a\domhi(\eta)$.
 
 As one series of simulations is performed for each set $\HH$ of hole-ice parameters, there is a likelihood $L_\HH$ for each parameter set $\HH$, which depends on the numbers $k_{i,\HH}$ of photon hits for photons started under the angle $\eta_i$, propagated with hole-ice parameters $\HH$.
 
@@ -44,11 +44,11 @@ $$
 
 The simulation resulting in the maximal likelihood $L_\HHbest$ corresponds to the set of hole-ice parameters $\HHbest$ that best describe the approximation curve $a\domhi(\eta)$.
 
-Figure \ref{fig:AWa5aiCh} shows the result of the parameter grid scan, plotting the likelihood, or rather $-2\Delta\llh:= -2(\ln L_\HH - \ln L_\HHbest) = -2 \ln \left(\sfrac{L_\HH}{L_\HHbest}\right)$ as a more common measure of agreement, against the hole-ice parameters $\HH$, that is to say against the effective scattering length $\lambda\esca\hi$ of the hole ice on the one axis, and the radius $r$ of the hole-ice cylinder on the other axis.
+Figure \ref{fig:AWa5aiCh} shows the result of the parameter grid scan, plotting the likelihood, or rather $-2\Delta\llh:= -2(\ln L_\HH - \ln L_\HHbest) = -2 \ln \left(\sfrac{L_\HH}{L_\HHbest}\right)$ as a more common measure of agreement, against the effective scattering length $\lambda\esca\hi$ of the hole ice on the one axis, and the radius $r$ of the hole-ice cylinder on the other axis.
 
 \begin{figure}[htbp]
   \smallerimage{parameter-scan-contours}
-  \caption{Agreement of the fixed hole-ice-approximation angular-acceptance curve $a\domhi(\eta)$ and direct hole-ice simulations using the new \clsim medium-propagation algorithm with hole-ice-cylinder radii $r$ given in units of the radius $r\dom$ of the optical module, and effective hole-ice scattering lengths $\lambda\esca\hi$. The simulation uses direct detection as hit acceptance criterion and plane waves with a starting distance $d=1\m$ and plane extent $e=1\m$ as photon sources. The absorption length within the hole ice is fixed to $\lambda\abs\hi=100\m$. Each dot in the plot represents one parameter set $\HH$ and one corresponding set of simulations. The $-2\Delta\llh$ on the colored axis corresponds to a binomial likelihood. $-2\Delta\llh = 0$ corresponds to the parameter set $\HHbest$ that best agrees with the approximation curve $a\domhi(\eta)$. The hole-ice parameters $\HHbest$ with best agreement are a hole-ice-cylinder radius equal to the radius of the optical module, and an effective scattering length $\lambda\esca\hi = 1.3\m$.}
+  \caption{Agreement of the fixed hole-ice-approximation angular-acceptance curve $a\domhi(\eta)$ and direct hole-ice simulations using the new \clsim medium-propagation algorithm with hole-ice-cylinder radii $r$ given in units of the radius $r\dom$ of the optical module, and effective hole-ice scattering lengths $\lambda\esca\hi$. Each dot in the plot represents one parameter set $\HH$ and one corresponding set of simulations. The $-2\Delta\llh$ on the colored axis corresponds to a binomial likelihood. $-2\Delta\llh = 0$ corresponds to the parameter set $\HHbest$ that best agrees with the approximation curve $a\domhi(\eta)$.}
   \label{fig:AWa5aiCh}
 \end{figure}
 
