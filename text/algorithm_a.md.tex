@@ -7,7 +7,7 @@
 
 A first approach to adding propagation through hole-ice cylinders to the standard propagation algorithm (section \ref{sec:standardphotonpropagationalgorithm}) implemented in \clsim is to add a subsequent correction to each simulation step without rewriting the existing algorithm.
 
-\sourcepar{The source code of the implementation of this first approach can be found in appendix \ref{sec:algorithm_a_source} as well as in the code repository at \url{https://github.com/fiedl/clsim/tree/sf/hole-ice-2017/resources/kernels/lib/hole_ice}.}
+\sourcepar{The source code of the implementation of this first approach can be found in appendix \ref{sec:algorithm_a_source}, in the folder \texttt{algorithm\_a} on the CD-ROM, as well as in the code repository at \url{https://github.com/fiedl/clsim/tree/sf/hole-ice-2017/resources/kernels/lib/hole_ice}.}
 
 This approach assumes that the scattering length $\lambda\hi\sca$ and the absorption length $\lambda\hi\abs$ within the hole ice can be expressed as multiple of the corresponding scattering length $\lambda\sca$ and absorption length $\lambda\abs$ within the surrounding bulk ice.
 
@@ -110,4 +110,4 @@ While one could workaround this problem locally by adjusting the correction fact
 
 Secondly, the algorithm does work only correct in scenarios where the photon crosses only one cylinder between two scattering points. In scenarios where the photon crosses several cylinders, for example when nested cylinders are used to model radially changing properties of the hole ice, or when instantly-absorbing cylinders are used to model cables within a hole-ice cylinder, this algorithm is not able to calculate the corrections properly because it would interpret the interaction factors $f$ not only relative to the surrounding bulk ice but also relative to the cylinders the photon has already crossed in this simulation step.
 
-A different approach to adding propagation through hole-ice cylinders to the standard-propagation algorithm is to treat hole-ice cylinders the same way as other media such as ice layers rather than accounting for the hole-ice effects using ex-post corrections. This second approach gets rid of the above shortcomings, but at the cost that the standard-\clsim algorithm that handles the propagation through different media needs to be re-written. This second approach is described in the following section.
+A different approach to adding propagation through hole-ice cylinders to the standard-propagation algorithm is to treat hole-ice cylinders the same way as other media such as ice layers rather than accounting for the hole-ice effects using subsequent corrections. This second approach gets rid of the above shortcomings, but at the cost that the standard-\clsim algorithm that handles the propagation through different media needs to be re-written. This second approach is described in the following section.
