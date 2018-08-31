@@ -5,7 +5,6 @@
 \subsection{\icecube Simulation Framework}
 
 This study uses the \noun{IceCube Simulation Framework}, short \icesim, in Version `V05-00-07`.
-
 The framework, written in \noun{C++}\footnote{C++ programming language, \url{https://isocpp.org}} and \noun{Python}\footnote{Python programming language, \url{https://www.python.org}}, provides the software needed to run simulations, to write and to process \icecube-specific data such as simulated or recorded events and the detector geometry.
 
 % \begin{figure}[htb]
@@ -14,17 +13,17 @@ The framework, written in \noun{C++}\footnote{C++ programming language, \url{htt
 % \end{figure}
 
 \docframe{
-\docparwithoutframe{The documentation of the \noun{IceCube Simulation Framework} can be found at \url{http://software.icecube.wisc.edu/documentation/}, the source code at \url{http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/simulation}.}\medskip
+\docparwithoutframe{The documentation of the \noun{IceCube Simulation Framework} can be found at \url{http://software.icecube.wisc.edu/documentation/}.}\medskip
 
-\docparwithoutframe{A guide on how to install the \noun{IceCube Simulation Framework} with all the other tools needed for this study is provided at \url{https://github.com/fiedl/hole-ice-study/blob/master/notes/2018-01-23_Installing_IceSim_in_Zeuthen.md}.}
+\docparwithoutframe{A guide on how to install the \noun{IceCube Simulation Framework} with all the other tools needed for this study is provided at \url{https://github.com/fiedl/hole-ice-study/blob/master/notes/2018-01-23_Installing_IceSim_in_Zeuthen.md}.}\medskip
+
+\sourceparwithoutframe{The source code of the \noun{IceCube Simulation Framework} can be found at \url{http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/simulation}.}
 }
 
 \subsection{Photon Propagation With \clsim}
 
 The main tool of this study is the photon-tracking simulation software, \clsim. This software implements a ray-tracing algorithm described in section \ref{sec:standardphotonpropagationalgorithm}, modeling scattering and absorption of light in the deep-glacial ice at the South Pole or in Mediterranean sea water. \cite{clsimreadme}
-
-Written in C++, \noun{Python} and \noun{OpenCL C}\footnote{OpenCL, Open Computing Language, \url{https://www.khronos.org/opencl}}, \clsim uses \noun{OpenCL} to simulate the photon propagation in a highly parallelized way on graphics processing units (GPUs).
-
+Written in C++, \noun{Python} and \noun{OpenCL C}\footnote{OpenCL, Open Computing Language, \url{https://www.khronos.org/opencl}}, \clsim uses \noun{OpenCL} to simulate the photon propagation in a highly parallelized way on graphics processing units (GPUs). \cite{clsimsource}
 \clsim reads the photon sources from the \icesim data, converts the data into a format that can be used on GPUs, uploads the data and the propagation program (``kernel'') onto the GPU, and propagates the photons there. Then \clsim downloads the hits and tracks of the propagated photons, performs post-processing operations such as accepting hits on optical modules based on the acceptance criteria of the modules, and converts them back into an \icesim-compatible format.
 
 \docframe{
@@ -38,29 +37,25 @@ Written in C++, \noun{Python} and \noun{OpenCL C}\footnote{OpenCL, Open Computin
 \subsection{Photon Visualization With \steamshovel}
 
 \steamshovel (Figure \ref{fig:steamshovel}) is the event and data viewer software of \icecube. It allows to visualize the \icecube detector as well as events that have been recorded, reconstructed or simulated in the detector.
-
 For example, \steamshovel can be used to visualize light sources such as muons traveling through the detector producing Cherenkov light, or LED flashes that can be emitted by the optical modules for calibration purposes. \steamshovel may also visualize the photons propagating through the ice, or the amount of light detected by the optical modules.
-
 Data containing timing information can be visualized in an animated manner, watching an event as slow-motion animation.
 
-\begin{figure}
+\begin{figure}[htbp]
   \image{steamshovel}
   \caption{Screenshot of \steamshovel, the \icecube event and data viewer software. The main workspace shows a schematic of the \icecube detector with its 86 strings holding 60 optical detector modules each. Control elements allow to hide and display components and to navigate through the event information. Image source: \cite{steamshoveldocumentation}}
   \label{fig:steamshovel}
 \end{figure}
 
 Most event visualizations in this study are created using \steamshovel.
-
 In order to visualize hole ice and propagating photons for this study, several patches of the standard \steamshovel code are required.
 
 \sourcepar{The required \steamshovel patches are provided within the code repository of this study: \url{https://github.com/fiedl/hole-ice-study/tree/master/patches/steamshovel}}
 
-
 \subsection{Other Software Tools}
 
 In order to process data, to perform statistical analyses, and to plot data, this study uses several supplementary software libraries, such as \noun{NumPy}\footnote{NumPy package for scientific computing, \url{http://www.numpy.org}}, \noun{Matplotlib}\footnote{Matplotlib plotting library, \url{http://matplotlib.org}} and \noun{Pandas}\footnote{Pandas Python Data Analysis Library, \url{http://pandas.pydata.org}}.
+For unit tests (section \ref{sec:unit_tests}), this study uses the \noun{gtest}\footnote{Google Test Framework, gtest, \url{https://github.com/google/googletest}} testing framework.
 
 \docpar{The necessary scripts and installation instructions can be found in the code repository of this study at \url{https://github.com/fiedl/hole-ice-study}.}
 
-For unit tests (section \ref{sec:unit_tests}), this study uses the \noun{gtest}\footnote{Google Test Framework, gtest, \url{https://github.com/google/googletest}} testing framework.
 
