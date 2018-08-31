@@ -20,9 +20,11 @@ Figure \ref{fig:chie4Ite} shows the result of this simulation. The angular-accep
 
 By performing a grid scan (see section \ref{sec:cluster_parallelization}) over a range of hole-ice parameters, one can find the best match with the approximation curve currently in use, in order to understand which kind of direct-propagation hole ice best matches the hole ice currently assumed in all simulations using the approximation curve.
 
-\docpar{This grad scan is documented in \issue{12}.}
+\docframe{
+\docparwithoutframe{This grad scan is documented in \issue{12}.}\medskip
 
-\sourcepar{A script to configure and perform this kind of parameter scan is provided in \script{ParameterScan}.}
+\sourceparwithoutframe{A script to configure and perform this kind of parameter scan is provided in \script{ParameterScan}.}
+}
 
 In principle, one could scan over a wide variety of parameters, including the scattering and absorption lengths of the hole ice, the hole-ice-cylinder radius, the distance from which the photons are started towards the optical module, the kind of the photon source (pencil beams, or plane waves), and the extent of the photon source plane. In order to keep the computational effort minimal, however, all conditions are kept the same as above, and only hole-ice-cylinder radius and hole-ice scattering length are varied in the grid scan.
 

@@ -23,25 +23,33 @@
 % https://tex.stackexchange.com/a/668/70789
 \urlstyle{sf}
 
-\newcommand\iconpar[2]{%
-  \vspace{1em}\fbox{%
-    \begin{tabularx}{\textwidth}{lL}%
-      \adjustbox{minipage=6mm, center=6mm, valign=t, raise=-2mm}{\center{#1}} & \footnotesize\sffamily #2%
-    \end{tabularx}%
-  }\vspace{1em}%
+\newcommand\docframe[1]{%
+  \vspace{1em}\fbox{\minipage{\textwidth}#1\endminipage}\vspace{1em}%
 }
 
-\newcommand\githubicon{\faGithub}
-\newcommand\githubpar[1]{\iconpar{\githubicon}{#1}}
+\newcommand\iconpar[2]{%
+  \docframe{\iconparwithoutframe{#1}{#2}}%
+}
 
-\newcommand\webicon{\hspace*{1mm}\faExternalLink}
-\newcommand\webpar[1]{\iconpar{\webicon}{#1}}
+\newcommand\iconparwithoutframe[2]{%
+  \begin{tabularx}{\textwidth}{lL}%
+    \adjustbox{minipage=6mm, center=6mm, valign=t, raise=-2mm}{\center{#1}} & \footnotesize\sffamily #2%
+  \end{tabularx}%
+}
+
+% \newcommand\githubicon{\faGithub}
+% \newcommand\githubpar[1]{\iconpar{\githubicon}{#1}}
+%
+% \newcommand\webicon{\hspace*{1mm}\faExternalLink}
+% \newcommand\webpar[1]{\iconpar{\webicon}{#1}}
 
 \newcommand\documentationicon{\faBook}
 \newcommand\docpar[1]{\iconpar{\documentationicon}{#1}}
+\newcommand\docparwithoutframe[1]{\iconparwithoutframe{\documentationicon}{#1}}
 
 \newcommand\sourcecodeicon{\faFileTextO}
 \newcommand\sourcepar[1]{\iconpar{\sourcecodeicon}{#1}}
+\newcommand\sourceparwithoutframe[1]{\iconparwithoutframe{\sourcecodeicon}{#1}}
 
 \newcommand\youtubeicon{\faVideoCamera} %\faYoutube \faVideoFileO
 \newcommand\youtubepar[1]{\iconpar{\youtubeicon}{#1}}
