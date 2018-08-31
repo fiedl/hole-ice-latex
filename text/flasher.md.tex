@@ -3,6 +3,8 @@
 \subsection{Scanning Hole-Ice Parameters for the Best Agreement with Flasher-Calibration Data}
 \label{sec:flasher}
 
+% https://github.com/fiedl/hole-ice-study/issues/59
+
 For calibration purposes, each optical module in the \icecube detector is equipped with a set of flasher light-emitting diodes (LEDs) as illustrated in figure \ref{fig:Quee3yui}. Using these flasher LEDs, a known amount of light can be produced at a given position and time within the detector that can be measured by the optical modules and can thereby be used to calibrate the detector. \cite{icepaper}
 
 \begin{figure}[htbp]
@@ -29,9 +31,10 @@ The aim of the following series of simulations is to adjust the simulated hole-i
 
 \sourcepar{A script to configure and perform these kinds of simulations is provided in \script{FlasherSimulation}. A script for performing flasher simulations as grid scan is provided in \script{FlasherParameterScan}.}
 
-As shown in figure \ref{fig:ea9Zieh0} (b), the amount of light received at strings 62 and 54 is significantly reduced compared to the other strings. All surrounding strings have about the same distance from the sending string, $122.0\m$ to $125.4\m$. This reduction might be due to the shadowing effect of the main cable of the sending optical module.\footnote{See \issue{60}.} But also the sending optical module might not be positioned well centered within its hole-ice column, such that the emitted light is suppressed in the direction to strings 62 and 54.
-
-Using this mechanism to fit the cable positions or the position of the sending optical module in relation to its hole-ice column is out of scope of this study, but is suggested as a follow-up study.\followup
+As shown in figure \ref{fig:ea9Zieh0} (b), the amount of light received at strings 62 and 54 is significantly reduced compared to the other strings. The distances of the sending optical module to the receiving strings range from $122.0\m$ to $125.4\m$ and average out at $124.5\m$, such that the different distances can only cause a peak reduction of about $2\,\%$ rather than the observed reduction of about $30\,\%$.
+% https://github.com/fiedl/hole-ice-study/issues/60#issuecomment-417486136
+The properties of the bulk ice cannot account for the asymmetric reduction either.
+The reduction may be caused by some kind of asymmetric shadowing effect, either by shadowing cables\footnote{Flasher simulation with cable: See section \ref{sec:flasher_with_cable}.}, or by asymmetric hole ice in proximity of the sending optical module, such that the emitted light is suppressed in the direction to strings 62 and 54. The reduction may also be caused by the hole ice of strings 62 and 54 having other optical properties than the hole ice of the other strings, or by the position of the hole-ice cylinders of strings 62 and 54, shielding those strings less from the direction of the sending string 63. A systematic simulation study to investigate those scenarios is out of scope of this study, but is suggested as a follow-up study.\followup
 
 In this flasher study, all optical modules are assumed to be positioned central in their respective hole-ice cylinders. In the simulation, hits are recorded in all optical modules of the detector. For a first attempt, however, only the receiving strings 55, 64, 71, and 70 are used to fit the properties of the hole ice.\footnote{If the dominant effect causing the asymmetry is the displacement of the sending optical module within the hole ice, excluding strings 62 and 54 leads to a systematic error. If the dominant effect causing the asymmetry is the shadowing cable, including those strings leads to a systematic error. Further studies are required to account for both possibilities.}
 
