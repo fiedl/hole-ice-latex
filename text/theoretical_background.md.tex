@@ -94,6 +94,12 @@ $n$ is the refractive index of the medium, $c'$ the speed of light within the me
 
 The virtual photon field of the charged particle moving through the medium polarizes the atoms in the medium. Each resulting electric dipole is a source of electromagnetic radiation. But as each dipole arranges towards the charged particle, integrating over the whole spatial sphere around the charged particle, the net emitted radiation vanishes if the charged particle's velocity $v$ is smaller than the speed of light $c'$ in the medium. For higher velocities, the Coulomb field of the charged particle can only polarize the atoms within a cone with an opening angle of $2\phi$, the \textit{Cherenkov cone}, resulting in a net photon emission perpendicular to the surface of the cone. \cite{physiklexikon}
 
+\begin{figure}[htbp]
+  \centering\includegraphics[width=0.5\textwidth]{img/cherenkov}
+  \caption{Visualization of the \textit{Cherenkov cone}: A charged particle moves through a medium with a velocity $v>c'$ greater than the phase velocity $c'$ of light within this medium. Due to non-isotropic polarization effects, \textit{Cherenkov photons} are emitted under an angle $\phi$ relative of the direction of motion of the charged particle.}
+  \label{fig:ehai2Ahj}
+\end{figure}
+
 The spectral distribution of Cherenkov photons is given by equation \ref{eq:cherenkovspectrum}. A particle with $\pm z$ elementary charges that travels a distance $\d x$ emits $\d N$ Cherenkov photons with a wavelength range of $[\nu; \nu + \d\nu]$. $\alpha$ is the fine structure constant. \cite{katz2012}
 As $\d N \propto \sfrac{1}{\nu^2}$, the spectrum prefers photons with shorter wavelengths $\nu$.
 
@@ -105,11 +111,7 @@ As $\d N \propto \sfrac{1}{\nu^2}$, the spectrum prefers photons with shorter wa
 
 Per GeV of secondary particle shower energy within the detector, an order of $10^5$\nbsp visible Cherenkov photons are created. \cite{instrumentation}
 
-\begin{figure}[htbp]
-  \centering\includegraphics[width=0.5\textwidth]{img/cherenkov}
-  \caption{Visualization of the \textit{Cherenkov cone}: A charged particle moves through a medium with a velocity $v>c'$ greater than the phase velocity $c'$ of light within this medium. Due to the limited speed of light being smaller than the speed of the charged particle, polarization effects are not isotropic, but \textit{Cherenkov photons} are emitted under an angle $\phi$ relative of the direction of motion of the charged particle.}
-  \label{fig:ehai2Ahj}
-\end{figure}
+
 
 
 \subsection{Photon Absorption and Scattering}
@@ -124,7 +126,7 @@ and is quantified by the \textbf{absorption length} $\lambda\abs$, which is the 
 % lundberg
 Therefore, in accordance with the \noun{Beer-Lambert law}, the absorption length is the path length that light needs to travel within a medium to have its intensity drop to $\sfrac{1}{\e}$ of its original intensity. \cite{lexikonderphysik}
 % lexikonderphysik, Band 1, Absorptionslänge
-% Absorption lengths in the South-Polar ice are in the order of $100\m$ and can in clear ice layers in the absence of dust even exceed $200\m$. \cite{ackermann}
+% Absorption lengths in the South-Polar ice are on the order of $100\m$ and can in clear ice layers in the absence of dust even exceed $200\m$. \cite{ackermann}
 % ackermann, page 5, paragraph 12
 Absorption lengths in the South-Polar ice vary between $10\m$ in dusty regions and $280\m$ in very clear ice layers. \cite{ackermann, ppcpaper, icepaper}
 
@@ -156,7 +158,7 @@ $$ \lim_{n \rightarrow \infty} \lambda\sca\,\sum_{i=0}^n \meancostheta^i = \frac
 % scattering lengths between 5m and 90m in the detector volume \cite{ppcpaper}
 % effective scattering coefficient for 400nm between 0.011/m and 0.2/m \cite{icepaper} fig. 16, corresponding to esca=5m to 90m esca
 
-Typical effective scattering lengths within the South-Polar ice are in the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$.
+Typical effective scattering lengths within the South-Polar ice are on the order of $25\m$ \cite{lundberg} and range from $5\m$ to $90\m$ in the detector volume \cite{icepaper}, corresponding to the geometric scattering length ranging from $0.3\m$ to $5.4\m$.
 
 % https://github.com/fiedl/hole-ice-study/issues/51 - point particles
 Light interference effects are ignored during photon propagation as the average distance between the scattering centers is large compared to the photon wavelength. \cite{ackermann}
