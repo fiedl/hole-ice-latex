@@ -152,29 +152,7 @@ Further investigations on this matter are required, but are out of scope of this
 
 Simulations with direct photon propagation through hole ice of different parameter configurations $\HH$ allow to rate the compatibility of different hole-ice models. For example, generating simulation-based angular-acceptance curves allows to calculate the likelihood of two models being compatible. This, however, would require a more involved study of systematics of the specific simulation design, which is out of scope of this study, but should be considered by follow-up studies.\followup
 
-As a first step, however, angular-acceptance curves from simulations with hole-ice parameters from different studies are shown in this section. Table \ref{tab:angular_acceptance_compatibility} summarizes the findings, but does only provide a rough classification in \enquote{curves look similar} (\ok) and \enquote{curves do not look similar} (\bad).
-
-\begin{table}
-  \begin{center}
-  \resizebox{\columnwidth}{!}{%
-  \begin{tabular}{rr|ccccccc}
-                            & \small{\textbf{Method}}     & \clsimppc           & \clsimppc         & \clsimppc            & A priori   & Dima \\
-    \small{\textbf{Method}} & \small{\textbf{Parameters}} & $\HH_\text{YAG H2}$ & $\HH_\text{DARD}$ & $\HH_\text{SpiceHD}$ & $\HH_\text{YAG H2}$ & -- \\
-    %                        & $r$                         & \\
-    %                        & $\lambda\sca\hi$            & \\
-    %                        & $\lambda\esca\hi$           & \\
-    \hline
-    \clsimppc               & $\HH_\text{YAG H2}$         & \same               & \greyedout        & \greyedout           & \greyedout & \greyedout \\
-    \clsimppc               & $\HH_\text{DARD}$           & \bad                & \same             & \greyedout           & \greyedout & \greyedout \\
-    \clsimppc               & $\HH_\text{SpiceHD}$        & \ok                 & \bad              & \same                & \greyedout & \greyedout \\
-    A priori                & $\HH_\text{YAG H2}$         & \bad                & \ok               & \bad                 & \same      & \greyedout\\
-    Dima's model            & --                          & \ok                 & \bad              & \ok                  & \bad       & \same
-  \end{tabular}
-  }
-  \end{center}
-  \caption{Compatibility of angular-acceptance curves $a(\eta)$. \textbf{Methods}: \underline{\clsim}: Angular-acceptance simulation with \clsim using the new medium-propagation algorithm with plane waves as photon sources and direct detection as acceptance criterion (section \ref{sec:angular_acceptance_scan}). \underline{\ppc}: POCAM-angular-acceptance simulation with \ppc using direct photon propagation through hole ice and direct detection (section \ref{sec:direct_photon_propagation_with_ppc}). \underline{\clsimppc}: Simulations performed with both, \clsim and \ppc, producing similar results. \underline{A priori}: A priori angular-acceptance curve $a\domhi(\eta)$ for $\HH_\text{YAG H2}$ parameters from \cite{icepaper} (section \ref{sec:hole_ice_approximation}). \underline{Dima}, \underline{Dima's model}: Angular-acceptance curve $a\domdima(\eta;p)$ from flasher unfolding studies \cite{flasherdataderivedicemodels} (section \ref{sec:dimas_model}). \textbf{Hole-Ice Parameters}: Each parameter set $\HH$ consists of a hole-ice-cylinder radius $r$ and a geometric hole-ice scattering length $\lambda\sca$, corresponding to an effective scattering length $\lambda\esca$. \underline{$\HH_\text{YAG H2}$}: from YAG laser measurements \cite{holeicestudieswithyag}, also called H2 model parameters, $r = 30\cm, \lambda\sca=50\cm, \lambda\esca = 8.33\m$ (section \ref{sec:yag_h2_parameters}). \underline{$\HH_\text{DARD}$}: from single-DOM LED measurements \cite{martindardupdate}, $r=30\cm$, $\lambda\sca = 10\cm, \lambda\esca = 1.67\m$ (section \ref{sec:dard_parameters}). \underline{$\HH_\text{SpiceHD}$}: from 7-string LED flasher studies \cite{martinspicehddard} and camera observations \cite{rongenswedishcamera}, $r = 0.6\,r\dom = 10\cm$, $\lambda\sca = 0.84\cm$, $\lambda\esca = 14\cm$ (section \ref{sec:spicehd_parameters}). \textbf{Rating}: \ok: Curves look roughly similar. \bad: Curves do not look similar.}
-  \label{tab:angular_acceptance_compatibility}
-\end{table}
+As a first step, however, angular-acceptance curves from simulations with hole-ice parameters from different studies are shown in this section. Table \ref{tab:angular_acceptance_compatibility} at the end of this section (page \pageref{tab:angular_acceptance_compatibility}) summarizes the findings.
 
 
 % https://github.com/fiedl/hole-ice-study/issues/80
@@ -289,3 +267,34 @@ As \clsim and \ppc show good agreement when comparing angular-acceptance curves 
 % from 7-string LED flasher studies \cite{martinspicehddard} and camera observations \cite{rongenswedishcamera}, $r = 0.6\,r\dom = 10\cm$, $\lambda\sca = 0.84\cm$, $\lambda\esca = 14\cm$ (section \ref{sec:spicehd_parameters}
 
 This leaves the hole-ice parameters from the \noun{SpiceHD} study \cite{martinspicehddard} that best match the camera observations \cite{rongenswedishcamera}, $r = 0.6\,r\dom = 10\cm$, $\lambda\sca = 0.84\cm$, $\lambda\esca = 14\cm$ (section \ref{sec:spicehd_parameters}), as the favorable hole-ice parameters for now.
+\subsubsection{Compatibility of Hole-Ice Models}
+\label{sec:compatibility_of_hole_ice_parameters}
+
+Direct photon-propagation-simulation through hole ice allows to compare different hole-ice models and hole-ice parameters.
+Both photon-propagation-simulation tools, \ppc and \clsim, produce matching effective angular-acceptance curves for direct photon propagation through hole ice. For photons approaching the optical module from above, the systematic uncertainties of the \clsim angular-acceptance scans appear too large to consider this angular range. Therefore, this section focuses on the angular range $\cos \eta > 0$ with large statistics, when assessing the compatibility of different hole-ice models.
+
+The \noun{SpiceHD} flasher study is compatible to camera observations. The resulting hole-ice parameters $\HH_\text{SpiceHD}$ as well as the parameters $\HH_\text{YAG H2}$ suggested by earlier laser calibration studies, both suggest a weaker hole-ice effect than approximated in the modified a priori angular-acceptance curve used in standard \clsim simulations. Dima's hole-ice model that only uses flasher-calibration data and does not rely on direct hole-ice simulations, also suggests a weaker hole ice. Using the hole-ice parameters $\HH_\text{DARD}$ in direct hole-ice simulations, suggested by the single-LED calibration study \noun{DARD}, however, results in angular-acceptance curves similar to the a priori angular-acceptance curve. Table \ref{tab:angular_acceptance_compatibility} shows a summary (page \pageref{tab:angular_acceptance_compatibility}).
+
+This leaves no obvious conclusion on which current hole-ice model is to be preferred. But as both direct hole-ice-simulation tools produce compatible results, both tools can now be used to study the various hole-ice scenarios in detail.
+
+\begin{table}[p]
+  \begin{center}
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{rr|ccccccc}
+                            & \small{\textbf{Method}}     & \clsimppc           & \clsimppc         & \clsimppc            & A priori   & Dima \\
+    \small{\textbf{Method}} & \small{\textbf{Parameters}} & $\HH_\text{YAG H2}$ & $\HH_\text{DARD}$ & $\HH_\text{SpiceHD}$ & $\HH_\text{YAG H2}$ & -- \\
+    %                        & $r$                         & \\
+    %                        & $\lambda\sca\hi$            & \\
+    %                        & $\lambda\esca\hi$           & \\
+    \hline
+    \clsimppc               & $\HH_\text{YAG H2}$         & \same               & \greyedout        & \greyedout           & \greyedout & \greyedout \\
+    \clsimppc               & $\HH_\text{DARD}$           & \bad                & \same             & \greyedout           & \greyedout & \greyedout \\
+    \clsimppc               & $\HH_\text{SpiceHD}$        & \ok                 & \bad              & \same                & \greyedout & \greyedout \\
+    A priori                & $\HH_\text{YAG H2}$         & \bad                & \ok               & \bad                 & \same      & \greyedout\\
+    Dima's model            & --                          & \ok                 & \bad              & \ok                  & \bad       & \same
+  \end{tabular}
+  }
+  \end{center}
+  \caption{Compatibility of angular-acceptance curves $a(\eta)$. \textbf{Methods}: \underline{\clsim}: Angular-acceptance simulation with \clsim using the new medium-propagation algorithm with plane waves as photon sources and direct detection as acceptance criterion (section \ref{sec:angular_acceptance_scan}). \underline{\ppc}: POCAM-angular-acceptance simulation with \ppc using direct photon propagation through hole ice and direct detection (section \ref{sec:direct_photon_propagation_with_ppc}). \underline{\clsimppc}: Simulations performed with both, \clsim and \ppc, producing similar results. \underline{A priori}: A priori angular-acceptance curve $a\domhi(\eta)$ for $\HH_\text{YAG H2}$ parameters from \cite{icepaper} (section \ref{sec:hole_ice_approximation}). \underline{Dima}, \underline{Dima's model}: Angular-acceptance curve $a\domdima(\eta;p)$ from flasher unfolding studies \cite{flasherdataderivedicemodels} (section \ref{sec:dimas_model}). \textbf{Hole-Ice Parameters}: Each parameter set $\HH$ consists of a hole-ice-cylinder radius $r$ and a geometric hole-ice scattering length $\lambda\sca$, corresponding to an effective scattering length $\lambda\esca$. \underline{$\HH_\text{YAG H2}$}: from YAG laser measurements \cite{holeicestudieswithyag}, also called H2 model parameters, $r = 30\cm, \lambda\sca=50\cm, \lambda\esca = 8.33\m$ (section \ref{sec:yag_h2_parameters}). \underline{$\HH_\text{DARD}$}: from single-DOM LED measurements \cite{martindardupdate}, $r=30\cm$, $\lambda\sca = 10\cm, \lambda\esca = 1.67\m$ (section \ref{sec:dard_parameters}). \underline{$\HH_\text{SpiceHD}$}: from 7-string LED flasher studies \cite{martinspicehddard} and camera observations \cite{rongenswedishcamera}, $r = 0.6\,r\dom = 10\cm$, $\lambda\sca = 0.84\cm$, $\lambda\esca = 14\cm$ (section \ref{sec:spicehd_parameters}). \textbf{Rating}: \ok: Curves look roughly similar. \bad: Curves do not look similar.}
+  \label{tab:angular_acceptance_compatibility}
+\end{table}
