@@ -51,7 +51,7 @@ Unexpected issues may arise when unit tests are run on another architecture as t
 
 Unit tests are, by design, also insensitive to high-level problems. Each individual component may produce the results expected from this component while still issues may arise when components are not tied together correctly, or because the expectations for an individual component may be wrong, which becomes apparent only when adopting a larger perspective rather than the focused perspective on individual components.
 
-To increase confidence in the new software, therefore, in addition to unit testing, high-level consistency checks need to be performed as described in the following subsections.
+To increase confidence in the new software, therefore, in addition to unit testing, high-level cross checks need to be performed as described in the following subsections.
 
 
 ### Instant-Absorption Tests
@@ -60,7 +60,7 @@ To increase confidence in the new software, therefore, in addition to unit testi
 A simple high-level test can be performed by starting several photons towards a cylinder, which is configured for instant absorption. After propagating the photons using the new media-propagation algorithm and recording the path of each individual photon, one can verify the results making sure than no photon position is recorded inside the instant-absorption cylinder (figure \ref{fig:chiep7Is}).
 Additionally, one can visualize the simulation using the \steamshovel event viewer to verify that no photon enters the instant-absorption cylinder as shown in figure \ref{fig:moo9Eiqu}.
 
-\sourcepar{The implementation of this consistency check can be found in \issue{67}, \issue{47}, and \issue{22}.}
+\sourcepar{The implementation of this cross check can be found in \issue{67}, \issue{47}, and \issue{22}.}
 
 % https://github.com/fiedl/hole-ice-study/issues/67
 \begin{figure}[htbp]
@@ -91,8 +91,7 @@ A related, but more complex scenario is starting photons within two nested cylin
   \label{fig:sahmoo8O}
 \end{figure}
 
-
-### Arrival-Time Distributions
+\subsubsection{Arrival-Time Distributions}
 \label{sec:arrival_time}
 
 % https://github.com/fiedl/hole-ice-study/issues/91
@@ -105,8 +104,8 @@ Figure \ref{fig:eipau6Ag} shows arrival-time distributions for this scenario bei
 \begin{figure}[htbp]
   \subcaptionbox{Top view of the detector strings in this simulation. The photons are started at the middle optical module of string 63, and are received by the optical modules of the surrounding strings 70, 71, 64, 55, 54, and 62.}{\includegraphics[width=.48\linewidth]{img/flasher-scenario}}
   \hfill
-  \subcaptionbox{For different hole-ice configurations, the simulation results in different photon-arrival-time distributions. The dashed lines indicate the mean arrival times.}{\includegraphics[width=.48\linewidth]{img/arrival-time-distribution-eipau6Ag}}
-  \caption{Creating arrival-time distributions for photons propagating from a central position to receiving optical modules around the starting position.}
+  \subcaptionbox{Photon-arrival-time distributions for different hole-ice configurations. The dashed lines indicate the mean arrival times.}{\includegraphics[width=.48\linewidth]{img/arrival-time-distribution-eipau6Ag}}
+  \caption{Creating arrival-time distributions for photons propagating through hole ice. The photons are started at a central position and detected by optical modules around the starting position.}
   \label{fig:eipau6Ag}
 \end{figure}
 
@@ -150,7 +149,7 @@ In the simulation, a pencil beam of $10^4$ photons is started within a hole-ice 
   \caption{\steamshovel event display of the simulation of photons propagating and being absorbed within the hole-ice cylinder without medium transition. The photons are started within the hole-ice cylinder, which is represented by the grey cylinder, inwards. The detector module, which is represented by the white sphere in the center of the figure, is shown only to illustrate the size of the scenery and is configured not to interact with the simulated photons.}
 \end{figure}
 
-\sourcepar{The implementation of this consistency check can be found in \issue{64}.}
+\sourcepar{The implementation of this cross check can be found in \issue{64}.}
 
 The distribution of the total path length should follow an exponential decay curve. From the rate of the decay, one should be able to read the absorption length $\lambda$ (see appendix \ref{sec:exponential_distribution}).
 
@@ -180,7 +179,7 @@ Indeed, the simulation yields the expected distribution of the total path length
 
 % https://github.com/fiedl/hole-ice-study/issues/65
 
-This consistency check aims to verify that the medium-boundary transition is handled correctly when photons enter a hole-ice cylinder from outside.
+This cross check aims to verify that the medium-boundary transition is handled correctly when photons enter a hole-ice cylinder from outside.
 
 % // Ice properties outside the hole ice:
 % floating_t local_scattering_lengths[MEDIUM_LAYERS] = {1000000.0};
@@ -204,7 +203,7 @@ This consistency check aims to verify that the medium-boundary transition is han
 In a simulation, a pencil beam of $10^5$ photons is started in a distance of $2.0\m$ to cylinder center towards the hole-ice cylinder with a radius of $1.0\m$. The effective scattering length outside is set to $10^6\m$, inside to $100\m$. The absorption length outside is set to $1.0\m$, inside to $0.10\m$.
 As before, for each simulated photon, the total path length, from the starting point of the photon along the photon's trajectory to the point where the photon is absorbed, is recorded.
 
-\sourcepar{The implementation of this consistency check can be found in \issue{65}.}
+\sourcepar{The implementation of this cross check can be found in \issue{65}.}
 
 \begin{figure}[htb]
   \smallerimage{cross-check-65-steamshovel}
@@ -229,12 +228,12 @@ The simulation yields the expected distribution of the total path length. Via a 
 
 % https://github.com/fiedl/hole-ice-study/issues/66
 
-This consistency check aims to verify that the medium-boundary transition is handled correctly when photons enter and leave a hole-ice cylinder.
+This cross check aims to verify that the medium-boundary transition is handled correctly when photons enter and leave a hole-ice cylinder.
 
 In a simulation, a pencil beam of $10^5$ photons is started in a distance of $1.5\m$ to the cylinder center towards the hole-ice cylinder with a radius of $0.5\m$. The effective scattering length outside and inside is set to $10^6\m$. The absorption length outside is set to $1.0\m$, inside to $0.75\m$.
 As before, for each simulated photon, the total path length is recorded.
 
-\sourcepar{The implementation of this consistency check can be found in \issue{66}.}
+\sourcepar{The implementation of this cross check can be found in \issue{66}.}
 
 \begin{figure}
   \smallerimage{cross-check-66-steamshovel}
@@ -245,7 +244,7 @@ As the simulated photons may now cross two different medium boundaries, the dist
 
 \begin{figure}
   \image{cross-check-66-histogram}
-  \caption{Distribution of the total path length of simulated photons, which start outside the cylinder, and may be absorbed before, within or after passing the cylinder, using the new medium-propagation algorithm. As expected, the distribution follows three exponential curves. The fitted absorption lengths are $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$, and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$. The true absorption length in the simulation is set to $1.00\m$ outside, and to $0.75\m$ within the hole-ice cylinder.}
+  \caption{Distribution of the total path length of simulated photons, which start outside the cylinder, and may be absorbed before, within or after passing the cylinder, using the new medium-propagation algorithm. The distribution follows three exponential curves. The fitted absorption lengths are $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$, and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$. The true absorption length in the simulation is set to $1.00\m$ outside, and to $0.75\m$ within the hole-ice cylinder.}
 \end{figure}
 
 The simulation yields the expected distribution of the total path length. The absorption lengths $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$ and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$ determined via a curve fit are in accordance with the true absorption length outside of $1.00\m$ and within the hole-ice cylinder of $0.75\m$ set in the simulation.
@@ -256,12 +255,12 @@ The simulation yields the expected distribution of the total path length. The ab
 
 % https://github.com/fiedl/hole-ice-study/issues/71
 
-The consistency checks of the previous sections refer to the absorption length. To examine the scattering-length behavior of the photons simulated using the new media-propagation algorithm, this consistency check observes the distance to the next scattering point in relation to the distance from the hole-ice center at each scattering point.
+The cross checks of the previous sections refer to the absorption length. To examine the scattering-length behavior of the photons simulated using the new media-propagation algorithm, this cross check observes the distance to the next scattering point in relation to the distance from the hole-ice center at each scattering point.
 
 In a simulation, a plane wave of 100 photons is started towards a hole-ice cylinder. Let the hole-ice radius be $0.50\m$. The scattering length within the hole-ice cylinder is $0.06\m$, the scattering length in the surrounding bulk ice is $1.48\m$.
 For each scattering step, the distance to the next scattering point and the current distance to the center of the hole-ice cylinder are recorded.
 
-\sourcepar{The implementation of this consistency check can be found in \issue{71}.}
+\sourcepar{The implementation of this cross check can be found in \issue{71}.}
 
 \begin{figure}[htbp]
   \smallerimage{cross-check-71-steamshovel}

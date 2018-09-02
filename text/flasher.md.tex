@@ -1,6 +1,6 @@
 %!TEX TS-program = ../make.zsh
 
-\subsection{Scanning Hole-Ice Parameters for the Best Agreement with Flasher-Calibration Data}
+\subsection{Scanning Hole-Ice Parameters for Optimal Agreement with Flasher-Calibration Data}
 \label{sec:flasher}
 
 % https://github.com/fiedl/hole-ice-study/issues/59
@@ -20,7 +20,7 @@ Figure \ref{fig:ea9Zieh0} shows 7-string calibration data.\footnote{Data source:
 
 \begin{figure}[htbp]
   \subcaptionbox{Top view of the detector strings. Each green circle represents one detector string, containing 60 optical modules each. In this flasher study, the LEDs of the central optical module on string 63 have been activated, and the amount of light arriving at the optical modules of the surrounding strings 62, 54, 55, 64, 71, and 70 has been measured. Image based on \cite{geometry}}{\halfimage{flasher-scenario}}\hfill
-  \subcaptionbox{Amount of light measured at the receiving optical modules on strings 62, 54, 55, 64, 71, and 70. Each column of this plot represents one receiving string. Within each column, the left most value represents the top most optical module of the string, the right most value represents the bottom most module of the string. Only optical modules are shown that receive at least one photon hit. Strings 62 and 54 receive significantly less light than the other strings.}{\halfimage{flasher-data-2012}}
+  \subcaptionbox{Amount of light measured at the receiving optical modules on strings 62, 54, 55, 64, 71, and 70. Each column of this plot represents one receiving string. Within each column, the left most value represents the top most optical module of the string, the right most value represents the bottom most module of the string. Only optical modules are shown that receive at least one photon hit.}{\halfimage{flasher-data-2012}}
   \caption{7-string flasher data: A central optical module is emitting light using the mounted flasher LEDs. The surrounding optical modules are measuring the amount of light arriving there.}
   \label{fig:ea9Zieh0}
 \end{figure}
@@ -51,7 +51,7 @@ Figure \ref{fig:Cahy7eej} shows \steamshovel visualizations of the simulation sc
   \subcaptionbox{Light emitted by the LEDs at the sending optical module. The modules is positioned centered in a bubble column with a diameter of $60\,\%$ of the diameter of the optical module. Only a fraction of $10^{-8}$ of the photons is shown in this image.\vspace*{3mm}}{\halfimage{flasher-steamshovel-sending}}\hfill
   \halfimage{flasher-steamshovel-single-received-photon}\hfill
   \begin{minipage}[b]{0.48\textwidth}
-    \subcaption{To emphasize the effect of the hole ice, a single photon is isolated in this image, entering a hole-ice cylinder with a diameter of $500\,\%$ of the diameter of the optical module (larger than in the real simulation). The scattering probability increases significantly within the cylinder. Without the cylinder, the photon would have missed the optical module. With the cylinder, the photon is scattered into the sensitive area of the optical module. On the other hand, other photons that would have hit the optical module are now scattered away by the hole ice (not shown in this image).}
+    \subcaption{To emphasize the effect of the hole ice, a single photon is isolated in this image, entering a hole-ice cylinder with a diameter of $500\,\%$ of the diameter of the optical module (larger than in the real simulation). The scattering probability increases significantly within the cylinder.}
   \end{minipage}
   \caption{\steamshovel visualization of the flasher scenario. LEDs at a central optical module emit light that propagates through the ice and is then received at surrounding optical modules.}
   \label{fig:Cahy7eej}

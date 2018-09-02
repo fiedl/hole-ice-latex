@@ -14,7 +14,7 @@ Figure \ref{fig:chie4Ite} shows the result of this simulation. The angular-accep
 
 \begin{figure}[htbp]
   \smallerimage{angular-acceptance-karle-h2-vs-reference}
-  \caption{Comparing the effective angular-acceptance curve currently in use for approximating the effect of hole ice on the detection of photons in simulations to a simulation with direct photon propagation through hole ice using the same hole-ice parameters, hole-ice-cylinder radius $r=30\cm$, geometric hole-ice scattering length $\lambda\sca\hi = 50\cm$. Both curves do not agree very well. LLH is the log binomial likelihood comparing both curves.}
+  \caption{Comparing the effective angular-acceptance curve currently in use for approximating the effect of hole ice on the detection of photons in simulations to a simulation with direct photon propagation through hole ice using the same hole-ice parameters, hole-ice-cylinder radius $r=30\cm$, geometric hole-ice scattering length $\lambda\sca\hi = 50\cm$. LLH is the log binomial likelihood comparing both curves.}
   \label{fig:chie4Ite}
 \end{figure}
 
@@ -46,10 +46,11 @@ $$
 The simulation resulting in the maximal likelihood $L_\HHbest$ corresponds to the set of hole-ice parameters $\HHbest$ that best describe the approximation curve $a\domhi(\eta)$.
 
 Figure \ref{fig:AWa5aiCh} shows the result of the parameter grid scan, plotting the likelihood, or rather $-2\Delta\llh:= -2(\ln L_\HH - \ln L_\HHbest) = -2 \ln \left(\sfrac{L_\HH}{L_\HHbest}\right)$ as a more common measure of agreement, against the effective scattering length $\lambda\esca\hi$ of the hole ice on the one axis, and the radius $r$ of the hole-ice cylinder on the other axis.
+For the optimal parameters $\HHbest$, $\Delta\llh$ is zero.
 
 \begin{figure}[htbp]
   \smallerimage{parameter-scan-contours}
-  \caption{Agreement of the fixed hole-ice-approximation angular-acceptance curve $a\domhi(\eta)$ and direct hole-ice simulations using the new \clsim medium-propagation algorithm with hole-ice-cylinder radii $r$ given in units of the radius $r\dom$ of the optical module, and effective hole-ice scattering lengths $\lambda\esca\hi$. Each dot in the plot represents one parameter set $\HH$ and one corresponding set of simulations. The $-2\Delta\llh$ on the colored axis corresponds to a binomial likelihood. $-2\Delta\llh = 0$ corresponds to the parameter set $\HHbest$ that best agrees with the approximation curve $a\domhi(\eta)$.}
+  \caption{Agreement of the fixed hole-ice-approximation angular-acceptance curve $a\domhi(\eta)$ and direct hole-ice simulations using the new \clsim medium-propagation algorithm with hole-ice-cylinder radii $r$ given in units of the radius $r\dom$ of the optical module, and effective hole-ice scattering lengths $\lambda\esca\hi$. Each dot in the plot represents one parameter set $\HH$ and one corresponding set of simulations.}
   \label{fig:AWa5aiCh}
 \end{figure}
 
