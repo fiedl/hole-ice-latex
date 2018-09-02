@@ -25,7 +25,7 @@ Figure \ref{fig:ea9Zieh0} shows 7-string calibration data.\footnote{Data source:
   \label{fig:ea9Zieh0}
 \end{figure}
 
-The aim of the following series of simulations is to adjust the simulated hole-ice parameters until the calibration data curve is reproduced by the simulation in order to find the hole-ice parameters that best match the calibration data.
+The aim of the following series of simulations is to adjust the simulated hole-ice parameters until the the simulation is able to reproduce the calibration data in order to find the hole-ice parameters that best match the calibration data.
 
 \docframe{
 \docparwithoutframe{This preliminary 7-string flasher study is documented in \issue{59}.}\medskip
@@ -82,7 +82,7 @@ The index $i$ refers to the individual receiving optical modules. Each factor $\
 % Gluesenkamp, 10.1140/epjp/i2018-12042-x, 2017,
 % Probabilistic treatment of the uncertainty from the finite size of weighted Monte Carlo data.
 
-To account for the finite statistics of the simulation, this likelihood can be generalized. Rather than using just the number $\lambda_i$ of expected hits, which assumes infinite statistics for the simulation, one uses the number $k\imc$ of Monte-Carlo hits, which is the number of hits seen in the simulation, and a weight $w$, which quantifies the ratio of calibration data statistics and simulation statistics, to account for the results from the simulations. \cite[equation 21]{Gluesenkamp2018}
+To account for the finite statistics of the simulation, this likelihood can be generalized. Rather than using just the number $\lambda_i$ of expected hits, which assumes infinite statistics for the simulation, one uses the number $k\imc$ of Monte-Carlo hits, which is the number of hits seen in the simulation, and a weight $w$, which quantifies the ratio of calibration-data statistics and simulation statistics, to account for the results from the simulations. \cite[equation 21]{Gluesenkamp2018}
 
 \begin{equation}
   L = \prod_{i} \frac%
@@ -110,7 +110,7 @@ The optimal agreement of simulation and calibration data is achieved with hole-i
 
 % https://github.com/fiedl/hole-ice-study/issues/94
 \paragraph{Systematics}
-First, an outdated configuration for the positions of the optical module has been used in these simulations. Preliminary investigations show that newer calibration data leads to updated position of the optical modules that can differ from the positions used in this study on the order of $1\m$. Thus, newer position calibration information should be used for follow-up studies.
+First, an outdated configuration for the positions of the optical module has been used in these simulations. Preliminary investigations show that based on newer calibration data, the positions of the optical modules have been updated on the order of $1\m$. Thus, newer position calibration information should be used for follow-up studies.
 
 Next, an outdated set of ice-model parameters has been used in this set of simulations. In this study, the `spice_mie` ice model from 2010 has been used. For a proper flasher study, however, current ice models with improved fits for the scattering and absorption lengths, which depend on the ice layer, in particular the dust concentration in these layers, the ice temperature, photon wavelength, and photon direction, should be used. (See \cite{icepaper,flasherdataderivedicemodels}.)
 The tilt of the ice layers and the absorption anisotropy (section \ref{sec:ice}) have not been included in these simulations, because those features are not yet re-implemented for the new medium-propagation algorithm.\footnote{For the current status of re-implementing ice layers and ice anisotropy, see \url{https://github.com/fiedl/hole-ice-study/issues/48}.} These ice properties are negligible for short propagation distances, but become important for distances larger than about $10\m$, which is given for flasher studies where the spacing of sending and receiving optical module is on the order of $100\m$.
@@ -122,7 +122,7 @@ Most importantly, the displacement of the optical modules relative to their hole
 \subsection{Comparing Flasher-Calibration Data to a Flasher Simulation With Cable}
 \label{sec:flasher_with_cable}
 
-As shown in section \ref{sec:flasher}, calibration data indicates a strongly asymmetric shadowing effect when flashing the LEDs of a central optical module and measuring the amount of light detected by the surrounding optical modules. This effect may either be caused by the LEDs of the sending optical module being asymmetrically shielded, or by the receiving optical modules in two of the receiving strings being more shielded than in the other receiving strings, or by a combination of the two.
+As shown in section \ref{sec:flasher}, analyzing calibration data indicates a strongly asymmetric shadowing effect when flashing the LEDs of a central optical module and measuring the amount of light detected by the surrounding optical modules. This effect may either be caused by the LEDs of the sending optical module being asymmetrically shielded, or by the receiving optical modules in two of the receiving strings being more shielded than in the other receiving strings, or by a combination of the two.
 
 As the main cable at the side of the sending optical module causes asymmetric shielding as shown in section \ref{sec:cables}, the question arises whether the cable shadow is sufficient to account for the asymmetries observed in the flasher calibration data. Figure \ref{fig:neen7Noo} (a) shows a flasher-simulation scenario where an opaque cable with $4\cm$ diameter is placed besides the sending optical module such that it would reduce the emitted light in the direction of the two strings that show a reduced amount of detected light in the calibration data.
 
