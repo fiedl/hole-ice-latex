@@ -5,7 +5,8 @@
 
 In current \clsim simulations that do not use the new medium-propagation algorithm introduced by this study, an effective angular-acceptance curve $a\domhi(\eta)$ for optical modules is used to approximate the effect of the hole ice on the detection of photons (section \ref{sec:hole_ice_approximation}).
 
-The hole-ice properties that have been assumed to create the effective angular-acceptance curve $a\domhi(\eta)$, a hole-ice-cylinder radius of $30\cm$ and a geometric hole-ice scattering length of $\lambda\sca\hi = 50\cm$ (\textit{H2 model}) \cite{holeicestudieswithyag}, can be used in a \clsim simulation using the new medium-propagation algorithm and direct propagation through the hole ice in order to compare the effective angular-acceptance curve resulting from the simulation to the approximation curve currently in use.
+The hole-ice properties that have been assumed to create the effective angular-acceptance curve $a\domhi(\eta)$ are a hole-ice-cylinder radius of $30\cm$ and a geometric hole-ice scattering length of $\lambda\sca\hi = 50\cm$ (\textit{H2 model}) \cite{holeicestudieswithyag}.
+These properties can be used in a \clsim simulation using the new medium-propagation algorithm and direct propagation through the hole ice in order to compare the effective angular-acceptance curve resulting from the simulation to the approximation curve currently in use.
 
 \docpar{This simulation using the H2 parameters is documented in \issue{80}.}
 
@@ -13,7 +14,8 @@ In the simulation, direct detection is used as acceptance criterion, plane waves
 Figure \ref{fig:chie4Ite} shows the result of this simulation. The angular-acceptance curve resulting from the simulation does not match the approximation curve currently in use very well.\footnote{To make sure this is no matter of confusing effective scattering length and geometric scattering length, the same simulation has been performed with an effective scattering length of $50\cm$ rather than a geometric scattering length of $50\cm$. These curves match even worse. See appendix \ref{sec:angular_acceptance_simulation_for_h2_parameters}.}
 
 \begin{figure}[htbp]
-  \smallerimage{angular-acceptance-karle-h2-vs-reference}
+  \centering
+  \includegraphics[width=0.75\textwidth]{img/angular-acceptance-karle-h2-vs-reference}
   \caption{Comparing the effective angular-acceptance curve currently in use for approximating the effect of hole ice on the detection of photons in simulations to a simulation with direct photon propagation through hole ice using the same hole-ice parameters, hole-ice-cylinder radius $r=30\cm$, geometric hole-ice scattering length $\lambda\sca\hi = 50\cm$. LLH is the log binomial likelihood comparing both curves.}
   \label{fig:chie4Ite}
 \end{figure}

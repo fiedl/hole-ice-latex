@@ -49,7 +49,7 @@ Here, $s_\text{total}$ is the resulting speedup of the whole process, which is d
 Even in the limit that the component that is optimized takes zero time after applying the optimization, $s_\text{comp}\rightarrow\infty$, the speedup of the whole process is limited.
 Also, \authorname{House} and \authorname{Wyman} \cite{raytracingtips} recommend to first write working code, and then optimize in a second step.
 
-One important key concept to efficient parallel programming is to avoid executional threads being idle, waiting for other threads to finish before resuming.
+One key concept to efficient parallel programming is to avoid executional threads being idle, waiting for other threads to finish before resuming.
 One application of this concept in the hole-ice algorithm is to \textbf{filter hole-ice cylinders by range} in a \textbf{separate loop}.
 The algorithm needs to check in each simulation step, which hole-ice cylinders are in range of the photon and therefore should be considered when calculating the propagation through the hole ice. Without this optimization, the cylinders are processed one by one in each simulation step. While, in each iteration of the cylinder loop, all photons in range of one specific cylinder are propagated through that cylinder, all other photons not in range of the cylinder, wait idly and thereby waste computation time. This is illustrated in figure \ref{fig:ceiV8Yai} (a).
 
@@ -99,13 +99,15 @@ Note that printing a profiling result may be more expensive as the computation t
 \paragraph{Performance Optimizations for Production Use}
 After implementing and debugging a new algorithm, a lot of debug outputs and other development tools are no longer required when running simulations. For those production simulations, the debug features can be turned off by \textbf{compiling the \icecube simulation framework for production} use rather than for debugging. Thereby, simulations run significantly faster as debug outputs often cost more time than the actual simulation itself.
 
-\docpar{How to switch between a debug build and a production build is documented in \issue{73}.}
-
 Also, activating \textbf{kernel caching} on the production machines may improve simulation performance. However, this should only be used when always using the same propagation kernel, and should be avoided when switching between kernel versions or turning kernel features on and off, because the kernel cache will not be reliably reset automatically when changing kernels.
-
-\docpar{How to enable or disable kernel caching is documented in \issue{15}.}
 
 \label{sec:thinning}
 Another way to save computational time when performing simulations, especially large cluster scans, is to scale down the number of photons using a \textbf{thinning factor}. A representative fraction of the photons is propagated in the simulation, and then the simulation results, for example the numbers of hits in each detector module, are scaled up accordingly.
 
-\docpar{This thinning technique is used in the flasher parameter scan documented in \issue{59}.}
+\docframe{
+  \docparwithoutframe{How to switch between a debug build and a production build is documented in \issue{73}.}\medskip
+
+  \docparwithoutframe{How to enable or disable kernel caching is documented in \issue{15}.}\medskip
+
+  \docparwithoutframe{Using a thinning technique in flasher parameter scans is documented in \issue{59}.}
+}

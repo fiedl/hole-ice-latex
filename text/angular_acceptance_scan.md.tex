@@ -4,7 +4,7 @@
 \label{sec:angular_acceptance_scan}
 
 The angular acceptance, or angular sensitivity to incoming photons, of \icecube's digital optical modules (DOMs) depends on the direction of the incoming photons.
-This is due to the detector design as the photomultiplier tube (PMT) is facing downwards as illustrated in figure \ref{fig:weihee6X} (a). Therefore, a photon coming from below is more likely to hit the PMT and be detected than a photon coming from above. Also losses due to glass and gel transmission effects as well as the quantum and collection efficiencies of the PMT depend on the impact angle of the incoming photon \cite{icepaper}.
+This is due to the detector design as the photomultiplier tube (PMT) is facing downwards as illustrated in figure \ref{fig:weihee6X} (a). Therefore, a photon coming from below is more likely to hit the PMT and be detected than a photon coming from above. Also, losses due to glass and gel transmission effects as well as the quantum and collection efficiencies of the PMT depend on the impact angle of the incoming photon \cite{icepaper}.
 
 % effects included in the nominal curve:
 % ice paper, section 5.
@@ -13,13 +13,13 @@ This is due to the detector design as the photomultiplier tube (PMT) is facing d
 Figure \ref{fig:weihee6X} (b) shows the measured \textbf{angular acceptance} $a\dom(\eta)$ of the \icecube DOMs by plotting the \textbf{relative sensitivity} from lab measurements for each polar angle representing the direction of incoming photons. \cite{icepaper} The \textbf{sensitivity} is the fraction of the incoming photons that are registered by the detector. The sensitivity is normalized \textbf{relative} to the optimal incoming angle, which is from below, where the relative sensitivity is defined to be 1. Note that the polar angle $\eta$ is measured from below: For photons coming from below, $\eta = 0$. For photons coming from above, $\eta = \pi$.
 
 \begin{figure}[htbp]
-  \subcaptionbox{Side view of an \icecube digital optical module (DOM). The photomultiplier tube (PMT) in each DOM is facing downwards. Incoming photons are shown in the left upper corner of the illustration. They are moving towards the DOM under a polar angle $\eta$ measured from below. Image taken from \cite{martindardupdate}, slide 9.}{\halfimage{angular-acceptance-schematics-martin-feeJ0yah}}\hfill
-  \subcaptionbox{Angular acceptance $a(\eta)$: Sensitivity of the DOM to incoming photons depending on the polar angle $\eta$, relative to the sensitivity to photons from the optimal incoming angle $\eta = 0, \cos \eta = 1$. The ``nominal'' curve $a\dom(\eta)$ does not consider hole-ice effects and is based on lab measurements. The ``hole ice'' curve $a\domhi(\eta)$ effectively contains hole-ice effects and is based on simulations. Plot taken from \cite{icepaper}, figure 7.}{\halfimage{ice-paper-fig7}}
+  \subcaptionbox{Side view of an \icecube digital optical module (DOM). The photomultiplier tube (PMT) in each DOM is facing downwards. Incoming photons are shown in the left upper corner of the illustration. They are moving towards the DOM under a polar angle $\eta$ measured from below. Image taken from \cite{martindardupdate}.}{\halfimage{angular-acceptance-schematics-martin-feeJ0yah}}\hfill
+  \subcaptionbox{Angular acceptance $a(\eta)$: Relative sensitivity of the DOM to incoming photons depending on the polar angle $\eta$. The ``nominal'' curve $a\dom(\eta)$ does not consider hole-ice effects and is based on lab measurements. The ``hole ice'' curve $a\domhi(\eta)$ effectively contains hole-ice effects and is based on simulations (see footnote \ref{footnote:hole_ice_h2_curve}, page \pageref{footnote:hole_ice_h2_curve}). Plot taken from \cite{icepaper}, figure 7.}{\halfimage{ice-paper-fig7}}
   \caption{Angular acceptance: The sensitivity of \icecube's digital optical modules (DOMs) depends on the polar angle $\eta$ of the direction of incoming photons relative to the DOM.}
   \label{fig:weihee6X}\label{fig:icepaper}
 \end{figure}
 
-
+\FloatBarrier
 \subsubsection{Expected Effect of Hole Ice on the Angular Sensitivity}
 \label{sec:hole_ice_effects}
 
@@ -27,9 +27,9 @@ The effect of hole ice on the detection of incoming photons is expected to depen
 
 For photons approaching the optical module from below, $\eta = 0, \cos \eta = 1$, the hole-ice effect should be strong as the distance that photons need to travel through the hole ice is maximal. The photons are likely to be scattered away before reaching the optical module, effectively reducing the sensitivity for photons approaching the optical module from below as shown in figure \ref{fig:weihee6X} (b) by the blue curve in the region of $\cos \eta = 1$.
 
-For photons approaching the optical module from above, $\eta = \pi, \cos \eta = -1$, the hole-ice effect should also be strong as the distance that photons need to travel through the hole ice is maximal. The optical module is very insensitive to registering photons coming from above. But propagating through the hole ice, photons approaching the optical module from above are likely to be scattered away before reaching the optical module. There is a chance that those photons travel around the optical module and finally hit the module at a lower position in the sensitive area. This effectively increases the sensitivity of the module to photons approaching the optical module from above as shown in figure \ref{fig:weihee6X} (b) by the blue curve in the region of $\cos \eta = -1$.\footnote{The effective ``hole-ice'' angular-acceptance curve (blue curve in figure \ref{fig:weihee6X} b), has been obtained with simulations using the \noun{Photonics} software \cite{lundberg}, assuming a hole-ice cylinder of $30\cm$ radius and a geometric scattering length of $50\cm$. These are the so-called ``H2 parameters'' from an \noun{Amanda} calibration study \cite{holeicestudieswithyag,icemodelsdata}. See also section \ref{sec:a_priori_curve}.}
+For photons approaching the optical module from above, $\eta = \pi, \cos \eta = -1$, the hole-ice effect should also be strong as the distance that photons need to travel through the hole ice is maximal. The optical module is very insensitive to registering photons coming from above. But propagating through the hole ice, photons approaching the optical module from above are likely to be scattered away before reaching the optical module. There is a chance that those photons travel around the optical module and finally hit the module at a lower position in the sensitive area. This effectively increases the sensitivity of the module to photons approaching the optical module from above as shown in figure \ref{fig:weihee6X} (b) by the blue curve in the region of $\cos \eta = -1$.\footnote{The effective ``hole-ice'' angular-acceptance curve (blue curve in figure \ref{fig:weihee6X} b), has been obtained with simulations using the \noun{Photonics} software \cite{lundberg}, assuming a hole-ice cylinder of $30\cm$ radius and a geometric scattering length of $50\cm$. These are the so-called ``H2 parameters'' from an \noun{Amanda} calibration study \cite{holeicestudieswithyag,icemodelsdata}. See also section \ref{sec:a_priori_curve} and appendix \ref{sec:angular_acceptance_simulation_for_h2_parameters}. \label{footnote:hole_ice_h2_curve}}
 
-
+\newpage
 \subsubsection{Measuring the Effective Angular Acceptance With Simulations}
 \label{sec:measuring_angular_acceptance_with_simulations}\label{sec:gauging}
 
@@ -51,7 +51,7 @@ To make this relative frequency $h(\eta_i)$ comparable to the DOM's angular acce
 
 \sourcepar{A script to configure and perform these kinds of simulations is provided in \script{AngularAcceptance}.}
 
-
+\newpage
 \subsubsection{Photon Sources: Pencil Beams and Plane Waves}
 This study considers two types of photon sources for angular-acceptance studies, pencil beams and plane waves. Both are illustrated in figure \ref{fig:quie8Oof}.
 
@@ -156,7 +156,7 @@ Figure \ref{fig:Shai8yah} shows the results of the angular-acceptance scans, com
   \subcaptionbox{plane waves, a priori angular acceptance}{\halfimage{angular-acception-plane-waves-no-hole-ice-no-direct-detection}}
   \subcaptionbox{pencil beams, direct detection}{\halfimage{angular-acceptance-direct-detection-pencil-beam-no-hole-ice}}\hfill
   \subcaptionbox{plane waves, direct detection}{\halfimage{angular-acceptance-direct-detection-plane-waves-no-hole-ice}}\hfill
-  \caption{Comparison of angular-acceptance-scan simulations with different approaches, all without hole ice. In (a), the simulation curve follows the a priori curve by design as the a priori curve is used as DOM acceptance criterion. With direct detection, (c) and (d), the a priori curve is not put into the simulation.}
+  \caption{Comparison of angular-acceptance-scan simulations with different approaches, all without hole ice. In (a), the simulation curve follows the a priori curve by design as the a priori curve is used as DOM acceptance criterion. With direct detection, (c) and (d), the a priori curve is not put into the simulation. The error bars are based on a binomial likelihood (section \ref{sec:parameter_scan}).}
   \label{fig:Shai8yah}
 \end{figure}
 

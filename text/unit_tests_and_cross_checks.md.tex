@@ -91,6 +91,7 @@ A related, but more complex scenario is starting photons within two nested cylin
   \label{fig:sahmoo8O}
 \end{figure}
 
+\FloatBarrier\newpage
 \subsubsection{Arrival-Time Distributions}
 \label{sec:arrival_time}
 
@@ -124,14 +125,14 @@ Thirdly, for stronger hole ice, the left-hand side of the distribution histogram
 
 While these effects confirm the expectations qualitatively, examining other high-level observables allows to compare expectations to the simulations' results even quantitatively. This is the subject of the following sections, beginning with observing the photons' path-length distributions.
 
-
+\FloatBarrier\newpage
 \subsubsection{Exponential Distribution of the Total Path Length}
 \label{sec:total_path_length_distribution}
 
 % https://github.com/fiedl/hole-ice-study/issues/64
 
 Let the \textbf{Total path length} of a photon be the summed distance from the position where the photon is created, along the photon's path, to the position where the photon is absorbed.
-The total path length $X$ of photons that propagate in a medium with an absorption probability that is the same everywhere in the medium, for example within a confined area within the bulk ice, is expected to follow an exponential distribution with a rate parameter corresponding to the absorption probability, or equivalently the absorption length $\lambda$ within the medium.\footnote{If the photons do not depend on each other, the number of photons that are absorbed at a certain path length does only depend on the absorption probability, or equivalently on the absorption length $\lambda$, and the number of photons remaining at this path length. When a photon is absorbed, the number of remaining photons decreases. Thus, the change in the number of photons is proportional to the number of photons, causing the number of photons absorbed at a certain path length following an exponential distribution. See also appendix \ref{sec:exponential_distribution}.}
+The total path length $X$ of photons that propagate in a medium with an absorption probability that is the same everywhere in the medium, for example within a confined volume within the bulk ice, is expected to follow an exponential distribution with a rate parameter corresponding to the absorption probability, or equivalently the absorption length $\lambda$ within the medium.\footnote{If the photons do not depend on each other, the number of photons that are absorbed at a certain path length does only depend on the absorption probability, or equivalently on the absorption length $\lambda$, and the number of photons remaining at this path length. When a photon is absorbed, the number of remaining photons decreases. Thus, the change in the number of photons is proportional to the number of photons, causing the number of photons absorbed at a certain path length following an exponential distribution. See also appendix \ref{sec:exponential_distribution}.}
 
 \begin{equation}
   X: \ \ P(X \in [x; x + \dx[) \propto e^{\sfrac{-x}{\lambda}}, \ \ x \in \reals^+_0
@@ -144,8 +145,8 @@ In the simulation, a pencil beam of $10^4$ photons is started within a hole-ice 
 
 % The scattering length may be chosen arbitrarily small to make it unlikely that the photon will leave the hole-ice cylinder before it is absorbed.
 
-\begin{figure}[htb]
-  \smallerimage{cross-check-64-steamshovel}
+\begin{figure}[htbp]
+  %\smallerimage{cross-check-64-steamshovel}
   \caption{\steamshovel event display of the simulation of photons propagating and being absorbed within the hole-ice cylinder without medium transition. The photons are started within the hole-ice cylinder, which is represented by the grey cylinder, inwards. The detector module, which is represented by the white sphere in the center of the figure, is shown only to illustrate the size of the scenery and is configured not to interact with the simulated photons.}
 \end{figure}
 
@@ -153,9 +154,10 @@ In the simulation, a pencil beam of $10^4$ photons is started within a hole-ice 
 
 The distribution of the total path length should follow an exponential decay curve. From the rate of the decay, one should be able to read the absorption length $\lambda$ (see appendix \ref{sec:exponential_distribution}).
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
   \image{cross-check-64-exponential-distribution.png}
   \caption{Distribution of the total path length of simulated photons both started and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. The distribution follows an exponential curve. The fitted absorption length is $\lambda_\text{abs}=0.1003\m \pm 0.0011\m$. The true absorption length used in the simulation is $0.1000\m$.}
+  \label{fig:gieNa2Th}
 \end{figure}
 
 % [2018-05-14 16:33:11] fiedl@fiedl-mbp ~/hole-ice-study/scripts/FiringRange master ⚡
@@ -172,9 +174,9 @@ The distribution of the total path length should follow an exponential decay cur
 %     > ~/hole-ice-study/results/cross_checks/cross_check_64.txt
 % steamshovel tmp/propagated_photons.i3
 
-Indeed, the simulation yields the expected distribution of the total path length. Via a curve fit, the absorption length $\lambdaabs$ can be determined for this simulation to be $\lambdaabs = 0.1003\m \pm 0.0011\m$, which is in accordance with the true absorption length of $0.1000\m$ used in the simulation.
+Indeed, the simulation yields the expected distribution of the total path length (figure \ref{fig:gieNa2Th}). Via a curve fit, the absorption length $\lambdaabs$ can be determined for this simulation to be $\lambdaabs = 0.1003\m \pm 0.0011\m$, which is in accordance with the true absorption length of $0.1000\m$ used in the simulation.
 
-
+\FloatBarrier\newpage
 \subsubsection{Piecewise Exponential Distribution of the Total Path Length for One Medium Boundary}
 
 % https://github.com/fiedl/hole-ice-study/issues/65
@@ -205,7 +207,7 @@ As before, for each simulated photon, the total path length, from the starting p
 
 \sourcepar{The implementation of this cross check can be found in \issue{65}.}
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
   \smallerimage{cross-check-65-steamshovel}
   \caption{\steamshovel event display of the simulation of photons propagating through the hole-ice medium boundary. The photons are started outside and towards the hole-ice cylinder on the left hand side. As the scattering length within the cylinder is smaller, the photons scatter a lot more within the cylinder. The detector module is shown as a white sphere only to illustrate the size of the scenery and is configured not to interact with the simulated photons.}
 \end{figure}
@@ -214,16 +216,17 @@ As the absorption lengths are different outside and inside the cylinder, the his
 
 Note that the histogram's bins are proportional to the number $m(x):=\sfrac{-\d n(x)}{\dx}$ of photons that are absorbed within the path length interval $[x; x+\dx[$, not the number $n(x)$ of remaining photons. Thus, the histogram is expected to show a jumping discontinuity at the position of the medium border.\footnote{See also appendix \ref{sec:exponential_distribution}.}
 
-\begin{figure}
+\begin{figure}[htbp]
   \image{cross-check-65-histogram}
   \caption{Distribution of the total path length of simulated photons started outside and absorbed within a hole-ice cylinder using the new medium-propagation algorithm. The distribution follows two exponential curves. The fitted absorption lengths are $\lambda_\text{abs,1} = 1.016\m \pm 0.310\m$ and $\lambda_\text{abs,2} = 0.101\m \pm 0.014\m$. The true absorption length in the simulation is set to $1.000\m$ outside, and to $0.100\m$ within the hole-ice cylinder.}
+  \label{fig:iquo3Ou3}
 \end{figure}
 
-The simulation yields the expected distribution of the total path length. Via a curve fit, the absorption lengths $\lambda_\text{abs,1} = 1.016\m \pm 0.310\m$ and $\lambda_\text{abs,2} = 0.101\m \pm 0.014\m$ are in determined in accordance with the true absorption length outside of $1.000\m$ and within the hole-ice cylinder of $0.100\m$ set in the simulation.
+The simulation yields the expected distribution of the total path length (figure \ref{fig:iquo3Ou3}). Via a curve fit, the absorption lengths $\lambda_\text{abs,1} = 1.016\m \pm 0.310\m$ and $\lambda_\text{abs,2} = 0.101\m \pm 0.014\m$ are in determined in accordance with the true absorption length outside of $1.000\m$ and within the hole-ice cylinder of $0.100\m$ set in the simulation.
 
 % Why does the histogram have a half-height bin at the medium border? https://github.com/fiedl/hole-ice-study/issues/65#issuecomment-389624749} — It's not due to binning as in https://github.com/fiedl/hole-ice-study/issues/67#issuecomment-389874539. I've tried that.
 
-
+\FloatBarrier\newpage
 \subsubsection{Piecewise Exponential Distribution of the Total Path Length for Two Medium Boundaries}
 
 % https://github.com/fiedl/hole-ice-study/issues/66
@@ -235,22 +238,24 @@ As before, for each simulated photon, the total path length is recorded.
 
 \sourcepar{The implementation of this cross check can be found in \issue{66}.}
 
-\begin{figure}
+\begin{figure}[htbp]
   \smallerimage{cross-check-66-steamshovel}
   \caption{\steamshovel event display of the simulation of photons propagating through a hole-ice cylinder. As the scattering length is chosen to be very large, the photon path appears as a single line.  The photons are started outside the hole-ice cylinder on the left hand side. Some of them are absorbed before entering the cylinder, some within the cylinder and some after leaving the cylinder on the right hand side. The detector module is shown as a white sphere only to illustrate the size of the scenery and is configured not to interact with the simulated photons.}
 \end{figure}
 
 As the simulated photons may now cross two different medium boundaries, the distribution of the path lengths should follow three exponential curves: On the left hand side of the histogram, which corresponds to the photons that are absorbed before entering the hole ice, the histogram should follow an exponential curve governed by the absorption length outside. In the middle, which corresponds to the photons that are absorbed inside the cylinder, the histogram should follow an exponential curve governed by the absorption length within the hole ice. On the right hand side, which corresponds to the photons that are absorbed after leaving the hole-ice cylinder, the histogram should follow an exponential curve, again, governed by the absorption length outside the cylinder.
 
-\begin{figure}
+\begin{figure}[htbp]
   \image{cross-check-66-histogram}
   \caption{Distribution of the total path length of simulated photons, which start outside the cylinder, and may be absorbed before, within or after passing the cylinder, using the new medium-propagation algorithm. The distribution follows three exponential curves. The fitted absorption lengths are $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$, and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$. The true absorption length in the simulation is set to $1.00\m$ outside, and to $0.75\m$ within the hole-ice cylinder.}
+  \label{fig:io9eiDee}
 \end{figure}
 
-The simulation yields the expected distribution of the total path length. The absorption lengths $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$ and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$ determined via a curve fit are in accordance with the true absorption length outside of $1.00\m$ and within the hole-ice cylinder of $0.75\m$ set in the simulation.
+The simulation yields the expected distribution of the total path length (figure \ref{fig:io9eiDee}). The absorption lengths $\lambda_\text{abs,1} = 1.02\m \pm 0.22\m$, $\lambda_\text{abs,2} = 0.68\m \pm 0.19\m$ and $\lambda_\text{abs,3} = 1.07\m \pm 0.23\m$ determined via a curve fit are in accordance with the true absorption length outside of $1.00\m$ and within the hole-ice cylinder of $0.75\m$ set in the simulation.
 
 
-### Distance to Next Scattering Point in Relation to the Distance From the Hole-Ice Center
+\FloatBarrier
+\subsubsection{Distance to Next Scattering Point in Relation to the Distance From the Hole-Ice Center}
 \label{sec:cross_check_71}
 
 % https://github.com/fiedl/hole-ice-study/issues/71

@@ -39,9 +39,9 @@ If such two calculations are performed within one algorithm, this may lead to me
 
 For example, one part of the hole-ice-correction algorithm used the \noun{Pythagorean Theorem} to calculate the distance of the photon from the hole-ice center. Comparing this to the hole-ice radius, the algorithm decided whether the photon is within or outside the cylinder. Another part of the algorithm calculated intersections of the photon trajectory with the hole-ice cylinder. Evaluating the scale parameters $s_1$ and $s_2$ (see figure \ref{fig:aeQuae2U} a), the algorithm decided again whether the photon is within or outside the hole ice.
 
-If the photon is near the hole-ice radius, one mechanism may come to the conclusion that the photon is within the hole-ice cylinder while the other mechanism considers the photon outisde the cylinder. If both mechanisms are used in the same algorithm, this leads to inconsistencies.
+If the photon is near the hole-ice radius, one mechanism may come to the conclusion that the photon is within the hole-ice cylinder while the other mechanism considers the photon outside the cylinder. If both mechanisms are used in the same algorithm, this leads to inconsistencies.
 
-The soluation to this problem is to only use one way to determine whether the photon is within or outside the cylinder. The decision may still be ``wrong'' compared to a high-precision calculation, but it will be consistent and not cause the program to crash.
+The solution to this problem is to only use one way to determine whether the photon is within or outside the cylinder. The decision may still be ``wrong'' compared to a high-precision calculation, but it will be consistent and not cause the program to crash.
 
 \begin{figure}[htbp]
   \subcaptionbox{using scalar quantities}{\halfimage{intersection-Kahm4UeY}}
@@ -68,7 +68,7 @@ Both methods are described in section \ref{sec:intersections}. The important dif
 \paragraph{Memory Issues: ``OpenCL worker thread died unexpectedly''}
 While the user might wholeheartedly agree that the crash is rather unexpected, the error message does not help to find the underlaying issue, which is most probably a memory issue, for example allocating too few or too much memory on the GPU.
 
-To circumvent this issue, this study adds the propagation configuration parameter `MaxNumOutputPhotonsCorrectionFactor` to clsim, which acts as a factor within the calculation that determines how much memory will be allocated for storing photons.
+To circumvent this issue, this study adds the propagation configuration parameter `MaxNumOutputPhotonsCorrectionFactor` to \clsim, which acts as a factor within the calculation that determines how much memory will be allocated for storing photons.
 
 As a rule of thumb, using values from `MaxNumOutputPhotonsCorrectionFactor = 0.1` to `MaxNumOutputPhotonsCorrectionFactor = 1e-3` may resolve the issue. But the memory might then be insufficient to store all propagated photons, especially when photon paths are to be saved as well as compared to only the hits.
 

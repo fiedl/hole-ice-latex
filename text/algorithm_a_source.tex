@@ -26,7 +26,7 @@ inline bool not_between_zero_and_one(floating_t a) {
 
 inline unsigned int number_of_medium_changes(HoleIceProblemParameters_t p)
 {
-  // These are ordered by their frequency of occurrance in order
+  // These are ordered by their frequency of occurrence in order
   // to optimize for performance.
   if (not_between_zero_and_one(p.entry_point_ratio) && not_between_zero_and_one(p.termination_point_ratio)) return 0;
   if (not_between_zero_and_one(p.entry_point_ratio) || not_between_zero_and_one(p.termination_point_ratio)) return 1;

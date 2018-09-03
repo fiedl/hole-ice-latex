@@ -174,7 +174,7 @@ Using both pythagorean equations, eliminating $m$, one finds:
 1. Calculate $\len{X_1M'}$: $$ \len{X_1 M'} = \sqrt{\len{X_1 M'}^2} $$ In this approach, $\len{X_1M'}^2$ plays the role of the **discriminant**. If it is greater than zero, there are two intersection points. If it is zero, the intersection point $X$ falls onto $M'$, i.e. the line is actually a tangent. If the discriminant is less than zero, there is no intersection, because the radius $r$ is too small, i.e. the line is out of reach, resulting in the discriminant becoming negative.
 1. Calculate the desired distances $\len{AX_1}$ and $\len{AX_2}$: $$ \len{A X_{1,2}} = \len{A M'} \mp \len{X_1 M'} $$
 
-Or, as C code using the opencl native vector functions:
+Or, as \noun{C} code using the \noun{OpenCL} native vector functions:
 
 \begin{ccode}
   // Step 1
