@@ -15,25 +15,25 @@ This approach, however, required to rewrite the previous \clsim media-propagatio
 The layer-tilt and anisotropy ice features had to be left out for the time being and need to be reintegrated into the new algorithm, yet.
 The validity of the algorithms is supported by unit tests and a series of statistical cross checks.
 Also, \clsim hole-ice simulation results were found to agree with simulation results of \ppc, which is separate \icecube simulation software that also supports direct hole-ice propagation, but uses a different approach to implementing the medium transitions.
-The performance difference of the standard-\clsim media propagation and the new hole-ice algorithms is smaller than the uncertainties of the performance measurement.
+The performance difference per scattering step of the standard-\clsim media propagation and the new hole-ice algorithms is smaller than the uncertainties of the performance measurement.
 Simulating the direct photon propagation through hole ice with small scattering lengths, however, adds more scattering steps to the simulation, resulting in a longer total simulation time.
-The performance of large-scale simulations can still be improved by applying GPU-programming and momory optimizations.
+The performance of large-scale simulations can still be improved by applying GPU-programming and memory optimizations.
 
 In general, the new method allows to simulate the propagation through hole-ice cylinders with different absorption lengths, scattering lengths, and radii.
 The optical modules can be positioned with individual displacements relative to the hole ice.
 The method supports the nesting of several hole-ice cylinders of different properties and the simulation of light-absorbing cables.
-Optical modules support direct detection and thereby can accept photon hits based on whether the photon hit the sensitive area of the optical module rather than based on the impact angle.
+Optical modules support direct detection and thereby can accept photon hits based on whether the photon hit the sensitive area of the optical module rather than based on the impact angle, as done in standard \clsim.
 These features allow to fit additional calibration parameters such as the positions, sizes, and scattering lengths of the individual hole-ice columns in the \icecube detector.
 
-Direct-photon-propagation simulations indicate that light propagation through the bulk ice of the \icecube detector is largely unaffected by the hole ice. But each photon that is detected by the optical modules, and every photon that is emitted by the calibration LEDs, needs to propagate through the hole ice and is affected by the properties of the hole ice.
-Depending on the hole-ice properties, the optical modules are effectively shielded by the hole ice. A fraction of the photons is absorbed during the random walk through the hole ice, or effectively reflected by the hole ice.
+Direct-photon-propagation simulations indicate that light propagation through the \icecube detector on large scales is mostly unaffected by the hole ice. But each photon that is detected by the optical modules, and every photon that is emitted by the calibration LEDs, needs to propagate through the hole ice and is affected by the properties of the hole ice.
+For sufficiently sized hole-ice columns with small scattering lengths, the optical modules are effectively shielded by the hole ice. A fraction of the photons is absorbed during the random walk through the hole ice, or effectively reflected by the hole ice.
 Evaluating calibration data indicates a strongly asymmetric shielding of the detector modules. Preliminary flasher simulations with direct photon propagation hint that this cannot be accounted for by the shadow of cables, but can be explained by simulating hole ice with a suitable scattering length, size and position relative to the detector modules.
 
 The new simulation method will be integrated into \icecube's simulation framework.
 Low-statistics studies can use the new simulation method to propagate all photons without hole-ice approximations in order to directly reduce systematic uncertainties.
 As the direct hole-ice propagation requires additional simulation time, high-statistics studies should continue to use approximation techniques, which modify the angular-acceptance behavior of the simulated optical modules to effectively account for the average effect of the propagation through hole-ice columns.
-By comparing the current standard hole-ice approximation to direct simulations, both methods were found to disagree.
-When simulating hole ice with the properties that have been assumed when creating the hole-ice-approximation curves, the new simulations indicate a less pronounced hole-ice effect than the current approximations.
+Comparing the current standard hole-ice approximation to direct simulations, both methods were found to disagree.
+Assuming the same hole-ice properties, the new simulations indicate a less pronounced hole-ice effect than the approximation curves.
 As some, but not all of the recent calibration studies also suggest a weaker hole ice, there is no obvious conclusion on which hole-ice model is to be preferred for the time being.
 With the new simulation tools, however, more detailed hole-ice-simulation studies can be performed aiming to find a hole-ice description that is able to reproduce all calibration observations.
 After that, the approximation curves can be updated accordingly to match the new hole-ice model.
