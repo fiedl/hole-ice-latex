@@ -21,16 +21,18 @@
 %
 \preparesectionmarks
 
+\makeatletter
 \newcommand\shorttitleheaderline{%
   \textbf{\ifdef{\shorttitle}{\shorttitle}{\runtitle}}%
   \ifdef{\dokumentid}{\xspace, \dokumentid}{}%
-  \ifdef{\entwurf}{\xspace, Draft \entwurf}{}%
+  \ifdef{\entwurf}{\xspace, Draft \entwurf}{\xspace, \@date}%
   %\ifthenelse{\equal{\entwurf}{}}{
   %	\datum
   %}{
   %	\textcolor{red}\entwurf\normalcolor
   %} \\
 }
+\makeatother
 
 \fancyhead[EL]{\footnotesize\textsf{\shorttitleheaderline}}
 \ifdef{\currentsection}{\fancyhead[ER]{\ifthenelse{\equal{\currentsection}{}}{}{\footnotesize\textsf{\thesection\ \currentsection}}}}
