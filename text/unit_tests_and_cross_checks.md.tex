@@ -17,7 +17,11 @@ Finally, a sample of propagated photons can be examined regarding their statisti
 
 In order to verify that individual components (``units'') of the implementation produce results as expected, unit tests were implemented for the algorithm that calculates intersections as well as for the hole-ice-correction algorithm.
 
-\sourcepar{The unit tests for the intersection algorithm can be found at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/intersection/intersection_test.c}, the unit tests for the hole-ice-correction algorithm at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/hole_ice/hole_ice_test.c}.}
+\docframe{
+  \sourceparwithoutframe{The unit tests for the intersection algorithm can be found in the folder \texttt{unit\_tests} on the CD-ROM and at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/intersection/intersection_test.c}.}\medskip
+
+  \sourceparwithoutframe{The unit tests for the hole-ice-correction algorithm can be found in the folder \texttt{unit\_tests} on the CD-ROM and at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2017/resources/kernels/lib/hole_ice/hole_ice_test.c}.}
+}
 
 \paragraph{Task} The task of unit tests is to test individual components of a software. In this case, the tests execute separate functions of the new algorithms with fixed input parameters and check whether the functions return the expected results, which, in preparation of the test, have been obtained by other means, either by a separate program, using a separate programming language, a separate algorithm, or via calculations by hand.
 
