@@ -1,0 +1,237 @@
+\subsection{Calculating Intersections of Photon Trajectories With Hole-Ice Cylinders}
+\label{sec:intersections}
+
+\subsubsection{Analytic Approach}\label{analytic-approach}
+
+\image{intersection-Kahm4UeY}
+
+Consider the starting point \(A := (A_x, A_y)\) and the ending point
+\(B := (B_x, B_y)\) of the trajectory.
+
+The length \(\len{AB}\) of the trajectory is given by the norm
+\(\norm{.}\) of the vector difference \(\vec{AB}\) of starting and
+ending point.
+
+\begin{equation} \notag
+  \len{AB} = \norm{\vec{AB}}, \ \ \vec{AB} \identical \vec{B} - \vec{A}, \ \ \norm{\vec{v}} \identical \sqrt{v_x^2 + v_y^2}
+\end{equation}
+
+In order to find the intersection points \(X_1\) and \(X_2\), solve the
+vectorial system of equations
+
+\begin{equation}
+  \vec{A} + s \, \vec{AB} = \vec{M} + \vec{MX}
+\end{equation}\begin{equation}
+  \norm{\vec{MX}} = r
+\end{equation}
+
+for the scalar parameter \(s\). The equation system is quadratic in
+\(s\) resulting in zero, one or two solutions.
+
+\begin{equation}
+  s_{1,2} = \frac{-\beta \mp \sqrt{\beta^2 - 4\alpha\gamma}}{2\alpha}
+\end{equation}\begin{equation}
+  \alpha = (B_x - A_x)^2 + (B_y - A_y)^2
+\end{equation}\begin{equation}
+  \beta = 2\,A_x(B_x-A_x) + 2\,A_y(B_y-Ay) - 2\,M_x(B_x-A_x) - 2\,M_y(B_y-A_y)
+\end{equation}\begin{equation}
+  \gamma = A_x^2 - 2\,A_x\,M_x^2 + M_x^2 + A_y^2 - 2\,A_y\,M_y + M_y^2 - r^2
+\end{equation}
+
+The term under the square root is also called \textbf{discriminant}
+\(D\).
+
+\begin{equation}
+  D = \beta^2 - 4\alpha\gamma
+\end{equation}
+
+For \(D < 0\), the square root does not exist in \(\reals\) and
+therefore, no intersection point exists. For \(D = 0\), there is only
+one intersection point, which is a tangent point. For \(D > 0\), there
+are two intersection points.
+
+Note that \(s = 0\) at the starting point \(A\), \(s = 1\) at the ending
+point \(B\), \(s = s_1\) at the first intersection point \(X_1\) and
+\(s = s_2\) at the second intersection point \(X_2\).
+
+Therefore, the intersection point coordinate vectors \(\vec{X_1}\) and
+\(\vec{X_2}\) are given by:
+
+\begin{equation}
+  \vec{X_1} = \vec{A} + s_1 \, \vec{AB}
+\end{equation}\begin{equation}
+  \vec{X_2} = \vec{A} + s_2 \, \vec{AB}
+\end{equation}
+
+This result can be verified using a symbolic mathematics library like
+\noun{SymPy}\footnote{\textbf{SymPy} is a Python library for symbolic mathematics. \url{http://sympy.org}}.
+
+\begin{python}
+# python
+
+from sympy import *
+init_printing(use_unicode=True)
+
+# Variables
+# ---------
+
+Ax, Ay = symbols("Ax Ay")
+Bx, By = symbols("Bx By")
+Mx, My = symbols("Mx My")
+Px, Py = symbols("Px Py")
+r = symbols("r")
+s = symbols("s")
+
+vx = Bx - Ax
+vy = By - Ay
+
+# First ansatz
+# ------------
+
+lhs = (Ax + s * vx - Mx)**2 + (Ay + s * vy - My)**2 - r**2
+expanded_lhs = expand(lhs)
+
+intersection_equation = Eq(lhs, 0)
+
+solution = solve(intersection_equation, s)
+s1 = solution[0]
+s2 = solution[1]
+
+# Second ansatz
+# -------------
+
+alpha = (By - Ay)**2 + (Bx - Ax)**2
+beta = 2 * Ay * (By - Ay) + 2 * Ax * (Bx - Ax) - 2 * My * (By - Ay) - 2 * Mx * (Bx - Ax)
+gamma = Ay**2 - 2 * Ay * My + My**2 - r**2 + Ax**2 - 2 * Ax * Mx + Mx**2
+discriminant = (beta**2 - 4 * alpha * gamma)
+
+ss1 = (- beta - sqrt(beta**2 - 4 * alpha * gamma)) / (2 * alpha)
+ss2 = (- beta + sqrt(beta**2 - 4 * alpha * gamma)) / (2 * alpha)
+
+# Compare ansatzes
+# ----------------
+
+# See also: http://docs.sympy.org/latest/tutorial/gotchas.html
+
+# # Does not work, because `==` checks object (structural) equality
+# s1 == ss1
+# s1 == ss2
+# s2 == ss1
+# s2 == ss2
+
+# Should be 0 for the matching pairs:
+simplify(s1 - ss1)  # => 0
+simplify(s1 - ss2)
+simplify(s2 - ss1)
+simplify(s2 - ss2)  # => 0
+
+# Or numerically:
+s1.equals(ss1)  # True
+s2.equals(ss2)  # True
+\end{python}
+
+\subsubsection{Geometric Approach}\label{geometric-approach}
+
+It turns out, the simulation on the GPU is faster and more precise if
+one does not treat the coordinates, e.g. \(A_x, A_y\) as separate
+quantities but keeps the calculations as much as possible vectorial and
+uses the GPU-native vector operation functions like \texttt{dot} for the
+vector scalar product (``dot product'').
+
+\image{intersection-vectorial-auloLai2}
+
+\paragraph{Goal}
+
+The goal is to find the distances \(\len{AX_1}, \len{AX_2}\) from the
+starting point \(A\) to the intersection points \(X_1, X_2\).
+
+\paragraph{Relations}
+
+Consider a projection of \(M\) onto \(AB\). The projected point is
+called \(M'\).
+
+Given \(\len{A M'}\) and \(\len{X_1 M'}\), the distances to the
+intersection points can be calculated as:
+
+\begin{equation} \len{A X_{1,2}} = \len{A M'} \mp \len{X_1 M'} \end{equation}
+
+Given \(\vec{AM}\) and the unit vector \(\vec{v}\) in \(\vec{AB}\)
+direction, \(\len{AM'}\) can be calculated using a vector projection:
+
+\begin{equation} \len{AM'} = \vec{AM} \cdot \vec{v} \end{equation}
+
+The operator \(\cdot\) is the scalar product (dot product). The unit
+vector \(\vec{v}\) in \(\vec{AB}\) direction is
+\(\vec{v} = \vec{AB} / \len{AB}\).
+
+The distance \(m:=\len{MM'}\) on right hand side of the triangle
+\(\triangle AM'M\) can be calculated using the pythagorean theorem:
+
+\begin{equation} m: \len{AM'}^2 + m^2 = \len{AM}^2 \end{equation}
+
+The distance \(\len{X_1 M}\), interpreted as part of the triangle
+\(\triangle X_1 M' M\) can be calculated using the pythagorean theorem:
+
+\begin{equation} \len{X_1 M'}: \len{X_1 M'}^2 + m^2 = r^2 \end{equation}
+
+The length \(\len{AM}\) of the vector \(\vec{AM}\) can be calculated
+using the scalar product, i.e.~projecting the vector on itself, and
+taking the square root:
+
+\begin{equation} \len{AM} = \sqrt{\vec{AM} \cdot \vec{AM}} \end{equation}
+
+Using both pythagorean equations, eliminating \(m\), one finds:
+
+\begin{equation}\begin{split}
+  \len{X_1 M'} &= \sqrt{r^2 - m^2} \\
+    &= \sqrt{r^2 - (\len{AM}^2 - \len{AM'}^2)} \\
+    &= \sqrt{r^2 - \len{AM}^2 + \len{AM'}^2} \\
+    &= \sqrt{r^2 - \vec{AM} \cdot \vec{AM} + \len{AM'}^2}
+\end{split}\end{equation}
+
+\paragraph{Algorithm}
+
+Using these relations, the desired distances \(\len{AX_1}, \len{AX_2}\)
+can be calculated with the following steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Calculate the length \(\len{AM'}\) by projecting \(\vec{AM}\) onto the
+  unit vector \(\vec{v}\) in \(\vec{AB}\)-direction:
+  \[ \len{AM'} = \vec{AM} \cdot \vec{v} \]
+\item
+  Calculate \(\len{X_1M'}^2\):
+  \[ \len{X_1 M'}^2 = r^2 - \vec{AM} \cdot \vec{AM} + \len{AM'}^2 \]
+\item
+  Calculate \(\len{X_1M'}\): \[ \len{X_1 M'} = \sqrt{\len{X_1 M'}^2} \]
+  In this approach, \(\len{X_1M'}^2\) plays the role of the
+  \textbf{discriminant}. If it is greater than zero, there are two
+  intersection points. If it is zero, the intersection point \(X\) falls
+  onto \(M'\), i.e.~the line is actually a tangent. If the discriminant
+  is less than zero, there is no intersection, because the radius \(r\)
+  is too small, i.e.~the line is out of reach, resulting in the
+  discriminant becoming negative.
+\item
+  Calculate the desired distances \(\len{AX_1}\) and \(\len{AX_2}\):
+  \[ \len{A X_{1,2}} = \len{A M'} \mp \len{X_1 M'} \]
+\end{enumerate}
+
+Or, as \noun{C} code using the \noun{OpenCL} native vector functions:
+
+\begin{ccode}
+  // Step 1
+  const floating4_t vector_AM = (const floating4_t)(M.x - A.x, M.y - A.y, 0, 0);
+  const floating_t length_AMprime = dot(vector_AM, v);
+
+  // Step 2
+  const floating_t discriminant = r * r - dot(vector_AM, vector_AM) + length_AMprime * length_AMprime;
+
+  // Step 3
+  const floating_t length_XMprime = native_sqrt(discriminant);
+
+  // Step 4
+  const floating_t length_AX1 = length_AMprime - length_XMprime;
+  const floating_t length_AX2 = length_AMprime + length_XMprime;
+\end{ccode}

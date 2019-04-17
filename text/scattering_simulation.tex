@@ -1,0 +1,125 @@
+\section{Examples of Application}
+\label{sec:applications}
+
+This section shows examples of what can be done with the new hole-ice
+algorithms. Section \ref{sec:scattering_simulation} visualizes the
+scattering of photons within hole-ice cylinders with different
+scattering lengths. Sections \ref{sec:angular_acceptance_scan} and
+\ref{sec:parameter_scan} demonstrate scanning the effective angular
+acceptance of optical modules for different hole-ice parameters.
+Sections \ref{sec:cylinder_shift} to \ref{sec:cables} show examples of
+shifting and nesting hole-ice cylinders as well as adding cables as
+cylinders of instant absorption. Section \ref{sec:flasher} shows an
+example of a flasher-calibration study. Section
+\ref{sec:flasher_with_cable} demonstrates a flasher simulation with
+shadowing cable.
+
+\subsection{Visualizing a Hole-Ice Column With Different Scattering Lengths}
+\label{sec:scattering_simulation}
+
+One of the first things one can use the new propagation algorithms for,
+is to visualize the scattering behavior of photons entering a hole-ice
+cylinder.
+
+\paragraph{Simulation}
+
+In this example, 100 simulated photons are propagated towards and into a
+hole-ice cylinder. The photons are started from random positions within
+a 1m-by-1m plane in a distance of \(1\m\) from the cylinder center in
+parallel towards the cylinder. (See figure \ref{fig:Uo8kuo2z} a.)
+
+The cylinder radius is \(30\cm\). The scattering length within the bulk
+ice is \(\lambda\sca = 1.3\m\), corresponding to an effective scattering
+length of \(\lambda\esca = 21.7\m\). The absorption length within the
+bulk ice is \(\lambda\abs = 48.0\m\).
+
+The scattering length \(\lambda\hi\sca\) within the hole ice is defined
+relative to the bulk-ice scattering length:
+\(\lambda\hi\sca = f\,\lambda\sca, \ f \in \reals_0^+\), for example
+\(f = \sfrac{1}{10}\) in figure \ref{fig:Uo8kuo2z} (c),
+\(f = \sfrac{1}{100}\) in figure \ref{fig:Uo8kuo2z} (d), and
+\(f = \sfrac{1}{1000}\) in figure \ref{fig:Uo8kuo2z} (d).
+
+This simulation uses the hole-ice-correction algorithm described in
+section \ref{sec:algorithm_a}. The interaction with the optical detector
+module is deactivated in this simulation.
+
+\docframe{
+\docparwithoutframe{The configuration and implementation of this simulation is documented in \issue{40}.}\medskip
+
+\sourceparwithoutframe{A script for configuring and running this and other simulations of this kind is provided at \url{https://github.com/fiedl/hole-ice-study/tree/master/scripts/FiringRange}.}
+}
+
+\paragraph{Visualization}
+
+The photon-propagation simulation records the starting point, each
+scattering point, and the final trajectory point of each photon. The
+photon trajectories can be visualized using the \steamshovel event
+display software.
+
+Photon trajectories are represented as lines connecting the scattering
+points. The colors of the trajectory segments indicate simulation steps.
+A red trajectory segment represents a photon that has just been created.
+The blue end of the spectrum represents a photon that is about to be
+absorbed.
+
+Figure \ref{fig:Uo8kuo2z} shows the \steamshovel visualizations of the
+simulation described above for different hole-ice scattering lengths.
+
+\youtubepar{An animated visualization of this photon-propagation simulation can be found at\newline \url{https://youtu.be/BhJ6F3B-I1s}, and in the folder \texttt{video} on the CD-ROM.}
+
+\begin{figure}[htbp]
+  \subcaptionbox{$\lambda\hi\sca = 1.0 \cdot \lambda\sca$, 3D view. The hole-ice is represented by the grey cylinder around the optical module represented by a white circle.}{\halfcropimage{example-Uo8kuo2z-sca1-0-steamshovel-color-3d}{0 0 0 2.2cm}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 1.0 \cdot \lambda\sca$, view from above}{\halfimage{example-Uo8kuo2z-sca1-0-steamshovel-color}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 0.1 \cdot \lambda\sca$}{\halfimage{example-Uo8kuo2z-sca0-1-steamshovel-color}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 0.01 \cdot \lambda\sca$}{\halfimage{example-Uo8kuo2z-sca0-01-steamshovel-color}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 0.001 \cdot \lambda\sca$}{\halfimage{example-Uo8kuo2z-sca0-001-steamshovel-color}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 0.0001 \cdot \lambda\sca$}{\halfimage{example-Uo8kuo2z-sca0-0001-steamshovel-color}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 0.0001 \cdot \lambda\sca$, zoom}{\halfimage{example-Uo8kuo2z-sca0-0001-steamshovel-color-zoom}}\hfill
+  \subcaptionbox{$\lambda\hi\sca = 0.0001 \cdot \lambda\sca$, zoom 2}{\halfimage{example-Uo8kuo2z-sca0-0001-steamshovel-color-zoom2}}\hfill
+  \caption{\steamshovel visualization of a photon-propagation simulation where photons are started from a plane on the right hand side onto a hole-ice cylinder with a radius of $30\cm$ from $1\m$ distance. The scattering length $\lambda\sca\hi$ within the hole-ice cylinder is given relative to the scattering length $\lambda\sca$ of the surrounding bulk ice. The absorption length is kept the same within the cylinder as in the bulk ice. The geometric scattering length of the bulk ice is $\lambda\sca = 1.3\m$, the absorption length is $\lambda\abs = 48.0\m$. Colors of the photon trajectories indicate the number of scatterings relative to the total number of scatterings of the photon until absorption. Red: photon just created, blue: photon about to be absorbed. The optical module is shown as a white sphere only to indicate the scale of the scenery. Interaction with the optical module is turned off in the simulation. Animation on \noun{YouTube}: \protect\url{https://youtu.be/BhJ6F3B-I1s}}
+  \label{fig:Uo8kuo2z}
+\end{figure}
+
+\paragraph{Observations}
+
+If the scattering length of the hole ice is the same as the scattering
+length of the bulk ice (figure \ref{fig:Uo8kuo2z} a and b), the photons
+pass right through the cylinder as if it were not there.
+
+The mean scattering angle in the bulk ice as well as in the hole ice is
+assumed as \ang{20} \cite{escawiki}. Therefore, for a weak hole ice with
+a large scattering length, the photons are deflected within the hole
+ice. See figure \ref{fig:Uo8kuo2z} (c) in comparison to (b).
+
+For a stronger hole ice with smaller scattering length, several
+scatterings occur within the hole ice, changing the direction of the
+scattered photons more drastically. This makes the hole-ice cylinder
+cause an effective reflection of the incoming photons. See figure
+\ref{fig:Uo8kuo2z} (d).
+
+In figure \ref{fig:Uo8kuo2z} (e), the scattering length is so small that
+the space between the cylinder border and the optical module is large
+enough to show the typical ``random walk'' \cite{randomwalk} of the
+randomly scattering photons. This random scattering delays the photons
+on their way to the optical module (compare section
+\ref{sec:arrival_time} regarding arrival-time distributions).
+
+For even stronger hole ice, which is shown in figures \ref{fig:Uo8kuo2z}
+(f), (g), and (h), the hole-ice cylinder around the optical module is
+shielding the module from the incoming photons. The small scattering
+length confines the random walk of the photons to the outer region of
+the cylinder as it is unlikely for a photon to be propagated further
+into the cylinder. The photons walk in the outer region until they are
+absorbed, or scattered out of the cylinder and escape.
+
+The same effect, confining the photons to the outer region of the
+cylinder, can be achieved by defining the absorption length within the
+cylinder to \(\lambda\abs\hi = 5\cm\). Then, no photon can reach more
+than \(5\cm\) into the cylinder (figure \ref{fig:Lie7laxa}).
+
+\begin{figure}[htbp]
+  \smallerimage{abs-len-about-5cm-sca-0-001-steamshovel}
+  \caption{\steamshovel visualization of a simulation where the absorption length within the cylinder is set to $\lambda\abs\hi \approx 5\cm$. The scattering length factor is $f\sca=0.001$. No photon can reach more than $5\cm$ into the cylinder. Figure \ref{fig:Uo8kuo2z} (e) on page \pageref{fig:Uo8kuo2z} shows the same simulation without setting the hole-ice absorption length.}
+  \label{fig:Lie7laxa}
+\end{figure}

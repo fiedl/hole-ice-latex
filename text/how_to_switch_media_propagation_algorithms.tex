@@ -1,0 +1,17 @@
+\subsection{How to Switch Back to Standard-\clsim's Media-Propagation Algorithm}
+\label{sec:how_to_switch_media_propagation}
+
+In order to switch back to the standard \clsim algorithm, even after the
+new code has been merged into the \icecube simulation framework, the
+standard \clsim code is provided as drop-in replacement.
+
+\sourcepar{The standard \clsim code as drop-in replacement can be found at \url{https://github.com/fiedl/clsim/blob/sf/hole-ice-2018/resources/kernels/lib/propagation_through_media/standard_clsim.c}}.
+
+To apply this code, switch in \texttt{propagation\_kernel.c.cl} \newline
+from calling \texttt{apply\_propagation\_through\_different\_media()}
+\newline
+to
+\texttt{apply\_propagation\_through\_different\_media\_with\_standard\_clsim()}.
+
+Also check \url{https://github.com/fiedl/hole-ice-study/issues/115}
+whether an \texttt{IceTray} switch has already been implemented.

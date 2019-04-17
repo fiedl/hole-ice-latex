@@ -1,0 +1,104 @@
+\section{Computing Concepts}
+\label{sec:simulation_background}
+
+\subsection{Monte-Carlo Simulations of Photons}
+\label{sec:monte_carlo}
+
+A Monte-Carlo simulation is a computational method that utilizes a large
+amount of random numbers. In order to substitute a complex, possibly
+unknown probability distribution, samples of random numbers are drawn
+from one or several basic probability distributions and processed in
+deterministic calculations. The results are evaluated to gain
+information about processes or quantities involved. This method is
+especially useful for systems with many degrees of freedom.
+\cite{physiklexikon}
+
+This study needs to determine whether and when detector modules are hit
+by photons from a given source assuming different ice parameters. In
+principle, one could devise a mathematical function of input quantities
+and random variables that determines whether and when a photon is
+detected by an optical module. This task would be disproportionately
+complex, however, especially as the function would have to be revised
+for every change in the underlying models.
+
+Therefore, this study uses Monte-Carlo simulations that propagate
+photons through the ice in several simulation steps. Based on drawing
+random numbers from basic probability distributions, the simulation
+determines in each step, whether and when to scatter or to absorb the
+photon next, and, in which direction the photon is to be scattered.
+Checking for DOM collisions in each step, the simulation is able to
+determine for each photon and each detector module whether and when the
+photon is detected by the module.
+
+To obtain probability statements from Monte-Carlo simulations, the
+\textit{law of large numbers} is employed: If an experiment involving
+random processes is repeated \(n\) times, the relative frequency
+\(h_n(A):=\sfrac{H(A)}{n}\) of an event\nbsp \(A\), which occurs
+\(H(A)\) times in total in these \(n\) experiments, approaches the
+\textit{probability}\nbsp \(p(A)\) of the event\nbsp \(A\) for large
+numbers\nbsp \(n\) with certainty. \cite{physiklexikon}
+
+\[
+  \lim_{n \rightarrow \infty} \text{P}(|h_n(A) - p(A)| < \epsilon) = 1, \ \ \ \epsilon \in \reals
+\]
+
+Technical progress concerning computational devices, graphics processing
+units (GPUs) in particular, allows to perform highly parallelized
+Monte-Carlo simulations on large scale. For a random-walk description of
+the propagation of photons, see \cite{absorption1997}. A first
+implementation of a photon-propagation simulation through ice is
+described in \cite{lundberg}. A study of propagation simulations using
+GPUs is presented in \cite{ppcpaper}.
+
+\subsection{Parallel Computing on Graphics Processing Units (GPUs)}
+\label{sec:parallel_computing}
+
+Graphics processing units (GPUs) are optimized for performing simple
+calculations for a large number of values in parallel.
+
+The general procedure for GPU calculations is to allocate memory on the
+GPU, to copy input parameters onto the GPU, perform calculations on the
+GPU, and then to download the results from the GPU. This procedure is
+efficient if the time that is spent for allocating, and copying to and
+from the GPU memory is short compared to the time spent with
+calculations on the GPU. \cite{cudacourse}
+
+The basic units for parallelization are \textit{computational threads}.
+All operations within a thread are sequential, while all those
+operations are applied to a set of threads, called
+\textit{thread block}, in parallel. Each GPU may have one or several
+thread blocks. \cite{cudacourse}
+
+While technological progress is achieved rapidly, GPU memory is still a
+considerably limited resource. In particular fast memory, which requires
+a small amount of physical time for reading and writing information, is
+expensive. Therefore, memory is divided in several categories: The
+\textit{local memory} that belongs only to one thread, is fastest but
+most limited. The \textit{shared memory}, which is common to all threads
+of one thread block, is slower. Next slower is the
+\textit{global memory}, which is common to all thread blocks on the GPU.
+Slowest, but in comparison to the GPU memory practically unlimited, is
+the \textit{host memory}, which is memory not on the GPU but on other
+components of the computer. Efficient memory use is one of the key
+concepts for performant GPU programming.
+\textit{Coalesce memory access}, which means that each thread in a
+thread block reads or writes from or to a coherent memory block parallel
+to the other threads of the thread block, increases memory access
+performance. \cite{cudacourse}
+
+Techniques that utilize the internal optimizations of GPUs allow for
+further performance improvements: Using GPU-native
+\textit{atomic operations} such as the increment operator that increases
+the value of a variable by 1 is more performant than using a generic
+mathematical operation. GPUs support vectors with four components as
+native data types. Using \textit{native vectorial operations} such as a
+dot product is more performant than implementing the operation as
+mathematical function manually. \cite{cudacourse}
+
+In parallel computing, the \textit{step complexity} of an algorithm is a
+measure of the physical time the parallelized algorithm needs to run.
+The \textit{work complexity} is a measure for the summed computational
+work that is done by all threads in that time. A pattern to avoid in
+this context is \textit{thread divergence} where some threads have to
+stay idle and wait for other threads completing their work.
+\cite{cudacourse}

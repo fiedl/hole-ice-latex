@@ -1,0 +1,30 @@
+\subsection{Additional Flow Charts}
+\label{sec:flow_charts}
+
+\subsubsection{\texorpdfstring{Standard \clsim's Media Propagation
+Algorithm}{Standard 's Media Propagation Algorithm}}\label{standard-s-media-propagation-algorithm}
+
+Figure \ref{fig:rieQu7sh} shows a flow chart of standard \clsim's
+media-propagation algorithm (section \ref{sec:standard_clsim}) that does
+not support cylinder-shaped media.
+
+\begin{figure}[htbp]
+  \image{algorithm-clsim-medium-propagation}
+  \caption{Flow chart of standard-\clsim's medium-propagation algorithm. Tilted ice layers and ice anisotropy are hard-coded. Media with other geometries such as hole-ice cylinders are not supported. This medium-propagation algorithm is replaced by the new algorithm described in section \ref{sec:algorithm_b}.}
+  \label{fig:rieQu7sh}
+\end{figure}
+
+\newpage
+
+\subsubsection{New Media-Propagation
+Algorithm}\label{new-media-propagation-algorithm}
+
+A flow chart of the new medium-propagation algorithm introduced in
+section \ref{sec:algorithm_b} that replaces standard-\clsim's
+media-propagation algorithm is shown in figure \ref{fig:iez4Geih}.
+
+\begin{figure}[htbp]
+  \image{algorithm-hole-ice-2018}
+  \caption{Flow chart of the new medium-propagation algorithm. The algorithm determines all medium changes (layers, hole ice) between two interaction points. Then the algorithm loops over all medium changes with different ice properties and calculates the geometrical distances to the next interaction points.}
+  \label{fig:iez4Geih}
+\end{figure}

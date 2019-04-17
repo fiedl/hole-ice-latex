@@ -1,0 +1,268 @@
+\subsection{Scanning Hole-Ice Parameters for Optimal Agreement with Flasher-Calibration Data}
+\label{sec:flasher}
+
+For calibration purposes, each optical module in the \icecube detector
+is equipped with a set of flasher light-emitting diodes (LEDs) as
+illustrated in figure \ref{fig:Quee3yui}. Using these flasher LEDs, a
+known amount of light can be produced at a given position and time
+within the detector that can be measured by the optical modules and can
+thereby be used to calibrate the detector. \cite{icepaper}
+
+\begin{figure}[htbp]
+  \subcaptionbox{Schematic diagram of an optical module. In the upper hemisphere, the flasher board is located, sustaining six horizontally emitting LEDs and six upward pointing LEDs. Image source: \cite{rongenswedishcamera}}{\halfimage{flasher-board-schema}\vspace*{7mm}}\hfill
+  \subcaptionbox{Principle of operation of the LED flasher calibration system: Photons emitted by the LED of one optical module propagate through the ice and are detected by another optical module. The amount of light observed at the receiving optical modules depends on the properties of the ice the photons propagate through on the path from the sending to the receiving optical modules. Image source: \cite{icepaper}}{\halfimage{flasher-propagation-ice-paper}}
+  \caption{\icecube's light-emitting diode (LED) flasher calibration system.}
+  \label{fig:Quee3yui}
+\end{figure}
+
+Light that is emitted at one optical module and detected by another
+module has to travel through the ice in between those modules. The
+amount of light arriving at the target module depends on the amount of
+light absorbed or scattered away on the way from the sending to the
+receiving optical module. Both, the properties of the bulk ice of the
+South Polar glacier, and the properties of the hole ice surrounding the
+sending and the receiving optical modules, contribute to this effect.
+
+Figure \ref{fig:ea9Zieh0} shows 7-string calibration
+data.\footnote{Data source: \cite{flasherdata}} To produce this data
+set, all LEDs on \texttt{DOM 60\_30}, which is the middle optical module
+on string number 30, have been activated at once. The plot shows the
+amount of light received at the optical modules of the surrounding
+strings 62, 54, 55, 64, 71, and 70.
+
+\begin{figure}[htbp]
+  \subcaptionbox{Top view of the detector strings. Each green circle represents one detector string, containing 60 optical modules each. In this flasher study, the LEDs of the central optical module on string 63 have been activated, and the amount of light arriving at the optical modules of the surrounding strings 62, 54, 55, 64, 71, and 70 has been measured. Image based on \cite{geometry}}{\halfimage{flasher-scenario}}\hfill
+  \subcaptionbox{Amount of light measured at the receiving optical modules on strings 62, 54, 55, 64, 71, and 70. Each column of this plot represents one receiving string. Within each column, the left most value represents the top most optical module of the string, the right most value represents the bottom most module of the string. Only optical modules are shown that receive at least one photon hit.}{\halfimage{flasher-data-2012}}
+  \caption{7-string flasher data: A central optical module is emitting light using the mounted flasher LEDs. The surrounding optical modules are measuring the amount of light arriving there.}
+  \label{fig:ea9Zieh0}
+\end{figure}
+
+The aim of the following series of simulations is to adjust the
+simulated hole-ice parameters until the the simulation is able to
+reproduce the calibration data in order to find the hole-ice parameters
+that best match the calibration data.
+
+\docframe{
+\docparwithoutframe{This preliminary 7-string flasher study is documented in \issue{59}.}\medskip
+
+\sourceparwithoutframe{A script to configure and perform these kinds of simulations is provided in \script{FlasherSimulation}.}\medskip
+
+\sourceparwithoutframe{A script for performing flasher simulations as grid scan is provided in \script{FlasherParameterScan}.}
+}
+
+As shown in figure \ref{fig:ea9Zieh0} (b), the amount of light received
+at strings 62 and 54 is significantly reduced compared to the other
+strings. The distances of the sending optical module to the receiving
+strings range from \(122.0\m\) to \(125.4\m\) and average out at
+\(124.5\m\), such that the different distances can only cause a peak
+reduction of about \(2\,\%\) rather than the observed reduction of about
+\(30\,\%\). The properties of the bulk ice cannot account for the
+asymmetric reduction either. The reduction may be caused by some kind of
+asymmetric shadowing effect, either by shadowing
+cables\footnote{Flasher simulation with cable: See section \ref{sec:flasher_with_cable}.},
+or by asymmetric hole ice in proximity of the sending optical module,
+such that the emitted light is suppressed in the direction to strings 62
+and 54. The reduction may also be caused by the hole ice of strings 62
+and 54 having other optical properties than the hole ice of the other
+strings, or by the position of the hole-ice cylinders of strings 62 and
+54, shielding those strings less from the direction of the sending
+string 63. A systematic simulation study to investigate those scenarios
+is out of scope of this study, but is suggested as a follow-up
+study.\followup
+
+In this flasher study, all optical modules are assumed to be positioned
+central in their respective hole-ice cylinders. In the simulation, hits
+are recorded in all optical modules of the detector. For a first
+attempt, however, only the receiving strings 55, 64, 71, and 70 are used
+to fit the properties of the hole
+ice.\footnote{If the dominant effect causing the asymmetry is the displacement of the sending optical module within the hole ice, excluding strings 62 and 54 leads to a systematic error. If the dominant effect causing the asymmetry is the shadowing cable, including those strings leads to a systematic error. Further studies are required to account for both possibilities.}
+Figure \ref{fig:Cahy7eej} shows \steamshovel visualizations of the
+simulation scenario.
+
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{Total view of the detector. The flasher LEDs have been activated with full brightness. To see separate photon tracks in the image, only a fraction of $10^{-8}$ of the photons is shown in this image. The detector strings are about 125\m apart. The optical modules can detect light emitted up to 500\m away. \cite{instrumentation}\vspace*{3mm}}{\halfimage{flasher-steamshovel-total}}\hfill
+  \subcaptionbox{Light emitted by the LEDs at the sending optical module. The modules is positioned centered in a bubble column with a diameter of $60\,\%$ of the diameter of the optical module. Only a fraction of $10^{-8}$ of the photons is shown in this image.\vspace*{3mm}}{\halfimage{flasher-steamshovel-sending}}\hfill
+  \halfimage{flasher-steamshovel-single-received-photon}\hfill
+  \begin{minipage}[b]{0.48\textwidth}
+    \subcaption{To emphasize the effect of the hole ice, a single photon is isolated in this image, entering a hole-ice cylinder with a diameter of $500\,\%$ of the diameter of the optical module (larger than in the real simulation). The scattering probability increases significantly within the cylinder.}
+  \end{minipage}
+  \caption{\steamshovel visualization of the flasher scenario. LEDs at a central optical module emit light that propagates through the ice and is then received at surrounding optical modules.}
+  \label{fig:Cahy7eej}
+\end{figure}
+
+\paragraph{Likelihood}
+
+As a measure for comparing the calibration data to the simulation, a
+Poisson likelihood \(L\) is used as a basis.
+
+\begin{equation}
+  L = \prod_{i} \text{P}_{\lambda_i}(k_i) = \prod_{i} \frac{\lambda_i^{k_i}\,\e^{-\lambda_i}}{k_i !}
+\end{equation}
+
+The index \(i\) refers to the individual receiving optical modules. Each
+factor \(\text{P}_{\lambda_i}(k_i)\) represents the probability that
+module \(i\) registers \(k_i\) hits, given by the calibration data,
+while \(\lambda_i\), which is the mean of the Poisson distribution,
+represents the expected number of hits from the simulation.
+
+To account for the finite statistics of the simulation, this likelihood
+can be generalized. Rather than using just the number \(\lambda_i\) of
+expected hits, which assumes infinite statistics for the simulation, one
+uses the number \(k\imc\) of Monte-Carlo hits, which is the number of
+hits seen in the simulation, and a weight \(w\), which quantifies the
+ratio of calibration-data statistics and simulation statistics, to
+account for the results from the simulations.
+\cite[equation 21]{Gluesenkamp2018}
+
+\begin{equation}
+  L = \prod_{i} \frac%
+    {\left(\frac{1}{w}\right)^{k\imc} \cdot \left(k_i + k\imc - 1\right)!}%
+    {(k\imc - 1)! \cdot k_i! \cdot \left( 1 + \frac{1}{w} \right)^{k_i + k\imc}}
+\end{equation}
+
+If, in order to improve accuracy, the simulation has 10 times the number
+of photons as compared to the calibration data, the weight would be
+\(w=\sfrac{1}{10}\) as each simulated photon would correspond only to
+\(\sfrac{1}{10}\) real photons. If, in order to save computation time,
+only \(\sfrac{1}{10}\) of the number of photons from the calibration
+data are simulated (section \ref{sec:thinning}), the weight is \(w=10\)
+as each simulated photon corresponds to 10 photons from the calibration
+data.
+
+\paragraph{Results}
+
+Figure \ref{fig:ut4nao7X} shows a contour plot of the conducted
+parameter scan. The likelihood \(L_\HH\) of agreement of calibration
+data and the simulation using the hole-ice parameters \(\HH\) given by
+the coordinate axes, or rather
+\(-2\Delta\llh:= -2(\ln L_\HH - \ln L_\HHbest) = -2 \ln \left(\sfrac{L_\HH}{L_\HHbest}\right)\),
+is plotted against the hole-ice parameters. \(L_\HHbest\) is the maximum
+likelihood that corresponds to simulation with the hole-ice parameters
+\(\HHbest\) that best describe the calibration data, such that
+\(\Delta\llh = 0\) corresponds to the simulation that best agrees with
+the calibration data.
+
+\begin{figure}[htbp]
+  \smallerimage{flasher-contours-59}
+  \caption{Agreement of flasher calibration data with flasher simulations for different hole-ice parameters. The axes show the radius of the simulated hole-ice column and the effective scattering length of the hole ice. The blue ``valley'' shows the region of best agreement of data and simulation. Above the valley, the simulated hole ice is too weak, below the valley it is too strong to account for the amount of photon hits in the calibration data.}
+  \label{fig:ut4nao7X}
+\end{figure}
+
+The contour plot shows a valley (blue area) where the simulated hole ice
+leads to good agreement of simulation and calibration data. If the
+radius of the simulated hole-ice cylinder is too small, or the
+scattering length of the hole ice is too large, the hole-ice effect is
+too weak and the amount of light arriving at the receiving optical
+modules is too high compared to the flasher calibration data. If, on the
+other hand, the hole-ice cylinder is too large, or the scattering length
+of the hole ice is too small, the hole-ice effect is too strong and the
+amount of light arriving at the receiving optical modules is too low
+compared to the flasher calibration data.
+
+The optimal agreement of simulation and calibration data is achieved
+with hole-ice parameters \(\HHbest\):
+\(r = 0.83\,r\dom, \lambda\esca\hi = 0.10\m\), with a log likelihood
+\(\llh = \ln L_\HHbest = -278.66\). Note, however, that this example
+study is only to be considered a proof of concept for this kind of
+flasher parameter scan. Due to a number of systematics, in particular
+due to the unrealistic assumption that all optical modules are
+symmetrically centered within their hole-ice columns, it is expected
+that the study does not fit the correct hole-ice properties.
+
+\paragraph{Systematics}
+
+First, an outdated configuration for the positions of the optical module
+has been used in these simulations. Preliminary investigations show that
+based on newer calibration data, the positions of the optical modules
+have been updated on the order of \(1\m\). Thus, newer position
+calibration information should be used for follow-up studies.
+
+Next, an outdated set of ice-model parameters has been used in this set
+of simulations. In this study, the \texttt{spice\_mie} ice model from
+2010 has been used. For a proper flasher study, however, current ice
+models with improved fits for the scattering and absorption lengths,
+which depend on the ice layer, in particular the dust concentration in
+these layers, the ice temperature, photon wavelength, and photon
+direction, should be used. (See
+\cite{icepaper,flasherdataderivedicemodels}.) The tilt of the ice layers
+and the absorption anisotropy (section \ref{sec:ice}) have not been
+included in these simulations, because those features are not yet
+re-implemented for the new medium-propagation
+algorithm.\footnote{For the current status of re-implementing ice layers and ice anisotropy, see \url{https://github.com/fiedl/hole-ice-study/issues/48}.}
+These ice properties are negligible for short propagation distances, but
+become important for distances larger than about \(10\m\), which is
+given for flasher studies where the spacing of sending and receiving
+optical module is on the order of \(100\m\).
+
+Most importantly, the displacement of the optical modules relative to
+their hole-ice columns has not been considered in this study and should
+be included in follow-up simulations. In this study, two receiving
+strings have been deliberately excluded due to the observed asymmetry
+(figure \ref{fig:ea9Zieh0}). After determining the effect of the
+shadowing cable in simulations, however, the displacement of the optical
+module along the direction suggested by the observed asymmetry should be
+included as fit parameter. Preliminary investigations show that
+neglecting the displacement of the optical module causes systematic
+uncertainties for the fitted hole-ice scattering length on the order of
+\(30\,\%\).
+
+\subsection{Comparing Flasher-Calibration Data to a Flasher Simulation With Cable}
+\label{sec:flasher_with_cable}
+
+As shown in section \ref{sec:flasher}, evaluating calibration data
+indicates a strongly asymmetric shadowing effect when flashing the LEDs
+of a central optical module and measuring the amount of light detected
+by the surrounding optical modules. This effect may either be caused by
+the LEDs of the sending optical module being asymmetrically shielded, or
+by the receiving optical modules in two of the receiving strings being
+more shielded than in the other receiving strings, or by a combination
+of the two.
+
+As the main cable at the side of the sending optical module causes
+asymmetric shielding as shown in section \ref{sec:cables}, the question
+arises whether the cable shadow is sufficient to account for the
+asymmetries observed in the flasher calibration data. Figure
+\ref{fig:neen7Noo} (a) shows a flasher-simulation scenario where an
+opaque cable with \(4\cm\) diameter is placed besides the sending
+optical module such that it would reduce the emitted light in the
+direction of the two strings that show a reduced amount of detected
+light in the calibration data.
+
+\begin{figure}[htbp]
+  \subcaptionbox{Top view of the detector strings with position of the shadowing cable. Image based on \cite{geometry}.}{\halfimage{flasher-scenario-with-cable}}\hfill
+  \subcaptionbox{Amount of light seen by the receiving optical modules. From left to right each peak corresponds to one of the strings 62, 54, 55, 64, 71, and 70.}{\halfimage{flasher-simulation-with-cable-vs-data}}
+  \caption{Flasher-simulation scenario with a shadowing cable besides the sending optical module.}
+  \label{fig:neen7Noo}
+\end{figure}
+
+\docpar{This flasher simulation with shadowing cable is documented in \issue{97}.}
+
+In this flasher simulation, the sending and the receiving optical
+modules are embedded in a bubble column of a radius of \(83\,\%\) of the
+optical module and an effective bubble-column scattering length of
+\(10\cm\), which are the best-fit parameters of the flasher scan in
+section \ref{sec:flasher} that only considers the supposedly unshadowed
+receiving strings 55, 64, 71, and 70. All bubble columns are positioned
+symmetrically relative to the embedded optical modules, such that the
+bubble columns only cause an overall reduction, but no azimuthal
+asymmetry. The distances of the sending optical module to the receiving
+strings range from \(122.0\m\) to \(125.4\m\) and their differences can
+only cause a peak reduction of about \(2\,\%\). Therefore, in this
+scenario, the shadowing cable is the only remaining candidate to cause
+the observed peak reduction of about \(32\,\%\) observed in the
+calibration data. However, comparing results of the flasher simulation
+with shadowing cable to the flasher-calibration data (figure
+\ref{fig:neen7Noo} b) makes it implausible that the shadowing cable
+alone could be the cause of the azimuthal asymmetry.
+
+Hole ice, on the other hand, is a suitable candidate to account for the
+observed asymmetric peak reduction. Assuming the entire drill hole being
+filled with hole ice, varying the effective hole-ice scattering from
+\(60\cm\) to \(40\cm\) can cause a peak reduction in the observer
+magnitude of \(30\,\%\). As section \ref{sec:cylinder_shift} has shown
+that the displacement of the optical modules relative to the hole ice
+may cause strong asymmetric effects, it is plausible that a displacement
+of the optical modules relative to a hole ice with suitable optical
+properties is required to explain the asymmetric effects observed in
+calibration data.

@@ -1,0 +1,109 @@
+\subsection{Exponential Distribution of the Total Photon Path Length}
+\label{sec:exponential_distribution}
+
+This section shows why the total-path-length distribution of photons
+propagating through a homogeneous medium described in section
+\ref{sec:total_path_length_distribution} is expected to follow an
+exponential curve.
+
+Let \(N\) be the total number of started within the medium. Let
+\(\lambda\abs\) be the photon absorption length within the medium.
+
+The probability \(p(x):=f\,\dx\) for a photon to be absorbed within its
+path length interval \([x; x + \dx[\) is the same as long as the photon
+stays within the homogeneous medium.
+
+Let \(n(x)\) be the number of photons with a path length of \(x\) or
+more, which is the number of photons that still exist with a path length
+greater or equal \(x\).
+
+The number of photons \(m(x)\) that are absorbed within the interval
+\([x; x + \dx[\) is determined by the change of the number of remaining
+photons, which in the limit of many photons is proportional to the
+absorption probability \(p(x)\).
+
+\[ m(x) = -\dn(x) = p(x)\ n(x) = f\,\dx\,n(x) \]
+
+\[ \frac{\d}{\dx}\ n(x) = -f\ n(x) \]
+
+As the derivative of \(n\) is proportional to \(n\), \(n\) is an
+exponential.
+
+\[
+  n(x) = a\,\e^{b\,x}, \ \ \
+  \frac{\d}{\dx}\,n(x) = b\,a\,\e^{b\,x} = b\,n(x) = -f\,n(x)
+\]
+
+The absorption length \(\lambda\abs\) is defined as the distance after
+that the number of photons has dropped to \(\sfrac{1}{\e}\) of the
+original number.
+
+\[
+  n(x) = a\,\e^{b\,x}, \ \
+  n(\lambda\abs) = \frac{1}{\e}\, n(0)
+  \ \ \Rightarrow \ \
+  b = \sfrac{-1}{\lambdaabs}
+\]
+
+\[
+  n(x) = n(0) \cdot \e^{\sfrac{-x}{\lambda\abs}}, \ \ \ n(0) = N
+\]
+
+In a histogram of the total path lengths \(X\), the bin height is
+proportional to the number \(m(x)\) of photons that are absorbed within
+the interval \([x; x + \dx[\), not the number \(n(x)\) of remaining
+photons.
+
+\[
+  m(x) = p(x)\,n(x) = p(x)\,N\,\e^{\sfrac{-x}{\lambda\abs}}
+\]
+
+In the case of a homogeneous medium where \(p(x)\) is constant for all
+\(x\), \(p(x) = p_0\), the histogram should also follow an exponential
+curve.
+
+\[
+  m(x) = p_0\,N\,\e^{\sfrac{-x}{\lambda\abs}}
+\]
+
+From the rate of the exponential decay, one can read the absorption
+length \(\lambda\abs\).
+
+If, on the other hand, there is a medium border at \(x_0\) such that the
+absorption probability is piecewise defined,
+
+\[
+  p(x) = \begin{cases}
+    p_0 & : x \leq x_0 \\
+    p_1 & : x > x_0
+  \end{cases}
+\]
+
+then the histogram follows a piecewise defined curve, consisting of two
+exponential curves.
+
+\[
+  m(x) = \begin{cases}
+    p_0\,N\,\e^{\sfrac{-x}{\lambda_0}} & : x \leq x_0 \\
+    p_1\,N\,\e^{\sfrac{-x}{\lambda_1}} & : x > x_0
+  \end{cases}
+\]
+
+From the rates of the exponential decays, one can read the absorption
+lengths \(\lambda_0\) and \(\lambda_1\) of both media from the
+histogram.
+
+Note that as the histogram shows the number \(m(x)\) of decayed photons
+within an interval, not the number \(n(x)\) of remaining photons, the
+curve the histogram follows does not need to be continuous but may have
+a jump discontinuity at the position \(x_0\) of the medium border.
+
+The number \(n(x)\) of remaining photons, however, is continuous, also
+at the position \(x_0\) of the medium border.
+
+\[
+  n(x) = N - \int_0^x m(x) = \begin{cases}
+    N - f_0\,N\,\lambda_0\,\e^{\sfrac{-x}{\lambda_0}} & : x \leq x_0 \\
+    n(x_0) - f_1\,N\,\lambda_1\,\e^{\sfrac{-x}{\lambda_1}} & : x > x_0
+  \end{cases}
+\]
