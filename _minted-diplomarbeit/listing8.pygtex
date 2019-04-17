@@ -1,0 +1,56 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2018/resources/kernels/lib/ice\PYGZus{}layers/ice\PYGZus{}layers.c}
+
+\PYG{c+cp}{\PYGZsh{}ifndef ICE\PYGZus{}LAYERS\PYGZus{}C}
+\PYG{c+cp}{\PYGZsh{}define ICE\PYGZus{}LAYERS\PYGZus{}C}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}ice\PYGZus{}layers.h\PYGZdq{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{add\PYGZus{}ice\PYGZus{}layers\PYGZus{}on\PYGZus{}photon\PYGZus{}path\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}\PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{photonRange}\PYG{p}{,} \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+
+  \PYG{c+c1}{// The closest ice layer is special, because we need to check how far}
+  \PYG{c+c1}{// it is away from the photon. After that, all photon layers are equidistant.}
+  \PYG{c+c1}{//}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{z\PYGZus{}of\PYGZus{}closest\PYGZus{}ice\PYGZus{}layer\PYGZus{}boundary} \PYG{o}{=}
+      \PYG{n}{mediumLayerBoundary}\PYG{p}{(}\PYG{n}{photon\PYGZus{}layer}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z}\PYG{p}{));}
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZgt{}} \PYG{n}{ZERO}\PYG{p}{)} \PYG{n}{z\PYGZus{}of\PYGZus{}closest\PYGZus{}ice\PYGZus{}layer\PYGZus{}boundary} \PYG{o}{+=}
+      \PYG{p}{(}\PYG{n}{floating\PYGZus{}t}\PYG{p}{)}\PYG{n}{MEDIUM\PYGZus{}LAYER\PYGZus{}THICKNESS}\PYG{p}{;}
+
+  \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+  \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+      \PYG{n}{my\PYGZus{}divide}\PYG{p}{(}\PYG{n}{z\PYGZus{}of\PYGZus{}closest\PYGZus{}ice\PYGZus{}layer\PYGZus{}boundary} \PYG{o}{\PYGZhy{}} \PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z}\PYG{p}{);}
+  \PYG{k+kt}{int} \PYG{n}{next\PYGZus{}photon\PYGZus{}layer} \PYG{o}{=}
+      \PYG{n}{photon\PYGZus{}layer}\PYG{p}{(}\PYG{n}{z\PYGZus{}of\PYGZus{}closest\PYGZus{}ice\PYGZus{}layer\PYGZus{}boundary} \PYG{o}{+} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z}\PYG{p}{);}
+  \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+      \PYG{n}{getScatteringLength}\PYG{p}{(}\PYG{n}{next\PYGZus{}photon\PYGZus{}layer}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+  \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+      \PYG{n}{getAbsorptionLength}\PYG{p}{(}\PYG{n}{next\PYGZus{}photon\PYGZus{}layer}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+
+  \PYG{c+c1}{// Now loop through the equidistant layers in range.}
+  \PYG{c+c1}{//}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{max\PYGZus{}trajectory\PYGZus{}length\PYGZus{}between\PYGZus{}two\PYGZus{}layers} \PYG{o}{=}
+      \PYG{n}{my\PYGZus{}divide}\PYG{p}{((}\PYG{n}{floating\PYGZus{}t}\PYG{p}{)}\PYG{n}{MEDIUM\PYGZus{}LAYER\PYGZus{}THICKNESS}\PYG{p}{,} \PYG{n}{my\PYGZus{}fabs}\PYG{p}{(}\PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z}\PYG{p}{));}
+  \PYG{k}{while} \PYG{p}{(}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{+} \PYG{n}{max\PYGZus{}trajectory\PYGZus{}length\PYGZus{}between\PYGZus{}two\PYGZus{}layers} \PYG{o}{\PYGZlt{}} \PYG{n}{photonRange}\PYG{p}{)}
+  \PYG{p}{\PYGZob{}}
+    \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+    \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+        \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]}
+        \PYG{o}{+} \PYG{n}{max\PYGZus{}trajectory\PYGZus{}length\PYGZus{}between\PYGZus{}two\PYGZus{}layers}\PYG{p}{;}
+    \PYG{n}{next\PYGZus{}photon\PYGZus{}layer} \PYG{o}{=} \PYG{n}{photon\PYGZus{}layer}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z}
+        \PYG{o}{+} \PYG{p}{(}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{+} \PYG{l+m+mf}{0.01}\PYG{p}{)} \PYG{o}{*} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z}\PYG{p}{);}
+    \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+        \PYG{n}{getScatteringLength}\PYG{p}{(}\PYG{n}{next\PYGZus{}photon\PYGZus{}layer}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+    \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+        \PYG{n}{getAbsorptionLength}\PYG{p}{(}\PYG{n}{next\PYGZus{}photon\PYGZus{}layer}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+  \PYG{p}{\PYGZcb{}}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{int} \PYG{n+nf}{photon\PYGZus{}layer}\PYG{p}{(}\PYG{n}{floating\PYGZus{}t} \PYG{n}{z}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{n}{min}\PYG{p}{(}\PYG{n}{max}\PYG{p}{(}\PYG{n}{findLayerForGivenZPos}\PYG{p}{(}\PYG{n}{z}\PYG{p}{),} \PYG{l+m+mi}{0}\PYG{p}{),} \PYG{n}{MEDIUM\PYGZus{}LAYERS}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Get clsim fork}
+git clone git@github.com:fiedl/clsim.git \PYG{n+nv}{\PYGZdl{}SCRATCH}/clsim
+\PYG{n+nb}{cd} \PYG{n+nv}{\PYGZdl{}SCRATCH}/clsim
+
+\PYG{c+c1}{\PYGZsh{} Symlink it into the icesim source}
+\PYG{n+nb}{cd} \PYG{n+nv}{\PYGZdl{}ICESIM\PYGZus{}ROOT}/src
+rm \PYGZhy{}rf clsim
+ln \PYGZhy{}s \PYG{n+nv}{\PYGZdl{}SCRATCH}/clsim clsim
+
+\PYG{c+c1}{\PYGZsh{} Compile it}
+\PYG{n+nb}{cd} \PYG{n+nv}{\PYGZdl{}ICESIM\PYGZus{}ROOT}/build
+make \PYGZhy{}j \PYG{l+m}{6}
+\end{Verbatim}

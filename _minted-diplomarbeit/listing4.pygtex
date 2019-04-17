@@ -1,0 +1,91 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2017/resources/kernels/lib/intersection/intersection.c}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}intersection.h\PYGZdq{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{calculate\PYGZus{}intersections}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{o}{*}\PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{// Step 1}
+  \PYG{k}{const} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{vector\PYGZus{}AM} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{mx} \PYG{o}{\PYGZhy{}} \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{ax}\PYG{p}{,} \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{my} \PYG{o}{\PYGZhy{}} \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{ay}\PYG{p}{,} \PYG{l+m+mf}{0.0}\PYG{p}{,} \PYG{l+m+mf}{0.0}\PYG{p}{\PYGZcb{};}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{xy\PYGZus{}projection\PYGZus{}factor} \PYG{o}{=} \PYG{n}{my\PYGZus{}sqrt}\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{sqr}\PYG{p}{(}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{direction}\PYG{p}{.}\PYG{n}{z}\PYG{p}{));}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{=} \PYG{n}{dot}\PYG{p}{(}\PYG{n}{vector\PYGZus{}AM}\PYG{p}{,} \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{direction}\PYG{p}{)} \PYG{o}{/} \PYG{n}{xy\PYGZus{}projection\PYGZus{}factor}\PYG{p}{;}
+
+  \PYG{c+c1}{// Step 2}
+  \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{discriminant} \PYG{o}{=} \PYG{n}{sqr}\PYG{p}{(}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{r}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{dot}\PYG{p}{(}\PYG{n}{vector\PYGZus{}AM}\PYG{p}{,} \PYG{n}{vector\PYGZus{}AM}\PYG{p}{)} \PYG{o}{+} \PYG{n}{sqr}\PYG{p}{(}\PYG{n}{length\PYGZus{}AMprime}\PYG{p}{);}
+
+  \PYG{c+c1}{// Step 3}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}XMprime} \PYG{o}{=} \PYG{n}{my\PYGZus{}sqrt}\PYG{p}{(}\PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{discriminant}\PYG{p}{);}
+
+  \PYG{c+c1}{// Step 4}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}AX1} \PYG{o}{=} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{\PYGZhy{}} \PYG{n}{length\PYGZus{}XMprime}\PYG{p}{;}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}AX2} \PYG{o}{=} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{+} \PYG{n}{length\PYGZus{}XMprime}\PYG{p}{;}
+  \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{s1} \PYG{o}{=} \PYG{n}{length\PYGZus{}AX1} \PYG{o}{/} \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{distance} \PYG{o}{/} \PYG{n}{xy\PYGZus{}projection\PYGZus{}factor}\PYG{p}{;}
+  \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{s2} \PYG{o}{=} \PYG{n}{length\PYGZus{}AX2} \PYG{o}{/} \PYG{n}{p}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{distance} \PYG{o}{/} \PYG{n}{xy\PYGZus{}projection\PYGZus{}factor}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{s1}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{s2}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}discriminant}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{discriminant}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}x1}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{if} \PYG{p}{((}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s1} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s1} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{ax} \PYG{o}{+} \PYG{n}{p}\PYG{p}{.}\PYG{n}{direction}\PYG{p}{.}\PYG{n}{x} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{s1}\PYG{p}{;}
+  \PYG{k}{else}
+    \PYG{k}{return} \PYG{n}{my\PYGZus{}nan}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}x2}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{if} \PYG{p}{((}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s2} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s2} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{ax} \PYG{o}{+} \PYG{n}{p}\PYG{p}{.}\PYG{n}{direction}\PYG{p}{.}\PYG{n}{x} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{s2}\PYG{p}{;}
+  \PYG{k}{else}
+    \PYG{k}{return} \PYG{n}{my\PYGZus{}nan}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}y1}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{if} \PYG{p}{((}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s1} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s1} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{ay} \PYG{o}{+} \PYG{n}{p}\PYG{p}{.}\PYG{n}{direction}\PYG{p}{.}\PYG{n}{y} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{s1}\PYG{p}{;}
+  \PYG{k}{else}
+    \PYG{k}{return} \PYG{n}{my\PYGZus{}nan}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{intersection\PYGZus{}y2}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{if} \PYG{p}{((}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s2} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{s2} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{p}\PYG{p}{.}\PYG{n}{ay} \PYG{o}{+} \PYG{n}{p}\PYG{p}{.}\PYG{n}{direction}\PYG{p}{.}\PYG{n}{y} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{s2}\PYG{p}{;}
+  \PYG{k}{else}
+    \PYG{k}{return} \PYG{n}{my\PYGZus{}nan}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{bool} \PYG{n+nf}{intersecting\PYGZus{}trajectory\PYGZus{}starts\PYGZus{}inside}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZlt{}=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}}
+      \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}}
+      \PYG{p}{(}\PYG{n}{intersection\PYGZus{}discriminant}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{bool} \PYG{n+nf}{intersecting\PYGZus{}trajectory\PYGZus{}starts\PYGZus{}outside}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{p}{(} \PYG{o}{!} \PYG{n}{intersecting\PYGZus{}trajectory\PYGZus{}starts\PYGZus{}inside}\PYG{p}{(}\PYG{n}{p}\PYG{p}{));}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{bool} \PYG{n+nf}{intersecting\PYGZus{}trajectory\PYGZus{}ends\PYGZus{}inside}\PYG{p}{(}\PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}}
+      \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}}
+      \PYG{p}{(}\PYG{n}{intersection\PYGZus{}discriminant}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,183 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2018/resources/kernels/lib/propagation\PYGZus{}through\PYGZus{}media/propagation\PYGZus{}through\PYGZus{}media.c}
+
+\PYG{c+cp}{\PYGZsh{}ifndef PROPAGATION\PYGZus{}THROUGH\PYGZus{}MEDIA\PYGZus{}C}
+\PYG{c+cp}{\PYGZsh{}define PROPAGATION\PYGZus{}THROUGH\PYGZus{}MEDIA\PYGZus{}C}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}propagation\PYGZus{}through\PYGZus{}media.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../ice\PYGZus{}layers/ice\PYGZus{}layers.c\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}ifdef HOLE\PYGZus{}ICE}
+  \PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../hole\PYGZus{}ice/hole\PYGZus{}ice.c\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}endif}
+
+
+\PYG{c+c1}{// PROPAGATION THROUGH DIFFERENT MEDIA 2018: Layers, Cylinders}
+\PYG{c+c1}{// \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{c+c1}{// We know how many scattering lengths (`sca\PYGZus{}step\PYGZus{}left`) and}
+\PYG{c+c1}{// absorption lengths (`abs\PYGZus{}lens\PYGZus{}left`) the photon will}
+\PYG{c+c1}{// travel in this step.}
+\PYG{c+c1}{//}
+\PYG{c+c1}{// Because the mean scattering and absorption lengths are local}
+\PYG{c+c1}{// properties, i.e. depend on the ice layer or whether the photon}
+\PYG{c+c1}{// is within a hole\PYGZhy{}ice cylinder, we need to convert `sca\PYGZus{}step\PYGZus{}left`}
+\PYG{c+c1}{// and `abs\PYGZus{}lens\PYGZus{}left` to geometrical distances in order to determine}
+\PYG{c+c1}{// where the next interaction point is, i.e. how far to propagate}
+\PYG{c+c1}{// the photon in this step.}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{apply\PYGZus{}propagation\PYGZus{}through\PYGZus{}different\PYGZus{}media}\PYG{p}{(}
+  \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,}
+  \PYG{c+cp}{\PYGZsh{}ifdef HOLE\PYGZus{}ICE}
+    \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{numberOfCylinders}\PYG{p}{,} \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating4\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{,}
+    \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderScatteringLengths}\PYG{p}{,} \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderAbsorptionLengths}\PYG{p}{,}
+  \PYG{c+cp}{\PYGZsh{}endif}
+  \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{,}
+  \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left}\PYG{p}{,}
+  \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+
+  \PYG{k+kt}{int} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{p}{;}
+  \PYG{k+kt}{int} \PYG{n}{currentPhotonLayer} \PYG{o}{=} \PYG{n}{min}\PYG{p}{(}\PYG{n}{max}\PYG{p}{(}\PYG{n}{findLayerForGivenZPos}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z}\PYG{p}{),} \PYG{l+m+mi}{0}\PYG{p}{),} \PYG{n}{MEDIUM\PYGZus{}LAYERS}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{);}
+  \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{getScatteringLength}\PYG{p}{(}\PYG{n}{currentPhotonLayer}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+  \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{getAbsorptionLength}\PYG{p}{(}\PYG{n}{currentPhotonLayer}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+
+  \PYG{c+c1}{// To check which medium boundaries are in range, we need to estimate}
+  \PYG{c+c1}{// how far the photon can travel in this step.}
+  \PYG{c+c1}{//}
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{photonRange} \PYG{o}{=} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{];}
+
+  \PYG{n}{add\PYGZus{}ice\PYGZus{}layers\PYGZus{}on\PYGZus{}photon\PYGZus{}path\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}
+    \PYG{n}{photonPosAndTime}\PYG{p}{,}
+    \PYG{n}{photonDirAndWlen}\PYG{p}{,}
+    \PYG{n}{photonRange}\PYG{p}{,}
+
+    \PYG{c+c1}{// These values will be updates within this function:}
+    \PYG{o}{\PYGZam{}}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+    \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+    \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,}
+    \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}
+  \PYG{p}{);}
+
+  \PYG{c+cp}{\PYGZsh{}ifdef HOLE\PYGZus{}ICE}
+    \PYG{n}{add\PYGZus{}hole\PYGZus{}ice\PYGZus{}cylinders\PYGZus{}on\PYGZus{}photon\PYGZus{}path\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}
+      \PYG{n}{photonPosAndTime}\PYG{p}{,}
+      \PYG{n}{photonDirAndWlen}\PYG{p}{,}
+      \PYG{n}{photonRange}\PYG{p}{,}
+      \PYG{n}{numberOfCylinders}\PYG{p}{,}
+      \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{,}
+
+      \PYG{c+c1}{// These values will be updates within this function:}
+      \PYG{o}{\PYGZam{}}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+      \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+      \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,}
+      \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}
+    \PYG{p}{);}
+  \PYG{c+cp}{\PYGZsh{}endif}
+
+  \PYG{n}{sort\PYGZus{}medium\PYGZus{}changes\PYGZus{}by\PYGZus{}ascending\PYGZus{}distance}\PYG{p}{(}
+    \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+
+    \PYG{c+c1}{// These values will be updates within this function:}
+    \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+    \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,}
+    \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}
+  \PYG{p}{);}
+
+  \PYG{n}{loop\PYGZus{}over\PYGZus{}media\PYGZus{}and\PYGZus{}calculate\PYGZus{}geometrical\PYGZus{}distances\PYGZus{}up\PYGZus{}to\PYGZus{}the\PYGZus{}next\PYGZus{}scattering\PYGZus{}point}\PYG{p}{(}
+    \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+    \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,}
+    \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,}
+    \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{,}
+
+    \PYG{c+c1}{// These values will be updates within this function:}
+    \PYG{n}{sca\PYGZus{}step\PYGZus{}left}\PYG{p}{,}
+    \PYG{n}{abs\PYGZus{}lens\PYGZus{}left}\PYG{p}{,}
+    \PYG{n}{distancePropagated}\PYG{p}{,}
+    \PYG{n}{distanceToAbsorption}
+  \PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{sort\PYGZus{}medium\PYGZus{}changes\PYGZus{}by\PYGZus{}ascending\PYGZus{}distance}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{// Sort the arrays `distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes`, `local\PYGZus{}scattering\PYGZus{}lengths` and}
+  \PYG{c+c1}{// `local\PYGZus{}absorption\PYGZus{}lengths` by ascending distance to have the medium changes}
+  \PYG{c+c1}{// in the right order.}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// https://en.wikiversity.org/wiki/C\PYGZus{}Source\PYGZus{}Code/Sorting\PYGZus{}array\PYGZus{}in\PYGZus{}ascending\PYGZus{}and\PYGZus{}descending\PYGZus{}order}
+  \PYG{c+c1}{//}
+  \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{k} \PYG{o}{\PYGZlt{}=} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{;} \PYG{n}{k}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{l} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{l} \PYG{o}{\PYGZlt{}=} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{;} \PYG{n}{l}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{if} \PYG{p}{(}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{l}\PYG{p}{]} \PYG{o}{\PYGZgt{}} \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{k}\PYG{p}{])} \PYG{p}{\PYGZob{}}
+        \PYG{n}{floating\PYGZus{}t} \PYG{n}{tmp\PYGZus{}distance} \PYG{o}{=} \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{k}\PYG{p}{];}
+        \PYG{n}{floating\PYGZus{}t} \PYG{n}{tmp\PYGZus{}scattering} \PYG{o}{=} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{k}\PYG{p}{];}
+        \PYG{n}{floating\PYGZus{}t} \PYG{n}{tmp\PYGZus{}absorption} \PYG{o}{=} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{k}\PYG{p}{];}
+
+        \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{l}\PYG{p}{];}
+        \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{l}\PYG{p}{];}
+        \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{l}\PYG{p}{];}
+
+        \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{l}\PYG{p}{]} \PYG{o}{=} \PYG{n}{tmp\PYGZus{}distance}\PYG{p}{;}
+        \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{l}\PYG{p}{]} \PYG{o}{=} \PYG{n}{tmp\PYGZus{}scattering}\PYG{p}{;}
+        \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{l}\PYG{p}{]} \PYG{o}{=} \PYG{n}{tmp\PYGZus{}absorption}\PYG{p}{;}
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{loop\PYGZus{}over\PYGZus{}media\PYGZus{}and\PYGZus{}calculate\PYGZus{}geometrical\PYGZus{}distances\PYGZus{}up\PYGZus{}to\PYGZus{}the\PYGZus{}next\PYGZus{}scattering\PYGZus{}point}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{// We know how many scattering lengths (`sca\PYGZus{}step\PYGZus{}left`) and how many}
+  \PYG{c+c1}{// absorption lengths (`abs\PYGZus{}lens\PYGZus{}left`) we may spend when propagating}
+  \PYG{c+c1}{// through the different media.}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// Convert these into the geometrical distances `distancePropagated` (scattering)}
+  \PYG{c+c1}{// and `distanceToAbsorption` (absorption) and decrease `sca\PYGZus{}step\PYGZus{}left` and}
+  \PYG{c+c1}{// `abs\PYGZus{}lens\PYGZus{}left` accordingly.}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// Abort when the next scattering point is reached, i.e. `sca\PYGZus{}step\PYGZus{}left == 0`.}
+  \PYG{c+c1}{// At this point, `abs\PYGZus{}lens\PYGZus{}left` may still be greater than zero, because}
+  \PYG{c+c1}{// the photon may be scattered several times until it is absorbed.}
+  \PYG{c+c1}{//}
+  \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{p}{(}\PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{);} \PYG{n}{j}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{n}{floating\PYGZus{}t} \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium} \PYG{o}{=} \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{j}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+
+    \PYG{k}{if} \PYG{p}{(}\PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{\PYGZgt{}} \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{c+c1}{// The photon scatters after leaving this medium.}
+      \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{\PYGZhy{}=} \PYG{n}{my\PYGZus{}divide}\PYG{p}{(}\PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{,} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]);}
+      \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{+=} \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+      \PYG{c+c1}{// The photon scatters within this medium.}
+      \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium} \PYG{o}{=} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+      \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{+=} \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{;}
+      \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{k}{if} \PYG{p}{(}\PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{\PYGZgt{}} \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{c+c1}{// The photon is absorbed after leaving this medium.}
+      \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{\PYGZhy{}=} \PYG{n}{my\PYGZus{}divide}\PYG{p}{(}\PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{,} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]);}
+      \PYG{o}{*}\PYG{n}{distanceToAbsorption} \PYG{o}{+=} \PYG{n}{max\PYGZus{}distance\PYGZus{}in\PYGZus{}current\PYGZus{}medium}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+      \PYG{c+c1}{// The photon is absorbed within this medium.}
+      \PYG{o}{*}\PYG{n}{distanceToAbsorption} \PYG{o}{+=} \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+      \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{c+c1}{// Spend the rest of the budget with the last medium properties.}
+  \PYG{k}{if} \PYG{p}{(}\PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{+=} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{];}
+    \PYG{o}{*}\PYG{n}{distanceToAbsorption} \PYG{o}{+=} \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{*} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{];}
+    \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{\PYGZhy{}=} \PYG{n}{my\PYGZus{}divide}\PYG{p}{(}\PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]);}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{c+c1}{// If the photon is absorbed, only propagate up to the absorption point.}
+  \PYG{k}{if} \PYG{p}{(}\PYG{o}{*}\PYG{n}{distanceToAbsorption} \PYG{o}{\PYGZlt{}} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{=} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{;}
+    \PYG{o}{*}\PYG{n}{distanceToAbsorption} \PYG{o}{=} \PYG{n}{ZERO}\PYG{p}{;}
+    \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left} \PYG{o}{=} \PYG{n}{ZERO}\PYG{p}{;}
+  \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

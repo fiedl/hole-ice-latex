@@ -1,0 +1,29 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2018/resources/kernels/lib/intersection/intersection.h}
+
+\PYG{c+cp}{\PYGZsh{}ifndef INTERSECTION\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define INTERSECTION\PYGZus{}H}
+
+\PYG{k}{typedef} \PYG{k}{struct} \PYG{n}{IntersectionProblemParameters} \PYG{p}{\PYGZob{}}
+
+  \PYG{c+c1}{// Input values}
+  \PYG{c+c1}{//}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{ax}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{ay}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{mx}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{my}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{r}\PYG{p}{;}
+  \PYG{n}{floating4\PYGZus{}t} \PYG{n}{direction}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{distance}\PYG{p}{;}
+
+  \PYG{c+c1}{// Output values, which will be calculated in}
+  \PYG{c+c1}{// `calculate\PYGZus{}intersections()`.}
+  \PYG{c+c1}{//}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{discriminant}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{s1}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{s2}\PYG{p}{;}
+
+\PYG{p}{\PYGZcb{}} \PYG{n}{IntersectionProblemParameters\PYGZus{}t}\PYG{p}{;}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

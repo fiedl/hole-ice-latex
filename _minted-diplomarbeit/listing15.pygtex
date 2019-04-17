@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Step 1}
+\PYG{k}{const} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{vector\PYGZus{}AM} \PYG{o}{=} \PYG{p}{(}\PYG{k}{const} \PYG{n}{floating4\PYGZus{}t}\PYG{p}{)(}\PYG{n}{M}\PYG{p}{.}\PYG{n}{x} \PYG{o}{\PYGZhy{}} \PYG{n}{A}\PYG{p}{.}\PYG{n}{x}\PYG{p}{,} \PYG{n}{M}\PYG{p}{.}\PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{A}\PYG{p}{.}\PYG{n}{y}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{=} \PYG{n}{dot}\PYG{p}{(}\PYG{n}{vector\PYGZus{}AM}\PYG{p}{,} \PYG{n}{v}\PYG{p}{);}
+
+\PYG{c+c1}{// Step 2}
+\PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{discriminant} \PYG{o}{=} \PYG{n}{r} \PYG{o}{*} \PYG{n}{r} \PYG{o}{\PYGZhy{}} \PYG{n}{dot}\PYG{p}{(}\PYG{n}{vector\PYGZus{}AM}\PYG{p}{,} \PYG{n}{vector\PYGZus{}AM}\PYG{p}{)} \PYG{o}{+} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{*} \PYG{n}{length\PYGZus{}AMprime}\PYG{p}{;}
+
+\PYG{c+c1}{// Step 3}
+\PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}XMprime} \PYG{o}{=} \PYG{n}{native\PYGZus{}sqrt}\PYG{p}{(}\PYG{n}{discriminant}\PYG{p}{);}
+
+\PYG{c+c1}{// Step 4}
+\PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}AX1} \PYG{o}{=} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{\PYGZhy{}} \PYG{n}{length\PYGZus{}XMprime}\PYG{p}{;}
+\PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{length\PYGZus{}AX2} \PYG{o}{=} \PYG{n}{length\PYGZus{}AMprime} \PYG{o}{+} \PYG{n}{length\PYGZus{}XMprime}\PYG{p}{;}
+\end{Verbatim}

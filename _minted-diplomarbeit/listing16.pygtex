@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Fixed custom replacement of `isnan`:}
+\PYG{k+kt}{bool} \PYG{n+nf}{my\PYGZus{}is\PYGZus{}nan}\PYG{p}{(}\PYG{n}{floating\PYGZus{}t} \PYG{n}{a}\PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{k}{return} \PYG{p}{(}\PYG{n}{a} \PYG{o}{!=} \PYG{n}{a}\PYG{p}{);} \PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,63 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} python}
+
+\PYG{k+kn}{from} \PYG{n+nn}{sympy} \PYG{k+kn}{import} \PYG{o}{*}
+\PYG{n}{init\PYGZus{}printing}\PYG{p}{(}\PYG{n}{use\PYGZus{}unicode}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Variables}
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{n}{Ax}\PYG{p}{,} \PYG{n}{Ay} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Ax Ay\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{Bx}\PYG{p}{,} \PYG{n}{By} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Bx By\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{Mx}\PYG{p}{,} \PYG{n}{My} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Mx My\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{Px}\PYG{p}{,} \PYG{n}{Py} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Px Py\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{r} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}r\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{s} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}s\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{vx} \PYG{o}{=} \PYG{n}{Bx} \PYG{o}{\PYGZhy{}} \PYG{n}{Ax}
+\PYG{n}{vy} \PYG{o}{=} \PYG{n}{By} \PYG{o}{\PYGZhy{}} \PYG{n}{Ay}
+
+\PYG{c+c1}{\PYGZsh{} First ansatz}
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{n}{lhs} \PYG{o}{=} \PYG{p}{(}\PYG{n}{Ax} \PYG{o}{+} \PYG{n}{s} \PYG{o}{*} \PYG{n}{vx} \PYG{o}{\PYGZhy{}} \PYG{n}{Mx}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{p}{(}\PYG{n}{Ay} \PYG{o}{+} \PYG{n}{s} \PYG{o}{*} \PYG{n}{vy} \PYG{o}{\PYGZhy{}} \PYG{n}{My}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{expanded\PYGZus{}lhs} \PYG{o}{=} \PYG{n}{expand}\PYG{p}{(}\PYG{n}{lhs}\PYG{p}{)}
+
+\PYG{n}{intersection\PYGZus{}equation} \PYG{o}{=} \PYG{n}{Eq}\PYG{p}{(}\PYG{n}{lhs}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}
+
+\PYG{n}{solution} \PYG{o}{=} \PYG{n}{solve}\PYG{p}{(}\PYG{n}{intersection\PYGZus{}equation}\PYG{p}{,} \PYG{n}{s}\PYG{p}{)}
+\PYG{n}{s1} \PYG{o}{=} \PYG{n}{solution}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{n}{s2} \PYG{o}{=} \PYG{n}{solution}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} Second ansatz}
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{n}{alpha} \PYG{o}{=} \PYG{p}{(}\PYG{n}{By} \PYG{o}{\PYGZhy{}} \PYG{n}{Ay}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{p}{(}\PYG{n}{Bx} \PYG{o}{\PYGZhy{}} \PYG{n}{Ax}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{beta} \PYG{o}{=} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{Ay} \PYG{o}{*} \PYG{p}{(}\PYG{n}{By} \PYG{o}{\PYGZhy{}} \PYG{n}{Ay}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{Ax} \PYG{o}{*} \PYG{p}{(}\PYG{n}{Bx} \PYG{o}{\PYGZhy{}} \PYG{n}{Ax}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{My} \PYG{o}{*} \PYG{p}{(}\PYG{n}{By} \PYG{o}{\PYGZhy{}} \PYG{n}{Ay}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{Mx} \PYG{o}{*} \PYG{p}{(}\PYG{n}{Bx} \PYG{o}{\PYGZhy{}} \PYG{n}{Ax}\PYG{p}{)}
+\PYG{n}{gamma} \PYG{o}{=} \PYG{n}{Ay}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{Ay} \PYG{o}{*} \PYG{n}{My} \PYG{o}{+} \PYG{n}{My}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{Ax}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{Ax} \PYG{o}{*} \PYG{n}{Mx} \PYG{o}{+} \PYG{n}{Mx}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{discriminant} \PYG{o}{=} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{4} \PYG{o}{*} \PYG{n}{alpha} \PYG{o}{*} \PYG{n}{gamma}\PYG{p}{)}
+
+\PYG{n}{ss1} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}} \PYG{n}{beta} \PYG{o}{\PYGZhy{}} \PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{4} \PYG{o}{*} \PYG{n}{alpha} \PYG{o}{*} \PYG{n}{gamma}\PYG{p}{))} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{alpha}\PYG{p}{)}
+\PYG{n}{ss2} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}} \PYG{n}{beta} \PYG{o}{+} \PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{beta}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{4} \PYG{o}{*} \PYG{n}{alpha} \PYG{o}{*} \PYG{n}{gamma}\PYG{p}{))} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{alpha}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Compare ansatzes}
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{c+c1}{\PYGZsh{} See also: http://docs.sympy.org/latest/tutorial/gotchas.html}
+
+\PYG{c+c1}{\PYGZsh{} \PYGZsh{} Does not work, because `==` checks object (structural) equality}
+\PYG{c+c1}{\PYGZsh{} s1 == ss1}
+\PYG{c+c1}{\PYGZsh{} s1 == ss2}
+\PYG{c+c1}{\PYGZsh{} s2 == ss1}
+\PYG{c+c1}{\PYGZsh{} s2 == ss2}
+
+\PYG{c+c1}{\PYGZsh{} Should be 0 for the matching pairs:}
+\PYG{n}{simplify}\PYG{p}{(}\PYG{n}{s1} \PYG{o}{\PYGZhy{}} \PYG{n}{ss1}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} =\PYGZgt{} 0}
+\PYG{n}{simplify}\PYG{p}{(}\PYG{n}{s1} \PYG{o}{\PYGZhy{}} \PYG{n}{ss2}\PYG{p}{)}
+\PYG{n}{simplify}\PYG{p}{(}\PYG{n}{s2} \PYG{o}{\PYGZhy{}} \PYG{n}{ss1}\PYG{p}{)}
+\PYG{n}{simplify}\PYG{p}{(}\PYG{n}{s2} \PYG{o}{\PYGZhy{}} \PYG{n}{ss2}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} =\PYGZgt{} 0}
+
+\PYG{c+c1}{\PYGZsh{} Or numerically:}
+\PYG{n}{s1}\PYG{o}{.}\PYG{n}{equals}\PYG{p}{(}\PYG{n}{ss1}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} True}
+\PYG{n}{s2}\PYG{o}{.}\PYG{n}{equals}\PYG{p}{(}\PYG{n}{ss2}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} True}
+\end{Verbatim}

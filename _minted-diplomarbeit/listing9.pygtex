@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2018/resources/kernels/lib/ice\PYGZus{}layers/ice\PYGZus{}layers.h}
+
+\PYG{c+cp}{\PYGZsh{}ifndef ICE\PYGZus{}LAYERS\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define ICE\PYGZus{}LAYERS\PYGZus{}H}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{add\PYGZus{}ice\PYGZus{}layers\PYGZus{}on\PYGZus{}photon\PYGZus{}path\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}\PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{photonRange}\PYG{p}{,} \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{);}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{int} \PYG{n+nf}{photon\PYGZus{}layer}\PYG{p}{(}\PYG{n}{floating\PYGZus{}t} \PYG{n}{z}\PYG{p}{);}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

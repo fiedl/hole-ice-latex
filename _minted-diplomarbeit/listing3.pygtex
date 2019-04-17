@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2017/resources/kernels/lib/hole\PYGZus{}ice/hole\PYGZus{}ice.h}
+
+\PYG{c+cp}{\PYGZsh{}ifndef HOLE\PYGZus{}ICE\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define HOLE\PYGZus{}ICE\PYGZus{}H}
+
+\PYG{k}{typedef} \PYG{k}{struct} \PYG{n}{HoleIceProblemParameters} \PYG{p}{\PYGZob{}}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{distance}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{interaction\PYGZus{}length\PYGZus{}factor}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{;}
+  \PYG{n}{floating\PYGZus{}t} \PYG{n}{termination\PYGZus{}point\PYGZus{}ratio}\PYG{p}{;}
+  \PYG{k+kt}{bool} \PYG{n}{starts\PYGZus{}within\PYGZus{}hole\PYGZus{}ice}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}} \PYG{n}{HoleIceProblemParameters\PYGZus{}t}\PYG{p}{;}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

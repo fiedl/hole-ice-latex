@@ -1,0 +1,246 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2017/resources/kernels/lib/hole\PYGZus{}ice/hole\PYGZus{}ice.c}
+
+\PYG{c+cp}{\PYGZsh{}ifndef HOLE\PYGZus{}ICE\PYGZus{}C}
+\PYG{c+cp}{\PYGZsh{}define HOLE\PYGZus{}ICE\PYGZus{}C}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}hole\PYGZus{}ice.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../intersection/intersection.c\PYGZdq{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{bool} \PYG{n+nf}{is\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{floating\PYGZus{}t} \PYG{n}{a}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{p}{((}\PYG{o}{!}\PYG{n}{my\PYGZus{}is\PYGZus{}nan}\PYG{p}{(}\PYG{n}{a}\PYG{p}{))} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{a} \PYG{o}{\PYGZgt{}} \PYG{l+m+mf}{0.0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{a} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{1.0}\PYG{p}{));}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{bool} \PYG{n+nf}{not\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{floating\PYGZus{}t} \PYG{n}{a}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{k}{return} \PYG{p}{(}\PYG{o}{!} \PYG{n}{is\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{a}\PYG{p}{));}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n+nf}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}\PYG{n}{HoleIceProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{// These are ordered by their frequency of occurrence in order}
+  \PYG{c+c1}{// to optimize for performance.}
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{not\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{not\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{termination\PYGZus{}point\PYGZus{}ratio}\PYG{p}{))} \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{not\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{)} \PYG{o}{||} \PYG{n}{not\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{termination\PYGZus{}point\PYGZus{}ratio}\PYG{p}{))} \PYG{k}{return} \PYG{l+m+mi}{1}\PYG{p}{;}
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio} \PYG{o}{==} \PYG{n}{p}\PYG{p}{.}\PYG{n}{termination\PYGZus{}point\PYGZus{}ratio}\PYG{p}{)} \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{c+c1}{// tangent}
+  \PYG{k}{return} \PYG{l+m+mi}{2}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{hole\PYGZus{}ice\PYGZus{}distance\PYGZus{}correction}\PYG{p}{(}\PYG{n}{HoleIceProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{// Depending on the fraction of the distance the photon is traveling}
+  \PYG{c+c1}{// within the hole ice, there are six cases to consider.}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// N  denotes the number of intersections.}
+  \PYG{c+c1}{// H  means that the trajectory starts within hole ice.}
+  \PYG{c+c1}{// !H means that the trajectory starts outside of the hole ice.}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// Case 1: The trajectory is completely outside of the hole ice (!H, N=0).}
+  \PYG{c+c1}{// Case 2: The trajectory is completely within the hole ice (H, N=0).}
+  \PYG{c+c1}{// Case 3: The trajectory begins outside, but ends inside the hole ice (!H, N=1).}
+  \PYG{c+c1}{// Case 4: The trajectory begins inside, but ends outside the hole ice (H, N=1).}
+  \PYG{c+c1}{// Case 5: The trajectory starts and ends outside, but passes through the hole ice (!H, N=2).}
+  \PYG{c+c1}{// Case 6: The trajectory begins within one hole\PYGZhy{}ice cylinder, passes through}
+  \PYG{c+c1}{//           normal ice and ends in another hole\PYGZhy{}ice cylinder (H, N=2).}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// For further information, please have look at:}
+  \PYG{c+c1}{// https://github.com/fiedl/clsim/tree/sf/master/resources/kernels/lib/hole\PYGZus{}ice}
+
+  \PYG{k}{const} \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{num\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{=} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}\PYG{n}{p}\PYG{p}{);}
+
+  \PYG{c+c1}{// Case 1: The trajectory is completely outside of the hole ice.}
+  \PYG{c+c1}{// Thus, needs no correction.}
+  \PYG{k}{if} \PYG{p}{((}\PYG{n}{num\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{p}\PYG{p}{.}\PYG{n}{starts\PYGZus{}within\PYGZus{}hole\PYGZus{}ice}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{ac} \PYG{o}{=} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{termination\PYGZus{}point\PYGZus{}ratio}\PYG{p}{;}
+
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{starts\PYGZus{}within\PYGZus{}hole\PYGZus{}ice}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+
+    \PYG{c+c1}{// Case 4: The trajectory begins inside, but ends outside the hole ice.}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{interaction\PYGZus{}length\PYGZus{}factor} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{\PYGZgt{}} \PYG{n}{ac}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mf}{1.0} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{1.0} \PYG{o}{/} \PYG{n}{p}\PYG{p}{.}\PYG{n}{interaction\PYGZus{}length\PYGZus{}factor}\PYG{p}{)} \PYG{o}{*} \PYG{n}{ac}\PYG{p}{;}
+
+    \PYG{c+c1}{// Case 2: The trajectory is completely within the hole ice.}
+    \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+      \PYG{k}{return} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{interaction\PYGZus{}length\PYGZus{}factor} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{1.0}\PYG{p}{)} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+
+  \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+
+    \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{yb} \PYG{o}{=} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mf}{1.0} \PYG{o}{\PYGZhy{}} \PYG{n}{p}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{);}
+    \PYG{n}{floating\PYGZus{}t} \PYG{n}{yc} \PYG{o}{=} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{termination\PYGZus{}point\PYGZus{}ratio} \PYG{o}{\PYGZhy{}} \PYG{n}{p}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{);}
+
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{yc} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}WARNING: YC SHOULD NOT BE NEGATIVE, BUT YC=\PYGZpc{}f}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{yc}\PYG{p}{);}
+      \PYG{n}{yc} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{// Case 5: The trajectory starts and ends outside, but passes through the hole ice.}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{interaction\PYGZus{}length\PYGZus{}factor} \PYG{o}{*} \PYG{n}{yb} \PYG{o}{\PYGZgt{}} \PYG{n}{yc}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mf}{1.0} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{1.0} \PYG{o}{/} \PYG{n}{p}\PYG{p}{.}\PYG{n}{interaction\PYGZus{}length\PYGZus{}factor}\PYG{p}{)} \PYG{o}{*} \PYG{n}{yc}\PYG{p}{;}
+
+    \PYG{c+c1}{// Case 3}
+    \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+      \PYG{k}{return} \PYG{p}{(}\PYG{n}{p}\PYG{p}{.}\PYG{n}{interaction\PYGZus{}length\PYGZus{}factor} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{1.0}\PYG{p}{)} \PYG{o}{*} \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mf}{1.0} \PYG{o}{\PYGZhy{}} \PYG{n}{p}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{);}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}ifdef PRINTF\PYGZus{}ENABLED}
+  \PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}WARNING: UNHANDLED INTERSECTION CASE. This point should not be reached.\PYGZdq{}}\PYG{p}{);}
+\PYG{c+cp}{\PYGZsh{}endif}
+
+  \PYG{k}{return} \PYG{n}{my\PYGZus{}nan}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{hole\PYGZus{}ice\PYGZus{}distance\PYGZus{}correction\PYGZus{}for\PYGZus{}intersection\PYGZus{}problem}\PYG{p}{(}\PYG{n}{floating\PYGZus{}t} \PYG{n}{distance}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{interaction\PYGZus{}length\PYGZus{}factor}\PYG{p}{,} \PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{n}{calculate\PYGZus{}intersections}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{p}\PYG{p}{);}
+  \PYG{n}{HoleIceProblemParameters\PYGZus{}t} \PYG{n}{hip} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+    \PYG{n}{distance}\PYG{p}{,}
+    \PYG{n}{interaction\PYGZus{}length\PYGZus{}factor}\PYG{p}{,}
+    \PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{),} \PYG{c+c1}{// entry\PYGZus{}point\PYGZus{}ratio}
+    \PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{),} \PYG{c+c1}{// termination\PYGZus{}point\PYGZus{}ratio}
+    \PYG{n}{intersecting\PYGZus{}trajectory\PYGZus{}starts\PYGZus{}inside}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{c+c1}{// starts\PYGZus{}within\PYGZus{}hole\PYGZus{}ice}
+  \PYG{p}{\PYGZcb{};}
+  \PYG{k}{return} \PYG{n}{hole\PYGZus{}ice\PYGZus{}distance\PYGZus{}correction}\PYG{p}{(}\PYG{n}{hip}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}ifdef HOLE\PYGZus{}ICE\PYGZus{}TEST\PYGZus{}H}
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n+nf}{apply\PYGZus{}hole\PYGZus{}ice\PYGZus{}correction}\PYG{p}{(}\PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,} \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{numberOfCylinders}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{holeIceScatteringLengthFactor}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{holeIceAbsorptionLengthFactor}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{)}
+\PYG{c+cp}{\PYGZsh{}endif}
+\PYG{c+cp}{\PYGZsh{}ifndef HOLE\PYGZus{}ICE\PYGZus{}TEST\PYGZus{}H}
+\PYG{k+kr}{inline} \PYG{n}{floating\PYGZus{}t} \PYG{n}{apply\PYGZus{}hole\PYGZus{}ice\PYGZus{}correction}\PYG{p}{(}\PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,} \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{numberOfCylinders}\PYG{p}{,} \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating4\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{holeIceScatteringLengthFactor}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{holeIceAbsorptionLengthFactor}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{)}
+\PYG{c+cp}{\PYGZsh{}endif}
+\PYG{p}{\PYGZob{}}
+
+  \PYG{k}{if} \PYG{p}{(}\PYG{o}{!}\PYG{p}{(}\PYG{n}{my\PYGZus{}is\PYGZus{}nan}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{x}\PYG{p}{)} \PYG{o}{||} \PYG{n}{my\PYGZus{}is\PYGZus{}nan}\PYG{p}{(}\PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{)))} \PYG{p}{\PYGZob{}}
+
+    \PYG{c+c1}{// Find out which cylinders are in range in a separate loop}
+    \PYG{c+c1}{// in order to improve parallelism and thereby performance.}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// See: https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/30}
+    \PYG{c+c1}{//}
+    \PYG{c+cp}{\PYGZsh{}ifdef NUMBER\PYGZus{}OF\PYGZus{}CYLINDERS}
+      \PYG{c+c1}{// When running this on OpenCL, defining arrays using a constant}
+      \PYG{c+c1}{// as array size is not possible. Therefore, we need to use a}
+      \PYG{c+c1}{// pre\PYGZhy{}processor makro here.}
+      \PYG{c+c1}{//}
+      \PYG{c+c1}{// See: https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/38}
+      \PYG{c+c1}{//}
+      \PYG{k+kt}{int} \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{NUMBER\PYGZus{}OF\PYGZus{}CYLINDERS}\PYG{p}{];}
+    \PYG{c+cp}{\PYGZsh{}else}
+      \PYG{k+kt}{int} \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{numberOfCylinders}\PYG{p}{];}
+    \PYG{c+cp}{\PYGZsh{}endif}
+    \PYG{p}{\PYGZob{}}
+      \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+      \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{numberOfCylinders}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;}
+      \PYG{p}{\PYGZcb{}}
+      \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{numberOfCylinders}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n}{sqr}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{x} \PYG{o}{\PYGZhy{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{x}\PYG{p}{)} \PYG{o}{+}
+            \PYG{n}{sqr}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{y}\PYG{p}{)} \PYG{o}{\PYGZlt{}=}
+            \PYG{n}{sqr}\PYG{p}{(}\PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{+} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{w} \PYG{c+cm}{/* radius */}\PYG{p}{))}
+        \PYG{p}{\PYGZob{}}
+
+          \PYG{c+c1}{// If the cylinder has a z\PYGZhy{}range check if we consider that cylinder}
+          \PYG{c+c1}{// to be in range. https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/34}
+          \PYG{c+c1}{//}
+          \PYG{k}{if} \PYG{p}{((}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{||} \PYG{p}{((}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{p}{(((}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZlt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{0.5}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{+} \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{*} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZlt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{0.5}\PYG{p}{))} \PYG{o}{||} \PYG{p}{((}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZgt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{+} \PYG{l+m+mf}{0.5}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{+} \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{*} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZgt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{+} \PYG{l+m+mf}{0.5}\PYG{p}{)))))}
+          \PYG{p}{\PYGZob{}}
+            \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{i}\PYG{p}{;}
+            \PYG{n}{j} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+          \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{// Now loop over all cylinders in range and calculate corrections}
+    \PYG{c+c1}{// for `distancePropagated` and `distanceToAbsorption`.}
+    \PYG{c+c1}{//}
+    \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{numberOfCylinders}\PYG{p}{;} \PYG{n}{j}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{const} \PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+      \PYG{k}{if} \PYG{p}{(}\PYG{n}{i} \PYG{o}{==} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k}{break}\PYG{p}{;}
+      \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+
+        \PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+
+          \PYG{c+c1}{// Input values}
+          \PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{x}\PYG{p}{,}
+          \PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{y}\PYG{p}{,}
+          \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{x}\PYG{p}{,}
+          \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{y}\PYG{p}{,}
+          \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{w}\PYG{p}{,} \PYG{c+c1}{// radius}
+          \PYG{n}{photonDirAndWlen}\PYG{p}{,}
+          \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,}
+
+          \PYG{c+c1}{// Output values (will be calculated)}
+          \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{c+c1}{// discriminant}
+          \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{c+c1}{// s1}
+          \PYG{l+m+mi}{0}  \PYG{c+c1}{// s2}
+
+        \PYG{p}{\PYGZcb{};}
+
+        \PYG{n}{calculate\PYGZus{}intersections}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{p}\PYG{p}{);}
+
+        \PYG{c+c1}{// Are intersection points possible?}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}discriminant}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+
+          \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{scatteringEntryPointRatio} \PYG{o}{=} \PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{);}
+          \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{scatterintTerminationPointRatio} \PYG{o}{=} \PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{);}
+
+          \PYG{n}{HoleIceProblemParameters\PYGZus{}t} \PYG{n}{scatteringCorrectionParameters} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+            \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,}
+            \PYG{n}{holeIceScatteringLengthFactor}\PYG{p}{,}
+            \PYG{n}{scatteringEntryPointRatio}\PYG{p}{,}
+            \PYG{n}{scatterintTerminationPointRatio}\PYG{p}{,}
+            \PYG{n}{intersecting\PYGZus{}trajectory\PYGZus{}starts\PYGZus{}inside}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)}
+          \PYG{p}{\PYGZcb{};}
+
+          \PYG{k}{const} \PYG{n}{floating\PYGZus{}t} \PYG{n}{scaCorrection} \PYG{o}{=} \PYG{n}{hole\PYGZus{}ice\PYGZus{}distance\PYGZus{}correction}\PYG{p}{(}\PYG{n}{scatteringCorrectionParameters}\PYG{p}{);}
+          \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{+=} \PYG{n}{scaCorrection}\PYG{p}{;}
+
+          \PYG{c+c1}{// For the absorption, there are special cases where the photon is scattered before}
+          \PYG{c+c1}{// reaching either the first or the second absorption intersection point.}
+          \PYG{n}{floating\PYGZus{}t} \PYG{n}{absorptionEntryPointRatio}\PYG{p}{;}
+          \PYG{n}{floating\PYGZus{}t} \PYG{n}{absorptionTerminationPointRatio}\PYG{p}{;}
+          \PYG{n}{floating\PYGZus{}t} \PYG{n}{absCorrection} \PYG{o}{=} \PYG{l+m+mf}{0.0}\PYG{p}{;}
+          \PYG{k}{if} \PYG{p}{(}\PYG{o}{!}\PYG{p}{(}\PYG{n}{not\PYGZus{}between\PYGZus{}zero\PYGZus{}and\PYGZus{}one}\PYG{p}{(}\PYG{n}{scatteringCorrectionParameters}\PYG{p}{.}\PYG{n}{entry\PYGZus{}point\PYGZus{}ratio}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{n}{scatteringCorrectionParameters}\PYG{p}{.}\PYG{n}{starts\PYGZus{}within\PYGZus{}hole\PYGZus{}ice}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+            \PYG{c+c1}{// The photon reaches the hole ice, i.e. the absorption correction}
+            \PYG{c+c1}{// needs to be calculated.}
+            \PYG{n}{p}\PYG{p}{.}\PYG{n}{distance} \PYG{o}{=} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{;}
+            \PYG{n}{calculate\PYGZus{}intersections}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{p}\PYG{p}{);}
+
+            \PYG{c+c1}{// If the photon is scattered away before reaching the far and of}
+            \PYG{c+c1}{// the hole ice, the affected trajectory is limited by the}
+            \PYG{c+c1}{// point where the photon is scattered away.}
+            \PYG{n}{absorptionEntryPointRatio} \PYG{o}{=} \PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{);}
+            \PYG{n}{absorptionTerminationPointRatio} \PYG{o}{=} \PYG{n}{min}\PYG{p}{(}
+              \PYG{o}{*}\PYG{n}{distancePropagated} \PYG{o}{/} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{,}
+              \PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)}
+            \PYG{p}{);}
+
+            \PYG{n}{HoleIceProblemParameters\PYGZus{}t} \PYG{n}{absorptionCorrectionParameters} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+              \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{,}
+              \PYG{n}{holeIceAbsorptionLengthFactor}\PYG{p}{,}
+              \PYG{n}{absorptionEntryPointRatio}\PYG{p}{,}
+              \PYG{n}{absorptionTerminationPointRatio}\PYG{p}{,}
+              \PYG{n}{intersecting\PYGZus{}trajectory\PYGZus{}starts\PYGZus{}inside}\PYG{p}{(}\PYG{n}{p}\PYG{p}{),}
+            \PYG{p}{\PYGZcb{};}
+
+            \PYG{n}{absCorrection} \PYG{o}{=} \PYG{n}{hole\PYGZus{}ice\PYGZus{}distance\PYGZus{}correction}\PYG{p}{(}\PYG{n}{absorptionCorrectionParameters}\PYG{p}{);}
+
+          \PYG{p}{\PYGZcb{}}
+          \PYG{o}{*}\PYG{n}{distanceToAbsorption} \PYG{o}{+=} \PYG{n}{absCorrection}\PYG{p}{;}
+
+        \PYG{p}{\PYGZcb{}}
+
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

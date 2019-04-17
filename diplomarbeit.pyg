@@ -1,0 +1,5 @@
+# Disable caching globally. Despite the name this also works with OpenCL.
+export CUDA_CACHE_DISABLE=1
+
+# Reset cache manually:
+rm -r ~/.nv/ComputeCache

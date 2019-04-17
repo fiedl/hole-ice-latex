@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2018/resources/kernels/lib/propagation\PYGZus{}through\PYGZus{}media/propagation\PYGZus{}through\PYGZus{}media.h}
+
+\PYG{c+cp}{\PYGZsh{}ifndef PROPAGATION\PYGZus{}THROUGH\PYGZus{}MEDIA\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define PROPAGATION\PYGZus{}THROUGH\PYGZus{}MEDIA\PYGZus{}H}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{apply\PYGZus{}propagation\PYGZus{}through\PYGZus{}different\PYGZus{}media}\PYG{p}{(}
+  \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,}
+  \PYG{c+cp}{\PYGZsh{}ifdef HOLE\PYGZus{}ICE}
+    \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{numberOfCylinders}\PYG{p}{,} \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating4\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{,}
+    \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderScatteringLengths}\PYG{p}{,} \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderAbsorptionLengths}\PYG{p}{,}
+  \PYG{c+cp}{\PYGZsh{}endif}
+  \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{,}
+  \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left}\PYG{p}{,}
+  \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{);}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{sort\PYGZus{}medium\PYGZus{}changes\PYGZus{}by\PYGZus{}ascending\PYGZus{}distance}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{);}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{loop\PYGZus{}over\PYGZus{}media\PYGZus{}and\PYGZus{}calculate\PYGZus{}geometrical\PYGZus{}distances\PYGZus{}up\PYGZus{}to\PYGZus{}the\PYGZus{}next\PYGZus{}scattering\PYGZus{}point}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{sca\PYGZus{}step\PYGZus{}left}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{abs\PYGZus{}lens\PYGZus{}left}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distancePropagated}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distanceToAbsorption}\PYG{p}{);}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

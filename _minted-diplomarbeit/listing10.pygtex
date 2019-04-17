@@ -1,0 +1,120 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// https://github.com/fiedl/clsim/blob/sf/hole\PYGZhy{}ice\PYGZhy{}2018/resources/kernels/lib/hole\PYGZus{}ice/hole\PYGZus{}ice.c}
+
+\PYG{c+cp}{\PYGZsh{}ifndef HOLE\PYGZus{}ICE\PYGZus{}C}
+\PYG{c+cp}{\PYGZsh{}define HOLE\PYGZus{}ICE\PYGZus{}C}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}hole\PYGZus{}ice.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../intersection/intersection.c\PYGZdq{}}
+
+\PYG{k+kr}{inline} \PYG{k+kt}{void} \PYG{n+nf}{add\PYGZus{}hole\PYGZus{}ice\PYGZus{}cylinders\PYGZus{}on\PYGZus{}photon\PYGZus{}path\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{(}\PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonPosAndTime}\PYG{p}{,} \PYG{n}{floating4\PYGZus{}t} \PYG{n}{photonDirAndWlen}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{n}{photonRange}\PYG{p}{,} \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{numberOfCylinders}\PYG{p}{,} \PYG{n}{\PYGZus{}\PYGZus{}constant} \PYG{n}{floating4\PYGZus{}t} \PYG{o}{*}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{,} \PYG{k+kt}{int} \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{,} \PYG{n}{floating\PYGZus{}t} \PYG{o}{*}\PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{// Find out which cylinders are in range in a separate loop}
+  \PYG{c+c1}{// in order to improve parallelism and thereby performance.}
+  \PYG{c+c1}{//}
+  \PYG{c+c1}{// See: https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/30}
+  \PYG{c+c1}{//}
+  \PYG{c+cp}{\PYGZsh{}ifdef NUMBER\PYGZus{}OF\PYGZus{}CYLINDERS}
+    \PYG{c+c1}{// When running this on OpenCL, defining arrays using a constant}
+    \PYG{c+c1}{// as array size is not possible. Therefore, we need to use a}
+    \PYG{c+c1}{// pre\PYGZhy{}processor makro here.}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// See: https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/38}
+    \PYG{c+c1}{//}
+    \PYG{k+kt}{int} \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{NUMBER\PYGZus{}OF\PYGZus{}CYLINDERS}\PYG{p}{];}
+  \PYG{c+cp}{\PYGZsh{}else}
+    \PYG{k+kt}{int} \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{numberOfCylinders}\PYG{p}{];}
+  \PYG{c+cp}{\PYGZsh{}endif}
+  \PYG{p}{\PYGZob{}}
+    \PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{numberOfCylinders}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{numberOfCylinders}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{if} \PYG{p}{(}\PYG{n}{sqr}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{x} \PYG{o}{\PYGZhy{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{x}\PYG{p}{)} \PYG{o}{+}
+          \PYG{n}{sqr}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{y}\PYG{p}{)} \PYG{o}{\PYGZlt{}=}
+          \PYG{n}{sqr}\PYG{p}{(}\PYG{n}{photonRange} \PYG{o}{+} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{w} \PYG{c+cm}{/* radius */}\PYG{p}{))}
+      \PYG{p}{\PYGZob{}}
+
+        \PYG{c+c1}{// If the cylinder has a z\PYGZhy{}range check if we consider that cylinder}
+        \PYG{c+c1}{// to be in range. https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/34}
+        \PYG{c+c1}{//}
+        \PYG{k}{if} \PYG{p}{((}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{||} \PYG{p}{((}\PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{o}{!}\PYG{p}{(((}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZlt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{0.5}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{+} \PYG{n}{photonRange} \PYG{o}{*} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZlt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{\PYGZhy{}} \PYG{l+m+mf}{0.5}\PYG{p}{))} \PYG{o}{||} \PYG{p}{((}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZgt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{+} \PYG{l+m+mf}{0.5}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{+} \PYG{n}{photonRange} \PYG{o}{*} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z} \PYG{o}{\PYGZgt{}} \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{z} \PYG{o}{+} \PYG{l+m+mf}{0.5}\PYG{p}{)))))}
+        \PYG{p}{\PYGZob{}}
+          \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{i}\PYG{p}{;}
+          \PYG{n}{j} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+        \PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{c+c1}{// Now loop over all cylinders in range and calculate corrections}
+  \PYG{c+c1}{// for `*distancePropagated` and `*distanceToAbsorption`.}
+  \PYG{c+c1}{//}
+  \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{unsigned} \PYG{k+kt}{int} \PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{j} \PYG{o}{\PYGZlt{}} \PYG{n}{numberOfCylinders}\PYG{p}{;} \PYG{n}{j}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{k}{const} \PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{n}{indices\PYGZus{}of\PYGZus{}cylinders\PYGZus{}in\PYGZus{}range}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{i} \PYG{o}{==} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{k}{break}\PYG{p}{;}
+    \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+
+      \PYG{n}{IntersectionProblemParameters\PYGZus{}t} \PYG{n}{p} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+
+        \PYG{c+c1}{// Input values}
+        \PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{x}\PYG{p}{,}
+        \PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{y}\PYG{p}{,}
+        \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{x}\PYG{p}{,}
+        \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{y}\PYG{p}{,}
+        \PYG{n}{cylinderPositionsAndRadii}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{w}\PYG{p}{,} \PYG{c+c1}{// radius}
+        \PYG{n}{photonDirAndWlen}\PYG{p}{,}
+        \PYG{l+m+mf}{1.0}\PYG{p}{,} \PYG{c+c1}{// distance used to calculate s1 and s2 relative to}
+
+        \PYG{c+c1}{// Output values (will be calculated)}
+        \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{c+c1}{// discriminant}
+        \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{c+c1}{// s1}
+        \PYG{l+m+mi}{0}  \PYG{c+c1}{// s2}
+
+      \PYG{p}{\PYGZcb{};}
+
+      \PYG{n}{calculate\PYGZus{}intersections}\PYG{p}{(}\PYG{o}{\PYGZam{}}\PYG{n}{p}\PYG{p}{);}
+
+      \PYG{k}{if} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}discriminant}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k}{if} \PYG{p}{((}\PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZlt{}=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+          \PYG{c+c1}{// The photon is already within the hole ice.}
+          \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{cylinderScatteringLengths}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+          \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{n}{cylinderAbsorptionLengths}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+        \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+          \PYG{c+c1}{// The photon enters the hole ice on its way.}
+          \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+          \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=} \PYG{n}{intersection\PYGZus{}s1}\PYG{p}{(}\PYG{n}{p}\PYG{p}{);}
+          \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=} \PYG{n}{cylinderScatteringLengths}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+          \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=} \PYG{n}{cylinderAbsorptionLengths}\PYG{p}{[}\PYG{n}{i}\PYG{p}{];}
+        \PYG{p}{\PYGZcb{}}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+          \PYG{c+c1}{// The photon leaves the hole ice on its way.}
+          \PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes} \PYG{o}{+=} \PYG{l+m+mi}{1}\PYG{p}{;}
+          \PYG{n}{distances\PYGZus{}to\PYGZus{}medium\PYGZus{}changes}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=} \PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{);}
+          \PYG{k}{if} \PYG{p}{(}\PYG{n}{i} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{c+c1}{// there is no larger cylinder}
+          \PYG{p}{\PYGZob{}}
+            \PYG{k}{const} \PYG{k+kt}{int} \PYG{n}{photonLayerAtTheCylinderBorder} \PYG{o}{=}
+                \PYG{n}{photon\PYGZus{}layer}\PYG{p}{(}\PYG{n}{photonPosAndTime}\PYG{p}{.}\PYG{n}{z} \PYG{o}{+} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{z} \PYG{o}{*} \PYG{n}{intersection\PYGZus{}s2}\PYG{p}{(}\PYG{n}{p}\PYG{p}{));}
+            \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+                \PYG{n}{getScatteringLength}\PYG{p}{(}\PYG{n}{photonLayerAtTheCylinderBorder}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+            \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=}
+                \PYG{n}{getAbsorptionLength}\PYG{p}{(}\PYG{n}{photonLayerAtTheCylinderBorder}\PYG{p}{,} \PYG{n}{photonDirAndWlen}\PYG{p}{.}\PYG{n}{w}\PYG{p}{);}
+          \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+            \PYG{c+c1}{// There is a larger cylinder outside this one, which is the one before in the array.}
+            \PYG{c+c1}{// See: https://github.com/fiedl/hole\PYGZhy{}ice\PYGZhy{}study/issues/47}
+            \PYG{c+c1}{//}
+            \PYG{n}{local\PYGZus{}scattering\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=} \PYG{n}{cylinderScatteringLengths}\PYG{p}{[}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{];}
+            \PYG{n}{local\PYGZus{}absorption\PYGZus{}lengths}\PYG{p}{[}\PYG{o}{*}\PYG{n}{number\PYGZus{}of\PYGZus{}medium\PYGZus{}changes}\PYG{p}{]} \PYG{o}{=} \PYG{n}{cylinderAbsorptionLengths}\PYG{p}{[}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{];}
+          \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}
