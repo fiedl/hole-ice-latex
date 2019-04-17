@@ -8,7 +8,16 @@
 %     sudo tlmgr install fvextra
 %     sudo tlmgr update minted
 %
-\usepackage[outputdir=./build]{minted}
+
+% https://tex.stackexchange.com/a/88620/70789
+\usepackage{pdftexcmds}
+\makeatletter
+\ifcase\pdf@shellescape
+  \usepackage[frozencache]{minted}\or % no shell escape
+  %\usepackage[outputdir=./build]{minted}\or % unrestricted shell escape
+  \usepackage[finalizecache]{minted}\or % unrestricted shell escape
+  \usepackage[frozencache]{minted}\fi % restricted shell escape
+\makeatother
 
 \setminted{
   tabsize=2, linenos, breaklines, breakafter=/_, autogobble, breakautoindent, frame=lines, framesep=2mm, fontsize=\footnotesize
